@@ -1,16 +1,33 @@
 <template>
     <div class="tree-element-wrapper">
-        <div class="tree-element table">
-            TABLE
+
+        <div :class="treeElementClass">
+          <AddTreeElement />
+            <h3>{{alias}}</h3>
+            <h4>({{type}})</h4>
+          <AddTreeElement />
+        </div>
+        <div class="treeElementChild">
+          <TreeElement v-for="(child) of children" :key="child.id" :type="child.type" :alias="child.alias" :id="child.id" :children="child.children ? child.children : []" />
         </div>
     </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
+import AddTreeElement from './AddTreeElement.vue';
 
 @Options({
-  props: ['elementType']
+  props: ['type', 'alias', 'id', 'children'],
+  components: { AddTreeElement },
+  data: () => {
+    return {
+      treeElementClass: 'tree-element'
+    }
+  },
+  created() {
+    this.treeElementClass = `${this.type} ${this.treeElementClass}`;
+  }
 })
 export default class TreeElement extends Vue {
  
@@ -19,8 +36,11 @@ export default class TreeElement extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+  
+
   .tree-element-wrapper {
     padding-left: 40px;
+    
   }
 
   .tree-element {
@@ -40,5 +60,9 @@ export default class TreeElement extends Vue {
 
   .td {
     background-color:coral
+  }
+
+  .p {
+    background-color:khaki
   }
 </style>

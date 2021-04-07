@@ -1,8 +1,6 @@
 <template>
-  <div class="tree-editor-wrapper">
-    <AddTreeElement :pre="true" />
-    <TreeElement v-if="root" :type="root.type" :alias="root.alias" :id="root.id" :children="root.children ? root.children : []" />
-    <AddTreeElement :pre="false" />
+  <div class="add-element-wrapper">
+      <h1>+</h1>
   </div>
 </template>
 
@@ -22,21 +20,24 @@ import TreeElement from './TreeElement.vue';
   props: ['elementTreeData'],
   created() {
     this.root = this.elementTreeData && this.elementTreeData.length ? this.elementTreeData[0] : undefined;
-  }
+  },
 })
-export default class TreeEditor extends Vue {
+export default class AddToElementTree extends Vue {
  
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-  .tree-editor-wrapper {
-    display: inline-block;
-    width: 800px;
-    min-height: 200px;
-    margin: 10px;
-    padding: 10px;
-    border: 2px solid #999;
+ .add-element-wrapper {
+   display: inline-block;
+    background-color: inherit;
+    width: 40px;
+    height: 5px;
+  }
+
+  .add-element-wrapper:hover {
+    background-color: lightgreen;
+    height: 40px;
   }
 </style>
