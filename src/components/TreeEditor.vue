@@ -1,14 +1,18 @@
 <template>
   <div class="tree-editor-wrapper">
-    <AddTreeElement :pre="true" />
-    <TreeElement v-if="root" :type="root.type" :alias="root.alias" :id="root.id" :children="root.children ? root.children : []" />
-    <AddTreeElement :pre="false" />
+    <TreeElement
+      v-if="root"
+      :type="root.type"
+      :alias="root.alias"
+      :id="root.id"
+      :children="root.children ? root.children : []"
+    />
   </div>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import TreeElement from './TreeElement.vue';
+import { Options, Vue } from "vue-class-component";
+import TreeElement from "./TreeElement.vue";
 
 @Options({
   components: {
@@ -17,26 +21,27 @@ import TreeElement from './TreeElement.vue';
   data() {
     return {
       root: undefined
-    }
+    };
   },
-  props: ['elementTreeData'],
+  props: ["elementTreeData"],
   created() {
-    this.root = this.elementTreeData && this.elementTreeData.length ? this.elementTreeData[0] : undefined;
+    this.root =
+      this.elementTreeData && this.elementTreeData.length
+        ? this.elementTreeData[0]
+        : undefined;
   }
 })
-export default class TreeEditor extends Vue {
- 
-}
+export default class TreeEditor extends Vue {}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-  .tree-editor-wrapper {
-    display: inline-block;
-    width: 800px;
-    min-height: 200px;
-    margin: 10px;
-    padding: 10px;
-    border: 2px solid #999;
-  }
+.tree-editor-wrapper {
+  display: inline-block;
+  width: 800px;
+  min-height: 200px;
+  margin: 10px;
+  padding: 10px;
+  border: 2px solid #999;
+}
 </style>
