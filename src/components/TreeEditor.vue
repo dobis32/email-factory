@@ -5,6 +5,7 @@
       :type="root.type"
       :alias="root.alias"
       :id="root.id"
+      :parentid="'root'"
       :children="root.children ? root.children : []"
     />
   </div>
