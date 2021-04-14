@@ -11,8 +11,18 @@ export default {
             else parent.children = [elementToAdd, ...parent.children]
             context.commit('updateElementTree', updatedTree);
         }
-        else console.log('parent does not exist!');
-    }    
+        else alert('parent does not exist!');
+    },
+
+    closeModal: (context: any) => {
+        context.commit('updateModalState', true);
+        context.commit('resetModalCard');
+    },
+
+    openModal: (context: any, modalCard: string) => {
+        context.commit('updateModalState', false);
+        context.commit('setModalCard', modalCard);
+    }
 }
 
 

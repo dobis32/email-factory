@@ -10,7 +10,7 @@
       <h4 id="type">({{type}})</h4>
     </div>
     <div class="button-wrapper">
-      <div class="add-button"  @click="addSiblingAfter">
+      <div class="add-button" @click="addSiblingAfter">
         <span>+</span>
       </div>
     </div>
@@ -43,36 +43,41 @@ import { Options, Vue } from "vue-class-component";
     this.treeElementClass = `${this.type} ${this.treeElementClass}`;
   },
   methods: {
-    addSiblingBefore() { 
+    addSiblingBefore() {
       // TODO use modal to prompt user for element type
-      let elType = 'td'; // temp default element type
-      let newEl: iTreeElement = { 
+      let elType = "td"; // temp default element type
+      let newEl: iTreeElement = {
         type: elType,
-        alias: 'newSibling',
-        id: 'siblingid',
+        alias: "newSibling",
+        id: "siblingid",
         children: []
-      }
-      const payload: iAddSiblingPayload = { elementToAdd: newEl, parentid: this.parentid, pre: true }
-      this.$store.dispatch('addElementSibling', payload);
+      };
+      const payload: iAddSiblingPayload = {
+        elementToAdd: newEl,
+        parentid: this.parentid,
+        pre: true
+      };
+      this.$store.dispatch("addElementSibling", payload);
     },
-    addSiblingAfter() { 
+    async addSiblingAfter() {
       // TODO use modal to prompt user for element type
-      let elType = 'td'; // temp default element type
-      let newEl: iTreeElement = { 
+      let elType = "td";
+      let newEl: iTreeElement = {
         type: elType,
-        alias: 'newSibling',
-        id: 'siblingid',
+        alias: "newSibling",
+        id: "siblingid",
         children: []
-      }
-      const payload: iAddSiblingPayload = { elementToAdd: newEl, parentid: this.parentid, pre: false }
-      this.$store.dispatch('addElementSibling', payload)
+      };
+      const payload: iAddSiblingPayload = {
+        elementToAdd: newEl,
+        parentid: this.parentid,
+        pre: false
+      };
+      this.$store.dispatch("addElementSibling", payload);
     }
   }
 })
-export default class TreeElement extends Vue {
-
-  
-}
+export default class TreeElement extends Vue {}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
