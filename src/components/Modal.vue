@@ -1,16 +1,22 @@
 <template>
   <div id="modal-wrapper" v-if="activeState" @click="closeModal">
+    <AddElementCard :cb="modalcb" />
     <!-- card components here -->
   </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
+import AddElementCard from "./modal_cards/AddElementCard.vue";
 
 @Options({
   props: ["activeState", "activeModal"],
-  components: {},
-  computed: {},
+  components: { AddElementCard },
+  computed: {
+    cb() {
+      return this.$state.modalcb;
+    }
+  },
   methods: {
     closeModal() {
       this.$store.dispatch("closeModal");

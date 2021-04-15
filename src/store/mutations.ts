@@ -15,5 +15,13 @@ export default {
 
 	setModalCard: (state: any, modalCard: string) => {
 		state.activeModal = modalCard;
+	},
+
+	setModalCB: (state: any, modalcb: Function) => {
+		state.modalcb = modalcb;
+	},
+
+	getModalCB: (state: any) => {
+		state.modalcb;
 	}
 };

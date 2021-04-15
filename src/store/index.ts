@@ -38,7 +38,8 @@ export default createStore({
 	state: {
 		elementTree: elTree,
 		modalState: false,
-		activeModal: ''
+		activeModal: '',
+		modalcb: undefined
 	},
 	getters,
 	mutations,
