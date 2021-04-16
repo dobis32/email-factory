@@ -6,6 +6,9 @@ import mutations from './mutations';
 import actions from './actions';
 import ElementTreeFactory from '../classes/ElementTreeFactory';
 import _SUPPORTED_HTML_ELEMENTS_ from '../constants/SupportedHTMLElementTypes';
+import NonceFactory from '@/classes/NonceFactory';
+
+const nonceFactory = new NonceFactory();
 
 const treeFactory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_);
 
@@ -46,6 +49,7 @@ const treeData: Array<iTreeElement> = [
 export default createStore({
 	state: {
 		treeFactory,
+		nonceFactory,
 		treeData,
 		modalState: false,
 		activeModal: '',

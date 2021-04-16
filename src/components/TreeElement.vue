@@ -51,7 +51,7 @@ import { Options, Vue } from "vue-class-component";
       });
     },
     getNewElementID() {
-      return "siblingid"; // TODO generate new element id on the fly; must be UNIQUE to tree
+      return this.$store.state.nonceFactory.getNonce();
     },
     async addSibling(pre: boolean) {
       const { type, alias } = await this.getNewElementCredentials();
