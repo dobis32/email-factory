@@ -2,6 +2,7 @@
   <div>
     <TreeEditor :elementTreeData="getElementTree" />
     <ModuleOptions />
+    <Modal :activeState="getModalState" :activeModal="getActiveModal" :cb="getModalCB" />
   </div>
 </template>
 
@@ -9,16 +10,26 @@
 import { Options, Vue } from "vue-class-component";
 import TreeEditor from "./components/TreeEditor.vue";
 import ModuleOptions from "./components/ModuleOptions.vue";
-import iTreeElement from "./interfaces/iTreeElement";
+import Modal from "./components/Modal.vue";
 
 @Options({
   components: {
     TreeEditor,
-    ModuleOptions
+    ModuleOptions,
+    Modal
   },
   computed: {
     getElementTree() {
       return this.$store.getters.getElementTree;
+    },
+    getModalState() {
+      return this.$store.getters.getModalState;
+    },
+    getActiveModal() {
+      return this.$store.getters.getActiveModal;
+    },
+    getModalCB() {
+      return this.$store.getters.getModalCB;
     }
   },
   provide: {

@@ -1,29 +1,38 @@
+/* eslint-disable */
 import { createStore } from 'vuex';
 import iTreeElement from '../interfaces/iTreeElement';
 import getters from './getters';
 import mutations from './mutations';
 import actions from './actions';
+import ElementTreeFactory from '../classes/ElementTreeFactory';
+import _SUPPORTED_HTML_ELEMENTS_ from '../constants/SupportedHTMLElementTypes';
 
-const elTree: Array<iTreeElement> = [
+const treeFactory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_);
+
+const treeData: Array<iTreeElement> = [
 	{
+		id: 'foo',
+		root: true,
 		type: 'table',
 		alias: 'rootTable',
-		id: 'foo',
 		children: [
 			{
+				id: 'bar',
+				root: false,
 				type: 'tr',
 				alias: 'rootTR',
-				id: 'bar',
 				children: [
 					{
-						type: 'td',
 						id: 'fizz',
+						root: false,
+						type: 'td',
 						alias: 'rootTD',
 						children: [
 							{
+								id: 'buzz',
+								root: false,
 								type: 'p',
 								alias: 'rootP',
-								id: 'buzz',
 								children: []
 							}
 						]
@@ -36,10 +45,13 @@ const elTree: Array<iTreeElement> = [
 
 export default createStore({
 	state: {
-		elementTree: elTree,
+		treeFactory,
+		treeData,
 		modalState: false,
 		activeModal: '',
-		modalcb: undefined
+		modalcb: () => {
+			return;
+		}
 	},
 	getters,
 	mutations,

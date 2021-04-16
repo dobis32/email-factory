@@ -1,12 +1,14 @@
 <template>
   <div class="tree-editor-wrapper">
     <TreeElement
-      v-if="root"
-      :type="root.type"
-      :alias="root.alias"
-      :id="root.id"
-      :parentid="'root'"
-      :children="root.children ? root.children : []"
+      v-for="(el) of elementTreeData"
+      :key="el.id"
+      :root="el.root"
+      :type="el.type"
+      :alias="el.alias"
+      :id="el.id"
+      :parentid="undefined"
+      :children="el.children"
     />
   </div>
 </template>
@@ -20,17 +22,9 @@ import TreeElement from "./TreeElement.vue";
     TreeElement
   },
   data() {
-    return {
-      root: undefined
-    };
+    return {};
   },
-  props: ["elementTreeData"],
-  created() {
-    this.root =
-      this.elementTreeData && this.elementTreeData.length
-        ? this.elementTreeData[0]
-        : undefined;
-  }
+  props: ["elementTreeData"]
 })
 export default class TreeEditor extends Vue {}
 </script>

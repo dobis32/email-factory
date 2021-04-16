@@ -6,27 +6,23 @@ import iTreeElement from '@/interfaces/iTreeElement';
 describe('TreeEditor.vue', () => {
 	const mockElementTreeData: Array<iTreeElement> = [
 		{
-			type: 'table',
-			alias: 'rootTable',
-			id: 'foo',
+			id: 'bar',
+			root: false,
+			type: 'tr',
+			alias: 'rootTR',
 			children: [
 				{
-					type: 'tr',
-					alias: 'rootTR',
-					id: 'bar',
+					id: 'fizz',
+					root: false,
+					type: 'td',
+					alias: 'rootTD',
 					children: [
 						{
-							type: 'td',
-							id: 'fizz',
-							alias: 'rootTD',
-							children: [
-								{
-									type: 'p',
-									alias: 'rootP',
-									id: 'buzz',
-									children: []
-								}
-							]
+							id: 'buzz',
+							root: false,
+							type: 'p',
+							alias: 'rootP',
+							children: []
 						}
 					]
 				}
@@ -51,7 +47,7 @@ describe('TreeEditor.vue', () => {
 	beforeEach(() => {
 		wrapper = mount(TreeEditor, {
 			data: () => {
-				return { root: undefined };
+				return {};
 			},
 			props: {
 				elementTreeData: mockElementTreeData
@@ -61,11 +57,6 @@ describe('TreeEditor.vue', () => {
 				provide: {}
 			}
 		});
-	});
-
-	// Data
-	it('should have a component variable for the root tree element', () => {
-		expect(wrapper.vm.root).toEqual(mockElementTreeData[0]);
 	});
 
 	// Props

@@ -1,23 +1,37 @@
 <template>
   <div id="modal-card" @click="stopPropagation">
-    <h3>Element type:</h3>
-    <input type="text" v-model="elementType" name="type" placeholder id="type" />
+    <div class="input-row">
+      <h3>Element alias:</h3>
+      <input type="text" v-model="elementAlias" name="alias" placeholder id="alias" />
+    </div>
     <div id="submit-button" @click="submitData">Submit</div>
   </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
+
 @Options({
   data: () => {
-    return { elementType: "" };
+    return { elementAlias: "", submitting: false };
   },
   inject: ["stopPropagation"],
   props: ["cb"],
   methods: {
     submitData() {
-      console.log(this.elementType);
+      // TODO validate type and lias
+      // type should be table, tr, th, td, a, span, img (maybe h1, h2, etc?)
+      // alias should be unique to the tree
+      this.submitting = true;
+      this.$store.dispatch("closeModal");
     }
+  },
+  beforeUnmount() {
+    if (!this.submitting) {
+      this.elementAlias = "";
+    }
+    this.cb({ alias: this.elementAlias });
+    this.$store.dispatch("resetModalCB");
   }
 })
 export default class EditCartModal extends Vue {}
@@ -33,5 +47,18 @@ export default class EditCartModal extends Vue {}
   border: 1px solid #888;
   width: 400px; /* Could be more or less, depending on screen size */
   text-align: center;
+}
+
+.input-row {
+  padding-bottom: 20px;
+}
+
+#submit-button {
+  background-color: #062;
+  color: #fff;
+  cursor: pointer;
+  width: 80px;
+  margin: 0px auto;
+  padding: 15px 0px;
 }
 </style>

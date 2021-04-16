@@ -1,6 +1,7 @@
 export default interface iTreeElement {
+	id: string;
+	root: boolean;
 	type: string;
 	alias: string;
-	id: string;
 	children: Array<iTreeElement>;
 };

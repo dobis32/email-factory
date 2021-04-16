@@ -1,7 +1,7 @@
 <template>
   <div class="tree-element-wrapper">
     <div class="button-wrapper">
-      <div class="add-button" @click="addSiblingBefore">
+      <div id="add-before" class="add-button" @click="addSiblingBefore">
         <span>+</span>
       </div>
     </div>
@@ -10,7 +10,7 @@
       <h4 id="type">({{type}})</h4>
     </div>
     <div class="button-wrapper">
-      <div class="add-button" @click="addSiblingAfter">
+      <div id="add-after" class="add-button" @click="addSiblingAfter">
         <span>+</span>
       </div>
     </div>
@@ -18,6 +18,7 @@
     <TreeElement
       v-for="(child) of children"
       :key="child.id"
+      :root="child.root"
       :type="child.type"
       :alias="child.alias"
       :id="child.id"
@@ -33,7 +34,7 @@ import iAddSiblingPayload from "@/interfaces/iAddSiblingPayload";
 import { Options, Vue } from "vue-class-component";
 
 @Options({
-  props: ["type", "alias", "id", "children", "parentid"],
+  props: ["type", "alias", "id", "children", "parentid", "root"],
   data: () => {
     return {
       treeElementClass: "tree-element"
@@ -43,37 +44,38 @@ import { Options, Vue } from "vue-class-component";
     this.treeElementClass = `${this.type} ${this.treeElementClass}`;
   },
   methods: {
-    addSiblingBefore() {
-      // TODO use modal to prompt user for element type
-      let elType = "td"; // temp default element type
-      let newEl: iTreeElement = {
-        type: elType,
-        alias: "newSibling",
-        id: "siblingid",
-        children: []
-      };
-      const payload: iAddSiblingPayload = {
-        elementToAdd: newEl,
-        parentid: this.parentid,
-        pre: true
-      };
-      this.$store.dispatch("addElementSibling", payload);
+    getNewElementCredentials() {
+      return new Promise(resolve => {
+        this.$store.dispatch("setModalCB", resolve);
+        this.$store.dispatch("openModal", "AddElementCard");
+      });
     },
-    async addSiblingAfter() {
-      // TODO use modal to prompt user for element type
-      let elType = "td";
-      let newEl: iTreeElement = {
-        type: elType,
-        alias: "newSibling",
-        id: "siblingid",
-        children: []
-      };
-      const payload: iAddSiblingPayload = {
-        elementToAdd: newEl,
-        parentid: this.parentid,
-        pre: false
-      };
-      this.$store.dispatch("addElementSibling", payload);
+    getNewElementID() {
+      return "siblingid"; // TODO generate new element id on the fly; must be UNIQUE to tree
+    },
+    async addSibling(pre: boolean) {
+      const { type, alias } = await this.getNewElementCredentials();
+      if (type && alias) {
+        let newEl: iTreeElement = {
+          id: this.getNewElementID(),
+          root: this.root ? true : false,
+          type,
+          alias,
+          children: []
+        };
+        const payload: iAddSiblingPayload = {
+          elementToAdd: newEl,
+          parentid: this.parentid,
+          pre
+        };
+        this.$store.dispatch("addElementSibling", payload);
+      }
+    },
+    addSiblingBefore() {
+      this.addSibling(true);
+    },
+    addSiblingAfter() {
+      this.addSibling(false);
     }
   }
 })
