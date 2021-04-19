@@ -1,0 +1,97 @@
+import { mount, shallowMount } from '@vue/test-utils';
+import AddElementCard from '@/components/modal_cards/AddElementCard.vue';
+
+describe('AddElementCard.vue', () => {
+    let cb: Function;
+	let wrapper: any;
+    let stopPropagation: Function;
+    let provide: any;
+    let dispatch: Function;
+    let $store: any;
+	beforeEach(() => {
+        cb = jest.fn(() => {
+            return;
+        });
+
+        stopPropagation = jest.fn((e: Event) => { e.stopPropagation() });
+
+        provide = { stopPropagation };
+
+        dispatch = jest.fn();
+
+        $store = {
+            dispatch
+        }
+
+		wrapper = mount(AddElementCard, {
+			data: () => {
+				return {
+
+                };
+			},
+			props: {
+				cb
+			},
+			global: {
+				mocks: { $store },
+				provide
+			}
+		});
+	});
+
+    // Data
+    it('should have a component variable that dictates if the input data on the card is being submitted (the default value should be "false")', () => {
+        expect(wrapper.vm.submitting).toEqual(false);
+        expect(typeof wrapper.vm.submitting).toEqual('boolean');
+    });
+
+	// DOM
+    it('should call the provided "stopPropagation" function when the #modal-card is called', () => {
+        wrapper.find('#modal-card').trigger('click');
+        expect(wrapper.find('#modal-card').exists()).toBeTruthy();
+        expect(stopPropagation).toHaveBeenCalled();
+    });
+
+    it('should have a submit button that triggers the "submitData" function when clicked', () => {
+        wrapper.vm.submitData = jest.fn();
+        wrapper.find('#submit-button').trigger('click');
+        expect(wrapper.find('#submit-button').exists()).toBeTruthy();
+        expect(wrapper.vm.submitData).toHaveBeenCalled();
+    });
+
+    // Hooks TODO: how the hell do you test lifecycle hooks???
+    // it('should reset the "elementAlias" component variable if the submitting variable is false upon beforeUnmount', () => {
+    //     const initSubmitting = wrapper.vm.submitting;
+    //     wrapper.vm.beforeUnmount();
+    //     expect(initSubmitting).toEqual(false);
+    //     expect(wrapper.vm.elementAlias).toEqual('');
+    // });
+
+    // Props
+    it('should have a prop for the modal callback function', () => {
+        expect(wrapper.vm.cb).toBeDefined();
+        expect(typeof wrapper.vm.cb).toEqual('function');
+        expect(wrapper.vm.cb).toEqual(cb);
+    });
+
+    // Methods
+    it('should have a stopPropagation function provided', () => {
+        expect(wrapper.vm.stopPropagation).toBeDefined();
+        expect(wrapper.vm.stopPropagation).toEqual(provide.stopPropagation);
+    });
+
+    it('should have a function for submitting data', () => {
+        expect(wrapper.vm.submitData).toBeDefined();
+        expect(typeof wrapper.vm.submitData).toEqual('function');
+    });
+
+    it('should set the "submitting" component variable to "true" when submitting data', () => {
+        expect(wrapper.vm.submitting).toBeDefined();
+        expect(typeof wrapper.vm.submitting).toEqual('boolean');
+    });
+
+    it('should close the modal when submitting data', () => {
+        wrapper.vm.submitData();
+        expect(dispatch).toHaveBeenCalledWith('closeModal');
+    });
+});

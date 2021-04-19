@@ -2,6 +2,7 @@ import { mount, shallowMount, flushPromises } from '@vue/test-utils';
 import TreeElement from '@/components/TreeElement.vue';
 import iTreeElement from '@/interfaces/iTreeElement';
 import iAddSiblingPayload from '@/interfaces/iAddSiblingPayload';
+import NonceFactory from '@/classes/NonceFactory';
 
 describe('TreeElement.vue', () => {
 	const mockChildren: Array<iTreeElement> = [
@@ -63,7 +64,11 @@ describe('TreeElement.vue', () => {
 	beforeEach(() => {
 		dispatch = jest.fn();
 
-		state = {};
+		state = {
+			nonceFactory: {
+				getNonce: jest.fn(()=>{ return 'mockNonce' })
+			}
+		};
 
 		$store = {
 			state,
@@ -126,11 +131,6 @@ describe('TreeElement.vue', () => {
 		expect(typeof wrapper.vm.getNewElementCredentials).toEqual('function');
 	});
 
-	it('should have a method for adding a sibbling tree element', () => {
-		expect(wrapper.vm.addSibling).toBeDefined();
-		expect(typeof wrapper.vm.addSibling).toEqual('function');
-	});
-
 	it('should have a method for adding a sibbling tree element before the assumed tree element', () => {
 		wrapper.vm.addSibling = jest.fn(wrapper.vm.addSibling);
 		wrapper.vm.addSiblingBefore();
@@ -140,19 +140,11 @@ describe('TreeElement.vue', () => {
 		expect(wrapper.vm.addSibling).toHaveBeenCalledWith(true);
 	});
 
-	it('should have a method for adding a sibbling tree element after the assumed tree element', () => {
-		wrapper.vm.addSibling = jest.fn(wrapper.vm.addSibling);
-		wrapper.vm.addSiblingAfter();
-
-		expect(wrapper.vm.addSiblingAfter).toBeDefined();
-		expect(typeof wrapper.vm.addSiblingAfter).toEqual('function');
-		expect(wrapper.vm.addSibling).toHaveBeenCalledWith(false);
-	});
-
 	it('should have a function for getting a new element id', () => {
 		expect(wrapper.vm.getNewElementID).toBeDefined();
 		expect(typeof wrapper.vm.getNewElementID).toEqual('function');
 		expect(typeof wrapper.vm.getNewElementID()).toEqual('string');
+		expect(state.nonceFactory.getNonce).toHaveBeenCalled();
 	});
 
 	it('should have a method for adding a sibling to the assumed tree element', async () => {
@@ -160,9 +152,6 @@ describe('TreeElement.vue', () => {
 		const mockAlias = 'new-tr';
 		const mockPre = true;
 
-		wrapper.vm.getNewElementID = jest.fn(() => {
-			return 'mockElementID';
-		});
 		wrapper.vm.getNewElementCredentials = jest.fn(() => {
 			return Promise.resolve({ type: mockType, alias: mockAlias });
 		});
