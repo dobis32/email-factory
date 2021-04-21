@@ -59,13 +59,15 @@ describe('TreeEditor.vue', () => {
 		});
 	});
 
-	// Props
-	it('should have a prop for the assumed element tree', () => {
-		expect(wrapper.vm.elementTreeData).toBeDefined();
-		expect(Array.isArray(wrapper.vm.elementTreeData)).toBeTruthy();
-	});
-
+	// DOM
 	it('should render the assumed element tree', () => {
 		expect(wrapper.findAllComponents(TreeElement).length).toEqual(numberOfElements);
 	});
+
+	// Props
+	it('should have a prop for the assumed element tree', () => {
+		const props = wrapper.props();
+		expect(props.elementTreeData).toBeDefined();
+		expect(Array.isArray(props.elementTreeData)).toBeTruthy();
+	});	
 });

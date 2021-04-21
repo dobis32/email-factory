@@ -51,21 +51,24 @@ describe('Modal.vue', () => {
 
 	// Props
     it('should have a prop for the active modal state', () => {
-        expect(wrapper.vm.activeState).toBeDefined();
-        expect(typeof wrapper.vm.activeState).toEqual('boolean');
-        expect(wrapper.vm.activeState).toEqual(mockModalState);
+        const props = wrapper.props();
+        expect(props.activeState).toBeDefined();
+        expect(typeof props.activeState).toEqual('boolean');
+        expect(props.activeState).toEqual(mockModalState);
     });
 
     it('should have a props for the active modal card', () => {
-        expect(wrapper.vm.activeModal).toBeDefined();
-        expect(typeof wrapper.vm.activeModal).toEqual('string');
-        expect(wrapper.vm.activeModal).toEqual(mockActiveModal);
+        const props = wrapper.props();
+        expect(props.activeModal).toBeDefined();
+        expect(typeof props.activeModal).toEqual('string');
+        expect(props.activeModal).toEqual(mockActiveModal);
     });
 
     it('should have a prop for the modal callback function', () => {
-        expect(wrapper.vm.cb).toBeDefined();
-        expect(typeof wrapper.vm.cb).toEqual('function');
-        expect(wrapper.vm.cb).toEqual(mockModalCB);
+        const props = wrapper.props();
+        expect(props.cb).toBeDefined();
+        expect(typeof props.cb).toEqual('function');
+        expect(props.cb).toEqual(mockModalCB);
     });
 
     // Methods

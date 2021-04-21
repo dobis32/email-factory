@@ -35,6 +35,7 @@ import { Options, Vue } from "vue-class-component";
 
 @Options({
   props: ["type", "alias", "id", "children", "parentid", "root"],
+  inject: ["factory"],
   data: () => {
     return {
       treeElementClass: "tree-element"
@@ -50,14 +51,11 @@ import { Options, Vue } from "vue-class-component";
         this.$store.dispatch("openModal", "AddElementCard");
       });
     },
-    getNewElementID() {
-      return this.$store.state.nonceFactory.getNonce();
-    },
     async addSibling(pre: boolean) {
       const { type, alias } = await this.getNewElementCredentials();
       if (type && alias) {
         let newEl: iTreeElement = {
-          id: this.getNewElementID(),
+          id: this.factory().getNewElementID(),
           root: this.root ? true : false,
           type,
           alias,

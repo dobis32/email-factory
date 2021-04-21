@@ -13,5 +13,8 @@ export default {
 	},
 	getModalCB: (state: any) => {
 		return state.modalcb;
-	}
+	},
+	getElementID: (state: any) => {
+		return state.treeFactory.getNewElementID();
+	},
 };

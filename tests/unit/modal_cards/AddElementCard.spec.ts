@@ -59,19 +59,47 @@ describe('AddElementCard.vue', () => {
         expect(wrapper.vm.submitData).toHaveBeenCalled();
     });
 
-    // Hooks TODO: how the hell do you test lifecycle hooks???
-    // it('should reset the "elementAlias" component variable if the submitting variable is false upon beforeUnmount', () => {
-    //     const initSubmitting = wrapper.vm.submitting;
-    //     wrapper.vm.beforeUnmount();
-    //     expect(initSubmitting).toEqual(false);
-    //     expect(wrapper.vm.elementAlias).toEqual('');
-    // });
+    // Hooks
+    it('should reset the "elementAlias" component variable if the submitting variable is false upon beforeUnmount hook', () => {
+        const initSubmitting = wrapper.vm.submitting;
+        wrapper.vm.elementAlias = 'foobar';
+        wrapper.unmount();
+        expect(initSubmitting).toEqual(false);
+        expect(wrapper.vm.elementAlias).toEqual('');
+    });
+
+    it('should not reset the "elementAlias" component variable if the submitting variable is true upon unmount/beforeUnmount hook', () => {
+        const alias = 'foobar';
+        wrapper.vm.submitting = true;
+        const initSubmitting = wrapper.vm.submitting;
+        wrapper.vm.elementAlias = alias;
+        wrapper.unmount();
+        expect(initSubmitting).toEqual(true);
+        expect(wrapper.vm.elementAlias).toEqual(alias);
+    });
+
+    it('should call the callback function upon unmount/beforeUnmount', () => {
+        const alias = 'foobar';
+        wrapper.vm.submitting = true;
+        wrapper.vm.elementAlias = alias;
+        wrapper.unmount();
+        expect(cb).toHaveBeenCalled();
+        expect(cb).toHaveBeenCalledWith({ alias })
+    });
+
+    it('should dispatch the "resetModalCB" action to the store', () => {
+        const targetAction = "resetModalCB";
+        wrapper.unmount();
+        expect(dispatch).toHaveBeenCalled();
+        expect(dispatch).toHaveBeenCalledWith(targetAction);
+    });
 
     // Props
     it('should have a prop for the modal callback function', () => {
-        expect(wrapper.vm.cb).toBeDefined();
-        expect(typeof wrapper.vm.cb).toEqual('function');
-        expect(wrapper.vm.cb).toEqual(cb);
+        const props = wrapper.props()
+        expect(props.cb).toBeDefined();
+        expect(typeof props.cb).toEqual('function');
+        expect(props.cb).toEqual(cb);
     });
 
     // Methods
