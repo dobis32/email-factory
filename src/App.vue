@@ -38,7 +38,7 @@ const factory = new ElementTreeFactory(SUPPORTED_HTML_ELEMENTS);
     stopPropagation: (e: Event) => {
       e.stopPropagation();
     },
-    factory: () => {
+    getTreeFactoryInstance: () => {
       return factory;
     }
   }

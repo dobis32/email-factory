@@ -1,5 +1,6 @@
 /* eslint-disable */
 import iTreeElement from '@/interfaces/iTreeElement';
+import DefaultStateIndex from '@/constants/DefaultStateIndex';
 
 export default {
 	updateTreeData: (state: any, updatedTreeData: Array<iTreeElement>): void => {
@@ -11,7 +12,7 @@ export default {
 	},
 
 	resetModalCard: (state: any): void => {
-		state.activeModal = '';
+		state.activeModal = DefaultStateIndex.activeModal;
 	},
 
 	setModalCard: (state: any, modalCard: string): void => {
@@ -19,16 +20,10 @@ export default {
 	},
 
 	resetModalCB: (state: any): void => {
-		state.modalcb = () => {
-			return;
-		};
+		state.modalcb = DefaultStateIndex.modalcb
 	},
 
 	setModalCB: (state: any, modalcb: Function): void => {
 		state.modalcb = modalcb;
-	},
-
-	getModalCB: (state: any): void => {
-		state.modalcb;
 	}
 };

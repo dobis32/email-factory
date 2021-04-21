@@ -35,7 +35,7 @@ import { Options, Vue } from "vue-class-component";
 
 @Options({
   props: ["type", "alias", "id", "children", "parentid", "root"],
-  inject: ["factory"],
+  inject: ["getTreeFactoryInstance"],
   data: () => {
     return {
       treeElementClass: "tree-element"
@@ -55,7 +55,7 @@ import { Options, Vue } from "vue-class-component";
       const { type, alias } = await this.getNewElementCredentials();
       if (type && alias) {
         let newEl: iTreeElement = {
-          id: this.factory().getNewElementID(),
+          id: this.getTreeFactoryInstance().getNewElementID(),
           root: this.root ? true : false,
           type,
           alias,

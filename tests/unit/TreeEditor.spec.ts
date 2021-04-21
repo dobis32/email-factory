@@ -2,8 +2,14 @@ import { mount, shallowMount } from '@vue/test-utils';
 import TreeEditor from '@/components/TreeEditor.vue';
 import TreeElement from '@/components/TreeElement.vue';
 import iTreeElement from '@/interfaces/iTreeElement';
+import ElementTreeFactory from '@/classes/ElementTreeFactory';
+import SUPPORTED_HTML_ELEMENTS from '@/constants/SupportedHTMLElementTypes';
 
 describe('TreeEditor.vue', () => {
+	const factory = new ElementTreeFactory(SUPPORTED_HTML_ELEMENTS);
+	const getTreeFactoryInstance = () => {
+		return factory;
+	}
 	const mockElementTreeData: Array<iTreeElement> = [
 		{
 			id: 'bar',
@@ -44,6 +50,7 @@ describe('TreeEditor.vue', () => {
 	};
 	const numberOfElements = getNumberOfElementsInTree(mockElementTreeData);
 	let wrapper: any;
+
 	beforeEach(() => {
 		wrapper = mount(TreeEditor, {
 			data: () => {
@@ -54,7 +61,7 @@ describe('TreeEditor.vue', () => {
 			},
 			global: {
 				mocks: {},
-				provide: {}
+				provide: { getTreeFactoryInstance }
 			}
 		});
 	});

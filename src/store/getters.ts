@@ -1,6 +1,4 @@
 /* eslint-disable */
-import iTreeElement from '@/interfaces/iTreeElement';
-
 export default {
 	getElementTree: (state: any) => {
 		return state.treeData;
@@ -13,8 +11,5 @@ export default {
 	},
 	getModalCB: (state: any) => {
 		return state.modalcb;
-	},
-	getElementID: (state: any) => {
-		return state.treeFactory.getNewElementID();
 	},
 };

@@ -8,7 +8,8 @@ export default class ElementTreeFactory {
 		this._SUPPORTED_HTML_ELEMENTS = supportedElements;
 	}
 
-	createTreeElement(type: string, alias?: string): iTreeElement {
+	createTreeElement(type: string, alias?: string): iTreeElement | undefined {
+		if (!this.elementIsSupported(type)) return undefined;
 		const id = this.getNewElementID();
 		return {
 			id,

@@ -86,7 +86,7 @@ describe('TreeElement.vue', () => {
 			props: mockProps,
 			global: {
 				mocks: { $store },
-				provide: { factory: () => {
+				provide: { getTreeFactoryInstance: () => {
 					return elFactory; }
 				}
 			}
