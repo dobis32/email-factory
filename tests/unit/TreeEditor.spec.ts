@@ -4,7 +4,7 @@ import TreeElement from '@/components/TreeElement.vue';
 import iTreeElement from '@/interfaces/iTreeElement';
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
 import SUPPORTED_HTML_ELEMENTS from '@/constants/SupportedHTMLElementTypes';
-
+import { HTML_TR, HTML_TD, HTML_P } from '@/constants/SupportedHTMLElementTypes';
 describe('TreeEditor.vue', () => {
 	const factory = new ElementTreeFactory(SUPPORTED_HTML_ELEMENTS);
 	const getTreeFactoryInstance = () => {
@@ -14,19 +14,19 @@ describe('TreeEditor.vue', () => {
 		{
 			id: 'bar',
 			root: false,
-			type: 'tr',
+			element: HTML_TR,
 			alias: 'rootTR',
 			children: [
 				{
 					id: 'fizz',
 					root: false,
-					type: 'td',
+					element: HTML_TD,
 					alias: 'rootTD',
 					children: [
 						{
 							id: 'buzz',
 							root: false,
-							type: 'p',
+							element: HTML_P,
 							alias: 'rootP',
 							children: []
 						}

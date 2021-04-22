@@ -1,27 +1,30 @@
+import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
+import supported from '../constants/SupportedHTMLElementTypes';
+import { HTML_TABLE, HTML_TR, HTML_TD, HTML_P } from '@/constants/SupportedHTMLElementTypes';
 export default {
     treeData: [
         {
             id: 'foo',
             root: true,
-            type: 'table',
+            element: HTML_TABLE,
             alias: 'rootTable',
             children: [
                 {
                     id: 'bar',
                     root: false,
-                    type: 'tr',
+                    element: HTML_TR,
                     alias: 'rootTR',
                     children: [
                         {
                             id: 'fizz',
                             root: false,
-                            type: 'td',
+                            element: HTML_TD,
                             alias: 'rootTD',
                             children: [
                                 {
                                     id: 'buzz',
                                     root: false,
-                                    type: 'p',
+                                    element: HTML_P,
                                     alias: 'rootP',
                                     children: []
                                 }

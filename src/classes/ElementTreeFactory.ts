@@ -9,16 +9,22 @@ export default class ElementTreeFactory {
 		this._SUPPORTED_HTML_ELEMENTS = supportedElements;
 	}
 
-	createTreeElement(type: string, alias?: string): iTreeElement | undefined {
-		if (!this.elementIsSupported(type)) return undefined;
+	createTreeElement(elementType: string, alias?: string): iTreeElement | undefined {
+		if (!this.elementIsSupported(elementType)) return undefined;
 		const id = this.getNewElementID();
-		return {
+		const element = this.getElementOfType(elementType);
+		if(!element) return undefined;
+		else return {
 			id,
-			type,
-			root: type == 'table' ? true : false,
+			element,
+			root: element.getElementType() == 'table' ? true : false,
 			alias: alias ? alias : id,
 			children: []
 		}
+	}
+
+	getElementOfType(type: string): SupportedHTMLElement | undefined {
+		return this._SUPPORTED_HTML_ELEMENTS.find((el: SupportedHTMLElement) => el.getElementType() == type);
 	}
 
 	getNewElementID() {
@@ -52,5 +58,13 @@ export default class ElementTreeFactory {
 
 	addElementSibling(parent: iTreeElement, elementToAdd: iTreeElement, pre: boolean): Array<iTreeElement> {
 		return pre ? [ elementToAdd, ...parent.children ] : [ ...parent.children, elementToAdd ];
+	}
+
+	generateCode(treeData: Array<iTreeElement>) : string {
+		let code: string = '';
+
+		
+
+		return code;
 	}
 }

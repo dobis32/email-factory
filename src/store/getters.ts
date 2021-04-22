@@ -11,5 +11,5 @@ export default {
 	},
 	getModalCB: (state: any) => {
 		return state.modalcb;
-	},
+	}
 };

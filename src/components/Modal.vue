@@ -1,6 +1,7 @@
 <template>
   <div id="modal-wrapper" v-if="activeState" @click="closeModal">
     <AddElementCard v-if="activeModal == 'AddElementCard'" :cb="cb" />
+    <GeneratedCodeCard v-if="activeModal == 'GeneratedCodeCard'" :cb="cb" />
     <!-- card components here -->
   </div>
 </template>
@@ -8,10 +9,11 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import AddElementCard from "./modal_cards/AddElementCard.vue";
+import GeneratedCodeCard from "./modal_cards/GeneratedCodeCard.vue";
 
 @Options({
   props: ["activeState", "activeModal", "cb"],
-  components: { AddElementCard },
+  components: { AddElementCard, GeneratedCodeCard },
   methods: {
     closeModal() {
       this.$store.dispatch("closeModal");

@@ -1,4 +1,5 @@
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
+import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
 import _SUPPORTED_HTML_ELEMENTS_ from '@/constants/SupportedHTMLElementTypes';
 import iTreeElement from '@/interfaces/iTreeElement';
 
@@ -11,25 +12,25 @@ describe('ElementTreeFactory.ts', () => {
             {
                 id: 'foo',
                 root: true,
-                type: 'table',
+                element: _SUPPORTED_HTML_ELEMENTS_.find((el: SupportedHTMLElement) => 'table' == el.getElementType()) as SupportedHTMLElement,
                 alias: 'rootTable',
                 children: [
                     {
                         id: 'bar',
                         root: false,
-                        type: 'tr',
+                        element: _SUPPORTED_HTML_ELEMENTS_.find((el: SupportedHTMLElement) => 'tr' == el.getElementType()) as SupportedHTMLElement,
                         alias: 'rootTR',
                         children: [
                             {
                                 id: 'fizz',
                                 root: false,
-                                type: 'td',
+                                element: _SUPPORTED_HTML_ELEMENTS_.find((el: SupportedHTMLElement) => 'td' == el.getElementType()) as SupportedHTMLElement,
                                 alias: 'rootTD',
                                 children: [
                                     {
                                         id: 'buzz',
                                         root: false,
-                                        type: 'p',
+                                        element: _SUPPORTED_HTML_ELEMENTS_.find((el: SupportedHTMLElement) => 'p' == el.getElementType()) as SupportedHTMLElement,
                                         alias: 'rootP',
                                         children: []
                                     }
@@ -52,7 +53,7 @@ describe('ElementTreeFactory.ts', () => {
         expect(typeof factory.getNewElementID).toEqual('function');
         expect(el).toBeDefined();
         expect(el.alias).toEqual(alias);
-        expect(el.type).toEqual(type);
+        expect(el.element.getElementType()).toEqual(type);
     });
 
     it('should return an Obj<iTreeElement> with an alias that matches the ID if no alias is provided', () => {

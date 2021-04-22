@@ -7,7 +7,7 @@
     </div>
     <div :class="treeElementClass">
       <h3 id="alias">{{alias}}</h3>
-      <h4 id="type">({{type}})</h4>
+      <h4 id="type">({{element.getElementType()}})</h4>
     </div>
     <div class="button-wrapper">
       <div id="add-after" class="add-button" @click="addSiblingAfter">
@@ -19,7 +19,7 @@
       v-for="(child) of children"
       :key="child.id"
       :root="child.root"
-      :type="child.type"
+      :element="child.element"
       :alias="child.alias"
       :id="child.id"
       :parentid="id"
@@ -34,7 +34,7 @@ import iAddSiblingPayload from "@/interfaces/iAddSiblingPayload";
 import { Options, Vue } from "vue-class-component";
 
 @Options({
-  props: ["type", "alias", "id", "children", "parentid", "root"],
+  props: ["element", "alias", "id", "children", "parentid", "root"],
   inject: ["getTreeFactoryInstance"],
   data: () => {
     return {
@@ -42,7 +42,7 @@ import { Options, Vue } from "vue-class-component";
     };
   },
   created() {
-    this.treeElementClass = `${this.type} ${this.treeElementClass}`;
+    this.treeElementClass = `${this.element} ${this.treeElementClass}`;
   },
   methods: {
     getNewElementCredentials() {
@@ -57,7 +57,7 @@ import { Options, Vue } from "vue-class-component";
         let newEl: iTreeElement = {
           id: this.getTreeFactoryInstance().getNewElementID(),
           root: this.root ? true : false,
-          type: this.type,
+          element: this.element,
           alias,
           children: []
         };

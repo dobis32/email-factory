@@ -4,7 +4,7 @@
       v-for="(el) of elementTreeData"
       :key="el.id"
       :root="el.root"
-      :type="el.type"
+      :element="el.getElementType()"
       :alias="el.alias"
       :id="el.id"
       :parentid="undefined"

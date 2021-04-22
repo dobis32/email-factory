@@ -3,6 +3,9 @@
    <div class="module-option" @click="saveModule">
        SAVE MODULE
    </div>
+   <div class="module-option" @click="generateCode">
+       GENERATE CODE
+   </div>
   </div>
 </template>
 
@@ -13,6 +16,9 @@ import { Options, Vue } from 'vue-class-component';
   methods: {
     saveModule(): void {
       return;
+    },
+    generateCode(): void {
+      this.$store.dispatch('openModal', 'GeneratedCodeCard');
     }
   },
   props: {

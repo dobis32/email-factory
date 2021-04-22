@@ -5,26 +5,26 @@ import iAddSiblingPayload from '@/interfaces/iAddSiblingPayload';
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
 import _SUPPORTED_HTML_ELEMENTS_ from '@/constants/SupportedHTMLElementTypes';
 import _DEFAULT_STATE_ from '@/constants/DefaultState';
-
+import { HTML_TABLE, HTML_P, HTML_TD, HTML_TR } from '@/constants/SupportedHTMLElementTypes';
 const elFactory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_);
 describe('TreeElement.vue', () => {
 	const mockChildren: Array<iTreeElement> = [
 		{
 			id: 'bar',
 			root: false,
-			type: 'tr',
+			element: HTML_TR,
 			alias: 'rootTR',
 			children: [
 				{
 					id: 'fizz',
 					root: false,
-					type: 'td',
+					element: HTML_TD,
 					alias: 'rootTD',
 					children: [
 						{
 							id: 'buzz',
 							root: false,
-							type: 'p',
+							element: HTML_P,
 							alias: 'rootP',
 							children: []
 						}
@@ -45,13 +45,13 @@ describe('TreeElement.vue', () => {
 
 		return elements;
 	};
-	const mockType = 'table';
+	const mockElement = HTML_TABLE;
 	const mockAlias = 'rootTable';
 	const mockid = 'elementid';
 	const mockParentid = 'parentid';
 	const mockProps = {
 		root: false,
-		type: mockType,
+		element: mockElement,
 		alias: mockAlias,
 		id: mockid,
 		children: mockChildren,
@@ -99,7 +99,7 @@ describe('TreeElement.vue', () => {
 
 	// Data
 	it('should concatenate the default tree-element css class with the appropriate element type', () => {
-		expect(wrapper.vm.treeElementClass).toEqual(`${mockProps.type} ${mockTreeElement}`);
+		expect(wrapper.vm.treeElementClass).toEqual(`${mockProps.element.getElementType()} ${mockTreeElement}`);
 	});
 
 	// DOM
@@ -149,14 +149,14 @@ describe('TreeElement.vue', () => {
 	it('should have a method for adding a sibling to the assumed tree element', async () => {
 		const mockPre = true;
 		wrapper.vm.getNewElementCredentials = jest.fn(() => {
-			return Promise.resolve({ type: mockType, alias: mockAlias });
+			return Promise.resolve({ alias: mockAlias });
 		});
 		wrapper.vm
 
 		const mockNewEl: iTreeElement = {
 			id: mockID,
 			root: false,
-			type: mockType,
+			element: mockElement,
 			alias: mockAlias,
 			children: []
 		};
@@ -176,14 +176,14 @@ describe('TreeElement.vue', () => {
 	it('should know to create a root sibbling if the assumed tree element is a root', async () => {
 		const mockPre = false;
 		wrapper.vm.getNewElementCredentials = jest.fn(() => {
-			return Promise.resolve({ type: mockType, alias: mockAlias });
+			return Promise.resolve({ alias: mockAlias });
 		});
 		wrapper.vm
 
 		const mockNewEl: iTreeElement = {
 			id: mockID,
 			root: false,
-			type: mockType,
+			element: mockElement,
 			alias: mockAlias,
 			children: []
 		};
@@ -211,8 +211,10 @@ describe('TreeElement.vue', () => {
 	// Props
 	it('should have a prop for the type of the assumed tree element', () => {
 		const props = wrapper.props();
-		expect(props.type).toEqual(mockProps.type);
-		expect(typeof props.type).toEqual('string');
+		expect(props.element.getElementType()).toEqual(mockProps.element.getElementType());
+		expect(typeof props.element.getElementType()).toEqual('string');
+		expect( Array.isArray(props.element.getValidChildren())).toEqual(true);
+
 	});
 
 	it('should have a prop for the alias of the assumed tree element', () => {
