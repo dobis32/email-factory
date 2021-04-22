@@ -3,9 +3,10 @@ import TreeElement from '@/components/TreeElement.vue';
 import iTreeElement from '@/interfaces/iTreeElement';
 import iAddSiblingPayload from '@/interfaces/iAddSiblingPayload';
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
-import SUPPORTED_HTML_ELEMENTS from '@/constants/SupportedHTMLElementTypes';
+import _SUPPORTED_HTML_ELEMENTS_ from '@/constants/SupportedHTMLElementTypes';
+import _DEFAULT_STATE_ from '@/constants/DefaultState';
 
-const elFactory = new ElementTreeFactory(SUPPORTED_HTML_ELEMENTS);
+const elFactory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_);
 describe('TreeElement.vue', () => {
 	const mockChildren: Array<iTreeElement> = [
 		{
@@ -58,19 +59,21 @@ describe('TreeElement.vue', () => {
 	};
 	const numberOfChildren = getNumberOfElementsInTree(mockChildren);
 	const mockTreeElement = 'tree-element';
+	const mockID = elFactory.getNewElementID();
 	let wrapper: any;
 	let dispatch: any;
 	let state: any;
 	let $store: any;
-
+	let mockGetTreeFactoryInstance = () => {
+		return { 
+			getNewElementID() { return mockID }
+		}
+	
+	}
 	beforeEach(() => {
 		dispatch = jest.fn();
 
-		state = {
-			nonceFactory: {
-				getNonce: jest.fn(()=>{ return 'mockNonce' })
-			}
-		};
+		state = _DEFAULT_STATE_;
 
 		$store = {
 			state,
@@ -86,9 +89,8 @@ describe('TreeElement.vue', () => {
 			props: mockProps,
 			global: {
 				mocks: { $store },
-				provide: { getTreeFactoryInstance: () => {
-					return elFactory; }
-				}
+				provide: { getTreeFactoryInstance: mockGetTreeFactoryInstance }
+				
 			}
 		});
 
@@ -144,82 +146,59 @@ describe('TreeElement.vue', () => {
 		expect(wrapper.vm.addSibling).toHaveBeenCalledWith(true);
 	});
 
+	it('should have a method for adding a sibling to the assumed tree element', async () => {
+		const mockPre = true;
+		wrapper.vm.getNewElementCredentials = jest.fn(() => {
+			return Promise.resolve({ type: mockType, alias: mockAlias });
+		});
+		wrapper.vm
 
-	// TODO: make this miserable piece of shit pass
-	// it('should have a method for adding a sibling to the assumed tree element', async () => {
-	// 	const mockType = 'tr';
-	// 	const mockAlias = 'new-tr';
-	// 	const mockPre = true;
+		const mockNewEl: iTreeElement = {
+			id: mockID,
+			root: false,
+			type: mockType,
+			alias: mockAlias,
+			children: []
+		};
+		const mockPayload: iAddSiblingPayload = {
+			elementToAdd: mockNewEl,
+			parentid: mockParentid,
+			pre: mockPre
+		};
 
-	// 	wrapper.vm.getNewElementCredentials = jest.fn(() => {
-	// 		return Promise.resolve({ type: mockType, alias: mockAlias });
-	// 	});
+		await wrapper.vm.addSibling(mockPre);
 
-	// 	const mockNewEl: iTreeElement = {
-	// 		id: elFactory.getNewElementID(),
-	// 		root: false,
-	// 		type: mockType,
-	// 		alias: mockAlias,
-	// 		children: []
-	// 	};
-	// 	const mockPayload: iAddSiblingPayload = {
-	// 		elementToAdd: mockNewEl,
-	// 		parentid: mockParentid,
-	// 		pre: mockPre
-	// 	};
+		expect(wrapper.vm.addSibling).toBeDefined();
+		expect(typeof wrapper.vm.addSibling).toEqual('function');
+		expect(dispatch).toHaveBeenCalledWith('addElementSibling', mockPayload);
+	});
 
-	// 	await wrapper.vm.addSibling(mockPre);
+	it('should know to create a root sibbling if the assumed tree element is a root', async () => {
+		const mockPre = false;
+		wrapper.vm.getNewElementCredentials = jest.fn(() => {
+			return Promise.resolve({ type: mockType, alias: mockAlias });
+		});
+		wrapper.vm
 
-	// 	expect(wrapper.vm.addSibling).toBeDefined();
-	// 	expect(typeof wrapper.vm.addSibling).toEqual('function');
-	// 	expect(dispatch).toHaveBeenCalledWith('addElementSibling', mockPayload);
-	// });
+		const mockNewEl: iTreeElement = {
+			id: mockID,
+			root: false,
+			type: mockType,
+			alias: mockAlias,
+			children: []
+		};
+		const mockPayload: iAddSiblingPayload = {
+			elementToAdd: mockNewEl,
+			parentid: mockParentid,
+			pre: mockPre
+		};
 
-	// TODO: make this OTHER miserable PIECE OF SHIT pass
-	// it('should know to create a root sibbling if the assumed tree element is a root', async () => {
-	// 	const mockType = 'table';
-	// 	const mockAlias = 'new-table';
-	// 	const mockPre = true;
-	// 	let newProps = { ...mockProps };
-	// 	newProps.root = true;
-	// 	wrapper = mount(TreeElement, {
-	// 		data: () => {
-	// 			return {
-	// 				treeElementClass: mockTreeElement
-	// 			};
-	// 		},
-	// 		props: newProps,
-	// 		global: {
-	// 			mocks: { $store },
-	// 			provide: {}
-	// 		}
-	// 	});
+		await wrapper.vm.addSibling(mockPre);
 
-	// 	wrapper.vm.getNewElementID = jest.fn(() => {
-	// 		return 'mockElementID';
-	// 	});
-	// 	wrapper.vm.getNewElementCredentials = jest.fn(() => {
-	// 		return Promise.resolve({ type: mockType, alias: mockAlias });
-	// 	});
-
-	// 	const mockRootEl: iTreeElement = {
-	// 		id: wrapper.vm.getNewElementID(),
-	// 		root: true,
-	// 		type: mockType,
-	// 		alias: mockAlias,
-	// 		children: []
-	// 	};
-	// 	const mockPayload: iAddSiblingPayload = {
-	// 		elementToAdd: mockRootEl,
-	// 		parentid: mockParentid,
-	// 		pre: mockPre
-	// 	};
-	// 	await wrapper.vm.addSibling(mockPre);
-
-	// 	expect(wrapper.vm.addSibling).toBeDefined();
-	// 	expect(typeof wrapper.vm.addSibling).toEqual('function');
-	// 	expect(dispatch).toHaveBeenCalledWith('addElementSibling', mockPayload);
-	// });
+		expect(wrapper.vm.addSibling).toBeDefined();
+		expect(typeof wrapper.vm.addSibling).toEqual('function');
+		expect(dispatch).toHaveBeenCalledWith('addElementSibling', mockPayload);
+	});
 
 	it('should not add a sibling to the assumed tree element if the type or alias credentials are not valid', () => {
 		wrapper.vm.getNewElementCredentials = jest.fn(async () => {

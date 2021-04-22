@@ -1,6 +1,6 @@
 <template>
   <div class="module-options-wrapper">
-   <div class="module-option">
+   <div class="module-option" @click="saveModule">
        SAVE MODULE
    </div>
   </div>
@@ -10,6 +10,11 @@
 import { Options, Vue } from 'vue-class-component';
 
 @Options({
+  methods: {
+    saveModule(): void {
+      return;
+    }
+  },
   props: {
    
   }

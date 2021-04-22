@@ -3,10 +3,9 @@ import { createStore } from 'vuex';
 import getters from './getters';
 import mutations from './mutations';
 import actions from './actions';
-import _SUPPORTED_HTML_ELEMENTS_ from '../constants/SupportedHTMLElementTypes';
-import DefaultStateIndex from '@/constants/DefaultStateIndex';
+import _DEFAULT_STATE_ from '@/constants/DefaultState';
 export default createStore({
-	state: DefaultStateIndex,
+	state: _DEFAULT_STATE_,
 	getters,
 	mutations,
 	actions

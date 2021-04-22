@@ -1,4 +1,4 @@
-import { mount, shallowMount } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import AddElementCard from '@/components/modal_cards/AddElementCard.vue';
 
 describe('AddElementCard.vue', () => {

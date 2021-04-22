@@ -1,6 +1,6 @@
 import getters from '@/store/getters';
 import iTreeElement from '@/interfaces/iTreeElement';
-import DefaultStateIndex from '@/constants/DefaultStateIndex';
+import DefaultStateIndex from '@/constants/DefaultState';
 
 describe('getters.ts', () => {
     let treeData: Array<iTreeElement> 

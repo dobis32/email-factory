@@ -1,10 +1,11 @@
 import iTreeElement from '../interfaces/iTreeElement';
 import * as crypto from 'crypto';
+import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
 
 export default class ElementTreeFactory {
-	private _SUPPORTED_HTML_ELEMENTS: Array<string>;
+	private _SUPPORTED_HTML_ELEMENTS: Array<SupportedHTMLElement>;
 
-	constructor(supportedElements: Array<string>) {
+	constructor(supportedElements: Array<SupportedHTMLElement>) {
 		this._SUPPORTED_HTML_ELEMENTS = supportedElements;
 	}
 
@@ -24,8 +25,8 @@ export default class ElementTreeFactory {
 		return crypto.randomBytes(16).toString('base64');
 	}
 
-	elementIsSupported(el: string): boolean {
-		return this._SUPPORTED_HTML_ELEMENTS.find((type: string) => type == el) ? true : false;
+	elementIsSupported(targetType: string): boolean {
+		return this._SUPPORTED_HTML_ELEMENTS.find((el: SupportedHTMLElement) => el.getElementType() == targetType) ? true : false;
 	}
 
 	getTreeAsArray(treeData: Array<iTreeElement>): Array<iTreeElement> {

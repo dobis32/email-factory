@@ -32,7 +32,7 @@ export default {
             ]
         }
     ],
-    modalState: true,
+    modalState: false,
     activeModal: '',
     modalcb: () => { return; }
 }

@@ -52,12 +52,12 @@ import { Options, Vue } from "vue-class-component";
       });
     },
     async addSibling(pre: boolean) {
-      const { type, alias } = await this.getNewElementCredentials();
-      if (type && alias) {
+      const {  alias } = await this.getNewElementCredentials();
+      if (alias) {
         let newEl: iTreeElement = {
           id: this.getTreeFactoryInstance().getNewElementID(),
           root: this.root ? true : false,
-          type,
+          type: this.type,
           alias,
           children: []
         };

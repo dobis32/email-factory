@@ -1,5 +1,5 @@
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
-import SUPPORTED_HTML_ELEMENTS from '@/constants/SupportedHTMLElementTypes';
+import _SUPPORTED_HTML_ELEMENTS_ from '@/constants/SupportedHTMLElementTypes';
 import iTreeElement from '@/interfaces/iTreeElement';
 
 describe('ElementTreeFactory.ts', () => {
@@ -40,7 +40,7 @@ describe('ElementTreeFactory.ts', () => {
                 ]
             }
         ];
-        factory = new ElementTreeFactory(SUPPORTED_HTML_ELEMENTS);
+        factory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_);
         treeAsArray = factory.getTreeAsArray(treeData);
 	});
 
@@ -78,11 +78,11 @@ describe('ElementTreeFactory.ts', () => {
     });
 
     it('should have a function that determines if an element type is supported', () => {
-        const elType1 = SUPPORTED_HTML_ELEMENTS[0];
+        const elType1 = _SUPPORTED_HTML_ELEMENTS_[0];
         const elType2 = 'foobar';
         expect(factory.elementIsSupported).toBeDefined();
         expect(typeof factory.elementIsSupported).toEqual('function');
-        expect(factory.elementIsSupported(elType1)).toEqual(true);
+        expect(factory.elementIsSupported(elType1.getElementType())).toEqual(true);
         expect(factory.elementIsSupported(elType2)).toEqual(false);
     });
 

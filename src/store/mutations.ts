@@ -1,6 +1,6 @@
 /* eslint-disable */
 import iTreeElement from '@/interfaces/iTreeElement';
-import DefaultStateIndex from '@/constants/DefaultStateIndex';
+import DefaultStateIndex from '@/constants/DefaultState';
 
 export default {
 	updateTreeData: (state: any, updatedTreeData: Array<iTreeElement>): void => {

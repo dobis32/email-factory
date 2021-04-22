@@ -1,6 +1,6 @@
 import mutations from '@/store/mutations';
 import iTreeElement from '@/interfaces/iTreeElement';
-import DefaultStateIndex from '@/constants/DefaultStateIndex';
+import DefaultStateIndex from '@/constants/DefaultState';
 
 describe('mutations.ts', () => {
     let treeData: Array<iTreeElement> 

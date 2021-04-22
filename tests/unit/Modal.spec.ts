@@ -1,7 +1,5 @@
-import { mount, shallowMount } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import Modal from '@/components/Modal.vue';
-import TreeElement from '@/components/TreeElement.vue';
-import iTreeElement from '@/interfaces/iTreeElement';
 
 describe('Modal.vue', () => {
     let wrapper: any;

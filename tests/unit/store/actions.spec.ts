@@ -2,7 +2,6 @@ import actions from '@/store/actions';
 import iAddSiblingPayload from '@/interfaces/iAddSiblingPayload';
 import iTreeElement from '@/interfaces/iTreeElement';
 
-
 let mockContext: any;
 describe('actions.ts', () => {
 	beforeEach(() => {
