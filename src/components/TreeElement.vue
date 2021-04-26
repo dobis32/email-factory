@@ -22,6 +22,7 @@
       :element="child.element"
       :alias="child.alias"
       :id="child.id"
+      :attributes="child.attributes"
       :parentid="id"
       :children="child.children"
     />
@@ -31,10 +32,11 @@
 <script lang="ts">
 import iTreeElement from "@/interfaces/iTreeElement";
 import iAddSiblingPayload from "@/interfaces/iAddSiblingPayload";
+import HTMLAttribute from "@/classes/HTMLAttribute";
 import { Options, Vue } from "vue-class-component";
 
 @Options({
-  props: ["element", "alias", "id", "children", "parentid", "root"],
+  props: ["element", "alias", "id", "children", "parentid", "root", "attributes"],
   inject: ["getTreeFactoryInstance"],
   data: () => {
     return {
@@ -42,7 +44,7 @@ import { Options, Vue } from "vue-class-component";
     };
   },
   created() {
-    this.treeElementClass = `${this.element} ${this.treeElementClass}`;
+    this.treeElementClass = `${this.element.getElementType()} ${this.treeElementClass}`;
   },
   methods: {
     getNewElementCredentials() {
@@ -59,7 +61,8 @@ import { Options, Vue } from "vue-class-component";
           root: this.root ? true : false,
           element: this.element,
           alias,
-          children: []
+          children: new Array<iTreeElement>(),
+          attributes: new Array<HTMLAttribute>()
         };
         const payload: iAddSiblingPayload = {
           elementToAdd: newEl,

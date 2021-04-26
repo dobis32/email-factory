@@ -2,39 +2,9 @@ import { mount } from '@vue/test-utils';
 import TreeEditor from '@/components/TreeEditor.vue';
 import TreeElement from '@/components/TreeElement.vue';
 import iTreeElement from '@/interfaces/iTreeElement';
-import ElementTreeFactory from '@/classes/ElementTreeFactory';
-import SUPPORTED_HTML_ELEMENTS from '@/constants/SupportedHTMLElementTypes';
-import { HTML_TR, HTML_TD, HTML_P } from '@/constants/SupportedHTMLElementTypes';
+import _DEFAULT_STATE_ from '@/constants/DefaultState';
 describe('TreeEditor.vue', () => {
-	const factory = new ElementTreeFactory(SUPPORTED_HTML_ELEMENTS);
-	const getTreeFactoryInstance = () => {
-		return factory;
-	}
-	const mockElementTreeData: Array<iTreeElement> = [
-		{
-			id: 'bar',
-			root: false,
-			element: HTML_TR,
-			alias: 'rootTR',
-			children: [
-				{
-					id: 'fizz',
-					root: false,
-					element: HTML_TD,
-					alias: 'rootTD',
-					children: [
-						{
-							id: 'buzz',
-							root: false,
-							element: HTML_P,
-							alias: 'rootP',
-							children: []
-						}
-					]
-				}
-			]
-		}
-	];
+	const mockElementTreeData: Array<iTreeElement> = _DEFAULT_STATE_.treeData;
 
 	const getNumberOfElementsInTree = function(elementTree: Array<iTreeElement>) {
 		let elements: number = 0;
@@ -53,6 +23,7 @@ describe('TreeEditor.vue', () => {
 
 	beforeEach(() => {
 		wrapper = mount(TreeEditor, {
+			
 			data: () => {
 				return {};
 			},
@@ -61,7 +32,7 @@ describe('TreeEditor.vue', () => {
 			},
 			global: {
 				mocks: {},
-				provide: { getTreeFactoryInstance }
+				provide: {}
 			}
 		});
 	});

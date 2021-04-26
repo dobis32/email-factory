@@ -6,6 +6,8 @@ import ElementTreeFactory from '@/classes/ElementTreeFactory';
 import _SUPPORTED_HTML_ELEMENTS_ from '@/constants/SupportedHTMLElementTypes';
 import _DEFAULT_STATE_ from '@/constants/DefaultState';
 import { HTML_TABLE, HTML_P, HTML_TD, HTML_TR } from '@/constants/SupportedHTMLElementTypes';
+import HTMLAttribute from '@/classes/HTMLAttribute';
+
 const elFactory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_);
 describe('TreeElement.vue', () => {
 	const mockChildren: Array<iTreeElement> = [
@@ -26,11 +28,14 @@ describe('TreeElement.vue', () => {
 							root: false,
 							element: HTML_P,
 							alias: 'rootP',
-							children: []
+							children: [],
+							attributes: new Array<HTMLAttribute>()
 						}
-					]
+					],
+					attributes: new Array<HTMLAttribute>()
 				}
-			]
+			],
+			attributes: new Array<HTMLAttribute>()
 		}
 	];
 	const getNumberOfElementsInTree = function(elementTree: Array<iTreeElement>) {
@@ -55,7 +60,8 @@ describe('TreeElement.vue', () => {
 		alias: mockAlias,
 		id: mockid,
 		children: mockChildren,
-		parentid: mockParentid
+		parentid: mockParentid,
+		attributes: new Array<HTMLAttribute>()
 	};
 	const numberOfChildren = getNumberOfElementsInTree(mockChildren);
 	const mockTreeElement = 'tree-element';
@@ -158,7 +164,8 @@ describe('TreeElement.vue', () => {
 			root: false,
 			element: mockElement,
 			alias: mockAlias,
-			children: []
+			children: [],
+			attributes: new Array<HTMLAttribute>()
 		};
 		const mockPayload: iAddSiblingPayload = {
 			elementToAdd: mockNewEl,
@@ -185,7 +192,8 @@ describe('TreeElement.vue', () => {
 			root: false,
 			element: mockElement,
 			alias: mockAlias,
-			children: []
+			children: [],
+			attributes: new Array<HTMLAttribute>()
 		};
 		const mockPayload: iAddSiblingPayload = {
 			elementToAdd: mockNewEl,
@@ -238,6 +246,12 @@ describe('TreeElement.vue', () => {
 	it('should have a prop for the parent id of the assumed tree element', () => {
 		const props = wrapper.props();
 		expect(props.parentid).toEqual(mockProps.parentid);
+		expect(typeof props.parentid).toEqual('string');
+	});
+
+	it('should have a prop for attributes associated with the assumed tree element', () => {
+		const props = wrapper.props();
+		expect(props.attributes).toEqual(mockProps.attributes);
 		expect(typeof props.parentid).toEqual('string');
 	});
 });

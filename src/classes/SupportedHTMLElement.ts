@@ -1,3 +1,5 @@
+
+
 export default class SupportedHTMLElement {
     private _validChildren: Array<string>;
     private _elementName: string;
@@ -5,6 +7,7 @@ export default class SupportedHTMLElement {
         this._validChildren = validChildren;
         this._elementName = elementName;
     }
+
     getValidChildren(): Array<string> {
         return this._validChildren;
     }

@@ -1,6 +1,7 @@
-import iTreeElement from '../interfaces/iTreeElement';
+import iTreeElement from '@/interfaces/iTreeElement';
 import * as crypto from 'crypto';
 import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
+import HTMLAttribute from '@/classes/HTMLAttribute';
 
 export default class ElementTreeFactory {
 	private _SUPPORTED_HTML_ELEMENTS: Array<SupportedHTMLElement>;
@@ -19,7 +20,8 @@ export default class ElementTreeFactory {
 			element,
 			root: element.getElementType() == 'table' ? true : false,
 			alias: alias ? alias : id,
-			children: []
+			children: new Array<iTreeElement>(),
+			attributes:  new Array<HTMLAttribute>()
 		}
 	}
 
@@ -27,7 +29,7 @@ export default class ElementTreeFactory {
 		return this._SUPPORTED_HTML_ELEMENTS.find((el: SupportedHTMLElement) => el.getElementType() == type);
 	}
 
-	getNewElementID() {
+	getNewElementID(): string {
 		return crypto.randomBytes(16).toString('base64');
 	}
 
@@ -60,11 +62,22 @@ export default class ElementTreeFactory {
 		return pre ? [ elementToAdd, ...parent.children ] : [ ...parent.children, elementToAdd ];
 	}
 
-	generateCode(treeData: Array<iTreeElement>) : string {
-		let code: string = '';
+	generateCode(tree: Array<iTreeElement>): string {
+		let retString = '';
+		tree.forEach((el: iTreeElement) => {
+			let attributes = '';
+			let content = '';
+			el.attributes.forEach((att: HTMLAttribute) => {
+				const attObject = att.getAttribute()
+				if(attObject.attributeName == 'content' || attObject.attributeName == 'innerHTML') content += attObject.attributeValue;
+				else attributes += `${attObject.attributeName}="${attObject.attributeValue}" `;
+			})
+			retString += `<${el.element.getElementType()} ${attributes}>`;
+			retString += content;
+			retString += `</${el.element.getElementType()}>`;
+		});
 
-		
 
-		return code;
-	}
+        return retString;
+    }
 }
