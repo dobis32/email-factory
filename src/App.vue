@@ -2,7 +2,7 @@
   <div>
     <TreeEditor :elementTreeData="getElementTree" />
     <ModuleOptions />
-    <Modal :activeState="getModalState" :activeModal="getActiveModal" :cb="getModalCB" />
+    <Modal :activeState="getModalState" :activeModal="getActiveModal" :cb="getModalCB" :elementTreeData="getElementTree" />
   </div>
 </template>
 
@@ -12,8 +12,8 @@ import TreeEditor from "./components/TreeEditor.vue";
 import ModuleOptions from "./components/ModuleOptions.vue";
 import Modal from "./components/Modal.vue";
 import ElementTreeFactory from "./classes/ElementTreeFactory";
-import SUPPORTED_HTML_ELEMENTS from "./constants/SupportedHTMLElementTypes"
-const factory = new ElementTreeFactory(SUPPORTED_HTML_ELEMENTS);
+import _SUPPORTED_HTML_ELEMENTS_ from "./constants/SupportedHTMLElementTypes"
+const factory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_);
 @Options({
   components: {
     TreeEditor,

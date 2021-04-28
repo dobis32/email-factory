@@ -10,7 +10,7 @@ export default class ElementTreeFactory {
 		this._SUPPORTED_HTML_ELEMENTS = supportedElements;
 	}
 
-	createTreeElement(elementType: string, alias?: string): iTreeElement | undefined {
+	createTreeElement(elementType: string, alias?: string): iTreeElement | undefined { // TODO old/bad implementation; 
 		if (!this.elementIsSupported(elementType)) return undefined;
 		const id = this.getNewElementID();
 		const element = this.getElementOfType(elementType);
@@ -62,22 +62,29 @@ export default class ElementTreeFactory {
 		return pre ? [ elementToAdd, ...parent.children ] : [ ...parent.children, elementToAdd ];
 	}
 
-	generateCode(tree: Array<iTreeElement>): string {
+	generateCode(tree: Array<iTreeElement>, nestLevel = 0): string { // TODO unit test
 		let retString = '';
 		tree.forEach((el: iTreeElement) => {
+			let indent = '';
+			for(let i = 0; i < nestLevel; i++) {
+				indent += '\t';
+			}
 			let attributes = '';
 			let content = '';
 			el.attributes.forEach((att: HTMLAttribute) => {
 				const attObject = att.getAttribute()
-				if(attObject.attributeName == 'content' || attObject.attributeName == 'innerHTML') content += attObject.attributeValue;
+				if(attObject.attributeName == 'innerText') content += attObject.attributeValue;
 				else attributes += `${attObject.attributeName}="${attObject.attributeValue}" `;
 			})
-			retString += `<${el.element.getElementType()} ${attributes}>`;
-			retString += content;
-			retString += `</${el.element.getElementType()}>`;
+			const headTag = `${indent}<${el.element.getElementType()} ${attributes}>\n`;
+			const tailTag = `${indent}</${el.element.getElementType()}>\n`;
+			if(!content.length) {
+				content = this.generateCode(el.children, nestLevel + 1);
+			}
+			retString += headTag;
+			retString += `${content}`;
+			retString += tailTag;
 		});
-
-
         return retString;
     }
 }

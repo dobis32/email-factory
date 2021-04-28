@@ -1,6 +1,6 @@
 <template>
   <div id="modal-card" @click="stopPropagation">
-    <textarea name="generatedCode" id="generated-code" wrap="off" cols="30" rows="10"></textarea>
+    <textarea name="code" id="generated-code" wrap="off" cols="30" rows="10" v-model="generatedCode"></textarea>
   </div>
 </template>
 
@@ -13,10 +13,10 @@ import { Options, Vue } from "vue-class-component";
       generatedCode: ''
     }
   },
-  inject: ["stopPropagation", "getTreeFactoryInstance", "treeData"],
-  props: ["generatedCode"],
+  props: ["elementTreeData"],
+  inject: ["stopPropagation", "getTreeFactoryInstance"],
   beforeMount() {
-    this.generatedCode = this.getTreeFactoryInstance().generateCode(this.treeData);
+    this.generatedCode = this.getTreeFactoryInstance().generateCode(this.elementTreeData);
   },
   beforeUnmount() {
     this.$store.dispatch("resetModalCB");

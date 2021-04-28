@@ -30,13 +30,13 @@ export default {
                                     element: HTML_P,
                                     alias: 'rootP',
                                     attributes: new Array<HTMLAttribute>(),
-                                    children: []
+                                    children: [] as Array<iTreeElement>
                                 }
-                            ]
+                            ] as Array<iTreeElement>
                         }
-                    ]
+                    ] as Array<iTreeElement>
                 }
-            ]
+            ] as Array<iTreeElement>
         }
     ] as Array<iTreeElement>,
     modalState: false,

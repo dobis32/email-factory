@@ -41,6 +41,7 @@ export default class ModuleOptions extends Vue {
   .module-option {
     background-color: cornflowerblue;
     text-align: center;
+    cursor: pointer;
     padding: 20px 0px;
     margin: 10px 0px;
   }

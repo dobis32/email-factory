@@ -55,9 +55,10 @@ import { Options, Vue } from "vue-class-component";
     },
     async addSibling(pre: boolean) {
       const {  alias } = await this.getNewElementCredentials();
+      const factory = this.getTreeFactoryInstance();
       if (alias) {
         let newEl: iTreeElement = {
-          id: this.getTreeFactoryInstance().getNewElementID(),
+          id: factory.getNewElementID(),
           root: this.root ? true : false,
           element: this.element,
           alias,
@@ -67,7 +68,8 @@ import { Options, Vue } from "vue-class-component";
         const payload: iAddSiblingPayload = {
           elementToAdd: newEl,
           parentid: this.parentid,
-          pre
+          pre,
+          factory
         };
         this.$store.dispatch("addElementSibling", payload);
       }

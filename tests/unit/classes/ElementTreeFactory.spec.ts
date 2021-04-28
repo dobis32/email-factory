@@ -1,7 +1,7 @@
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
-import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
 import _SUPPORTED_HTML_ELEMENTS_ from '@/constants/SupportedHTMLElementTypes';
 import iTreeElement from '@/interfaces/iTreeElement';
+import { HTML_TABLE, HTML_TR, HTML_TD, HTML_P } from '@/constants/SupportedHTMLElementTypes';
 
 describe('ElementTreeFactory.ts', () => {
     let treeData: Array<iTreeElement>;
@@ -12,27 +12,31 @@ describe('ElementTreeFactory.ts', () => {
             {
                 id: 'foo',
                 root: true,
-                element: _SUPPORTED_HTML_ELEMENTS_.find((el: SupportedHTMLElement) => 'table' == el.getElementType()) as SupportedHTMLElement,
+                element: HTML_TABLE,
                 alias: 'rootTable',
+                attributes: [],
                 children: [
                     {
                         id: 'bar',
                         root: false,
-                        element: _SUPPORTED_HTML_ELEMENTS_.find((el: SupportedHTMLElement) => 'tr' == el.getElementType()) as SupportedHTMLElement,
+                        element: HTML_TR,
                         alias: 'rootTR',
+                        attributes: [],
                         children: [
                             {
                                 id: 'fizz',
                                 root: false,
-                                element: _SUPPORTED_HTML_ELEMENTS_.find((el: SupportedHTMLElement) => 'td' == el.getElementType()) as SupportedHTMLElement,
+                                element: HTML_TD,
                                 alias: 'rootTD',
+                                attributes: [],
                                 children: [
                                     {
                                         id: 'buzz',
                                         root: false,
-                                        element: _SUPPORTED_HTML_ELEMENTS_.find((el: SupportedHTMLElement) => 'p' == el.getElementType()) as SupportedHTMLElement,
+                                        element: HTML_P,
                                         alias: 'rootP',
-                                        children: []
+                                        children: [],
+                                        attributes: []
                                     }
                                 ]
                             }

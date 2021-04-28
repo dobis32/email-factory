@@ -1,6 +1,8 @@
 import actions from '@/store/actions';
 import iAddSiblingPayload from '@/interfaces/iAddSiblingPayload';
 import iTreeElement from '@/interfaces/iTreeElement';
+import { HTML_TABLE } from '@/constants/SupportedHTMLElementTypes';
+import HTMLAttribute from '@/classes/HTMLAttribute';
 
 let mockContext: any;
 describe('actions.ts', () => {
@@ -11,7 +13,7 @@ describe('actions.ts', () => {
 	});
 
     it('should have a function for adding a sibling to the assumed element', () => {
-        const elementToAdd = { id: 'foo', type: 'table', alias: 'foo', root: false, children: [] } as iTreeElement;
+        const elementToAdd = { id: 'foo',  root: false, element: HTML_TABLE, alias: 'foo', children: [] as Array<iTreeElement>, attributes: [] as Array<HTMLAttribute> } as iTreeElement;
         const payload = {
             elementToAdd,
             parentid: 'parentID', 

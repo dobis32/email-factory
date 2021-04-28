@@ -7,7 +7,7 @@
       :element="el.element"
       :alias="el.alias"
       :id="el.id"
-      :attributes="child.attributes"
+      :attributes="el.attributes"
       :parentid="undefined"
       :children="el.children"
     />
@@ -22,7 +22,7 @@ import TreeElement from "./TreeElement.vue";
   components: {
     TreeElement
   },
-  data() {
+  data: () => {
     return {};
   },
   props: ["elementTreeData"]
