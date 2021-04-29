@@ -5,5 +5,5 @@ export default interface iAddSiblingPayload {
 	elementToAdd: iTreeElement;
 	parentid: string;
 	pre: boolean;
-	factory: ElementTreeFactory
+	factory: ElementTreeFactory;
 };

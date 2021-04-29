@@ -7,8 +7,8 @@ import _SUPPORTED_HTML_ELEMENTS_ from '@/constants/SupportedHTMLElementTypes';
 import _DEFAULT_STATE_ from '@/constants/DefaultState';
 import { HTML_TABLE, HTML_P, HTML_TD, HTML_TR } from '@/constants/SupportedHTMLElementTypes';
 import HTMLAttribute from '@/classes/HTMLAttribute';
-
-const elFactory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_);
+import { _TESTING_HASH_ } from '@/constants/testing';
+const elFactory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_, _TESTING_HASH_);
 describe('TreeElement.vue', () => {
 	const mockChildren: Array<iTreeElement> = [
 		{
@@ -65,16 +65,14 @@ describe('TreeElement.vue', () => {
 	};
 	const numberOfChildren = getNumberOfElementsInTree(mockChildren);
 	const mockTreeElement = 'tree-element';
-	const mockID = elFactory.getNewElementID();
+	const mockID = _TESTING_HASH_;
 	let wrapper: any;
 	let dispatch: any;
 	let state: any;
 	let $store: any;
 	let mockGetTreeFactoryInstance = () => {
-		return { 
-			getNewElementID() { return mockID }
-		}
-	
+		return elFactory;
+
 	}
 	beforeEach(() => {
 		dispatch = jest.fn();
@@ -170,6 +168,7 @@ describe('TreeElement.vue', () => {
 		const mockPayload: iAddSiblingPayload = {
 			elementToAdd: mockNewEl,
 			parentid: mockParentid,
+			factory: elFactory,
 			pre: mockPre
 		};
 
@@ -198,6 +197,7 @@ describe('TreeElement.vue', () => {
 		const mockPayload: iAddSiblingPayload = {
 			elementToAdd: mockNewEl,
 			parentid: mockParentid,
+			factory: elFactory,
 			pre: mockPre
 		};
 

@@ -3,17 +3,21 @@
     <div class="input-row">
       <h3>Element alias:</h3>
       <input type="text" v-model="elementAlias" name="alias" placeholder id="alias" />
+      <select name="type" id="element-type">
+        <option v-for="(val) of foo">{{}}</option>
+      </select>
     </div>
     <div id="submit-button" @click="submitData">Submit</div>
   </div>
 </template>
 
 <script lang="ts">
+import SupportedHTMLElement from "@/classes/SupportedHTMLElement";
 import { Options, Vue } from "vue-class-component";
 
 @Options({
   data: () => {
-    return { elementAlias: "", submitting: false };
+    return { elementAlias: "", submitting: false, supportedChildren: new Array<SupportedHTMLElement>()};
   },
   inject: ["stopPropagation"],
   props: ["cb"],
@@ -25,6 +29,9 @@ import { Options, Vue } from "vue-class-component";
       this.submitting = true;
       this.$store.dispatch("closeModal");
     }
+  },
+  beforeMount() {
+    this.supportedChildren;
   },
   beforeUnmount() {
     if (!this.submitting) {

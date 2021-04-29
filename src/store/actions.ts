@@ -6,7 +6,7 @@ export default {
 		const { elementToAdd, parentid, pre, factory } = payload;
 		const treeAsArray = factory.getTreeAsArray(context.state.treeData);
 		const parentEl = factory.findElementByID(treeAsArray, parentid) as iTreeElement;
-		const updatedTree = factory.addElementSibling(parentEl, elementToAdd, pre);
+		factory.addElementSibling(parentEl, elementToAdd, pre);
 		context.commit('updateTreeData', context.state.treeData);
 	},
 	closeModal: (context: any) => {

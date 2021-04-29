@@ -2,13 +2,16 @@ import iTreeElement from '@/interfaces/iTreeElement';
 import * as crypto from 'crypto';
 import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
 import HTMLAttribute from '@/classes/HTMLAttribute';
+import { _TESTING_HASH_ } from '@/constants/Testing';
 
 export default class ElementTreeFactory {
 	private _SUPPORTED_HTML_ELEMENTS: Array<SupportedHTMLElement>;
+	private _testingHash: string;
 
-	constructor(supportedElements: Array<SupportedHTMLElement>) {
+	constructor(supportedElements: Array<SupportedHTMLElement>, testing?: string) {
 		this._SUPPORTED_HTML_ELEMENTS = supportedElements;
-	}
+		this._testingHash = testing ? testing : '';
+	}	
 
 	createTreeElement(elementType: string, alias?: string): iTreeElement | undefined { // TODO old/bad implementation; 
 		if (!this.elementIsSupported(elementType)) return undefined;
@@ -30,7 +33,8 @@ export default class ElementTreeFactory {
 	}
 
 	getNewElementID(): string {
-		return crypto.randomBytes(16).toString('base64');
+		if(this._testingHash == _TESTING_HASH_) return this._testingHash;
+		else return crypto.randomBytes(16).toString('base64');
 	}
 
 	elementIsSupported(targetType: string): boolean {

@@ -1,31 +1,53 @@
 import actions from '@/store/actions';
 import iAddSiblingPayload from '@/interfaces/iAddSiblingPayload';
 import iTreeElement from '@/interfaces/iTreeElement';
-import { HTML_TABLE } from '@/constants/SupportedHTMLElementTypes';
+import { HTML_TD } from '@/constants/SupportedHTMLElementTypes';
 import HTMLAttribute from '@/classes/HTMLAttribute';
+import ElementTreeFactory from '@/classes/ElementTreeFactory';
+import _SUPPORTED_HTML_ELEMENTS_ from '@/constants/SupportedHTMLElementTypes';
+import DefaultState from '@/constants/DefaultState';
 
 let mockContext: any;
+const factory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_);
 describe('actions.ts', () => {
 	beforeEach(() => {
+        factory.getTreeAsArray = jest.fn(factory.getTreeAsArray);
+        factory.findElementByID = jest.fn(factory.findElementByID);
+        factory.addElementSibling = jest.fn(factory.addElementSibling);
+
 		mockContext = {
-            commit: jest.fn()
+            commit: jest.fn(),
+            state: {
+                treeData: DefaultState.treeData
+            }
         }
 	});
 
     it('should have a function for adding a sibling to the assumed element', () => {
-        const elementToAdd = { id: 'foo',  root: false, element: HTML_TABLE, alias: 'foo', children: [] as Array<iTreeElement>, attributes: [] as Array<HTMLAttribute> } as iTreeElement;
+        const elementToAdd = { id: 'foo',  root: false, element: HTML_TD, alias: 'foo', children: [] as Array<iTreeElement>, attributes: [] as Array<HTMLAttribute> } as iTreeElement;
+        const treeData = DefaultState.treeData;
+        const parentid =  DefaultState.treeData[0].children[0].id;
+        const pre = true;
+
+        const treeAsArray = factory.getTreeAsArray(mockContext.state.treeData);
+		const parentEl = factory.findElementByID(treeAsArray, parentid) as iTreeElement;
+		factory.addElementSibling(parentEl, elementToAdd, pre);
+
         const payload = {
             elementToAdd,
-            parentid: 'parentID', 
-            pre: true
+            parentid: parentid,
+            factory,
+            pre
          } as iAddSiblingPayload;
+         const commitToDispatch = 'updateTreeData';
+         const dispatchPayload = [commitToDispatch, treeData];
         
         actions.addElementSibling(mockContext, payload);
         
         expect(actions.addElementSibling).toBeDefined();
         expect(typeof actions.addElementSibling).toEqual('function');
         expect(mockContext.commit).toHaveBeenCalled();
-        expect(mockContext.commit).toHaveBeenCalledWith('addTreeElement', payload);
+        expect(mockContext.commit).toHaveBeenCalledWith('updateTreeData', dispatchPayload);
     });
 
     it('should have a function to close the modal', () => {
