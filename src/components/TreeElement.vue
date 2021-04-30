@@ -26,6 +26,10 @@
       :parentid="id"
       :children="child.children"
     />
+
+    <div v-if="children.length == 0" id="add-child-button">
+      <h3>Add child</h3>
+    </div>
   </div>
 </template>
 
@@ -88,7 +92,7 @@ export default class TreeElement extends Vue {}
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .tree-element-wrapper {
-  padding-left: 40px;
+  padding-left: 50px;
 }
 
 .button-wrapper {
@@ -121,6 +125,7 @@ export default class TreeElement extends Vue {}
 }
 
 .add-button {
+ 
   display: inline-block;
   background-color: #fff;
   width: 30px;
@@ -134,18 +139,32 @@ export default class TreeElement extends Vue {}
     text-align: center;
   }
 }
-.button-wrapper:hover {
-  height: 30px;
 
-  .add-button {
-    &:hover {
-      cursor: pointer;
-    }
-    background-color: lightgreen;
-    span {
-      font-size: 28px;
-      color: #000;
-    }
+.add-button:hover {
+  
+  position: relative;
+  height: 30px;
+  cursor: pointer;
+  background-color: lightgreen;
+  span {
+    font-size: 28px;
+    color: #000;
+  }
+}
+
+#add-after:hover {
+  bottom: 24px;
+}
+
+#add-child-button {
+  width: 100px;
+  text-align: center;
+  margin-top: 5px;
+  margin-left: 50px;
+  background-color: slateblue;
+  padding: 5px 10px;
+  &:hover {
+    cursor: pointer;
   }
 }
 </style>

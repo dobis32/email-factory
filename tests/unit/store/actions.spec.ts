@@ -13,7 +13,7 @@ describe('actions.ts', () => {
 	beforeEach(() => {
         factory.getTreeAsArray = jest.fn(factory.getTreeAsArray);
         factory.findElementByID = jest.fn(factory.findElementByID);
-        factory.addElementSibling = jest.fn(factory.addElementSibling);
+        factory.addChildElement = jest.fn(factory.addChildElement);
 
 		mockContext = {
             commit: jest.fn(),
@@ -28,10 +28,9 @@ describe('actions.ts', () => {
         const treeData = DefaultState.treeData;
         const parentid =  DefaultState.treeData[0].children[0].id;
         const pre = true;
-
-        const treeAsArray = factory.getTreeAsArray(mockContext.state.treeData);
-		const parentEl = factory.findElementByID(treeAsArray, parentid) as iTreeElement;
-		factory.addElementSibling(parentEl, elementToAdd, pre);
+		const parentEl = factory.findElementByID(treeData, parentid) as iTreeElement;
+		
+        parentEl.children = factory.addChildElement(parentEl, elementToAdd, pre);
 
         const payload = {
             elementToAdd,
@@ -39,15 +38,13 @@ describe('actions.ts', () => {
             factory,
             pre
          } as iAddSiblingPayload;
-         const commitToDispatch = 'updateTreeData';
-         const dispatchPayload = [commitToDispatch, treeData];
         
         actions.addElementSibling(mockContext, payload);
         
         expect(actions.addElementSibling).toBeDefined();
         expect(typeof actions.addElementSibling).toEqual('function');
         expect(mockContext.commit).toHaveBeenCalled();
-        expect(mockContext.commit).toHaveBeenCalledWith('updateTreeData', dispatchPayload);
+        expect(mockContext.commit).toHaveBeenCalledWith('updateTreeData', treeData);
     });
 
     it('should have a function to close the modal', () => {

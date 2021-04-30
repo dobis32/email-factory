@@ -54,15 +54,15 @@ export default class ElementTreeFactory {
 		return treeAsArray;
 	}
 
-	findElementByID(treeAsArray: Array<iTreeElement>, targetid: string): iTreeElement | undefined {
-		return treeAsArray.find((el: iTreeElement) => el.id == targetid);
+	findElementByID(treeData: Array<iTreeElement>, targetid: string): iTreeElement | undefined {
+		return this.getTreeAsArray(treeData).find((el: iTreeElement) => el.id == targetid);
 	}
 
-	findElementByAlias(treeAsArray: Array<iTreeElement>, targetAlias: string): iTreeElement | undefined {
-		return treeAsArray.find((el: iTreeElement) => el.alias == targetAlias);
+	findElementByAlias(treeData: Array<iTreeElement>, targetAlias: string): iTreeElement | undefined {
+		return this.getTreeAsArray(treeData).find((el: iTreeElement) => el.alias == targetAlias);
 	}
 
-	addElementSibling(parent: iTreeElement, elementToAdd: iTreeElement, pre: boolean): Array<iTreeElement> {
+	addChildElement(parent: iTreeElement, elementToAdd: iTreeElement, pre: boolean): Array<iTreeElement> {
 		return pre ? [ elementToAdd, ...parent.children ] : [ ...parent.children, elementToAdd ];
 	}
 

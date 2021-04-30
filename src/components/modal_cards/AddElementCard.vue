@@ -3,9 +3,6 @@
     <div class="input-row">
       <h3>Element alias:</h3>
       <input type="text" v-model="elementAlias" name="alias" placeholder id="alias" />
-      <select name="type" id="element-type">
-        <option v-for="(val) of foo">{{}}</option>
-      </select>
     </div>
     <div id="submit-button" @click="submitData">Submit</div>
   </div>

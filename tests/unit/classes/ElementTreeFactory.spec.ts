@@ -120,10 +120,10 @@ describe('ElementTreeFactory.ts', () => {
     it('should have a function to add a sibling element', () => {
         const elToAdd = factory.createTreeElement('td') as iTreeElement;
         const parent = treeData[0].children[0]; // tr element
-        const result1 = factory.addElementSibling(parent, elToAdd, true);
-        const result2 =  factory.addElementSibling(parent, elToAdd, false);
-        expect(factory.addElementSibling).toBeDefined();
-        expect(typeof factory.addElementSibling).toEqual('function');
+        const result1 = factory.addChildElement(parent, elToAdd, true);
+        const result2 =  factory.addChildElement(parent, elToAdd, false);
+        expect(factory.addChildElement).toBeDefined();
+        expect(typeof factory.addChildElement).toEqual('function');
         expect(result1[0]).toEqual(elToAdd);
         expect(result2[1]).toEqual(elToAdd);
     });

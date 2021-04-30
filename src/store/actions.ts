@@ -4,9 +4,9 @@ import iTreeElement from '@/interfaces/iTreeElement';
 export default {
 	addElementSibling: (context: any, payload: iAddSiblingPayload) => {
 		const { elementToAdd, parentid, pre, factory } = payload;
-		const treeAsArray = factory.getTreeAsArray(context.state.treeData);
-		const parentEl = factory.findElementByID(treeAsArray, parentid) as iTreeElement;
-		factory.addElementSibling(parentEl, elementToAdd, pre);
+		const treeData = context.state.treeData
+		const parentEl = factory.findElementByID(treeData, parentid) as iTreeElement;
+		parentEl.children = factory.addChildElement(parentEl, elementToAdd, pre);
 		context.commit('updateTreeData', context.state.treeData);
 	},
 	closeModal: (context: any) => {
