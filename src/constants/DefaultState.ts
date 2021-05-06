@@ -41,5 +41,6 @@ export default {
     ] as Array<iTreeElement>,
     modalState: false,
     activeModal: '',
+    validChildren: new Array<string>(),
     modalcb: (): void => { return; }
 }

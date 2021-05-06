@@ -1,0 +1,1 @@
+export default ['table', 'span', 'img', 'a', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' ,'i', 'strong', 'b', 'u', 'strike'];

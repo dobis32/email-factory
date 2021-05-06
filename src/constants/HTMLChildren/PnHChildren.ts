@@ -1,0 +1,1 @@
+export default ['i', 'strong', 'b', 'u', 'strike'];

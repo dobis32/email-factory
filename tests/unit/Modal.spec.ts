@@ -4,7 +4,7 @@ import Modal from '@/components/Modal.vue';
 describe('Modal.vue', () => {
     let wrapper: any;
     let mockModalState: boolean = true;
-    let mockActiveModal: string = 'AddElementCard';
+    let mockActiveModal: string = 'HTMLElementCard'; // tests will definitely break if this value is NOT a valid modal element
     let mockModalCB: Function = () => { return; };
     const stopPropagation = jest.fn((e: Event) => { e.stopPropagation(); })
     const $store = {
@@ -35,10 +35,8 @@ describe('Modal.vue', () => {
     });
 
     it('render the corresponding modal card according to the value of the activeModal prop', () => {
-        // this test was written under the pretense that the mockActiveModal variable is set to 'AddElementCard'
-        expect(mockActiveModal).toEqual('AddElementCard');
+        // this test was written under the pretense that the mockActiveModal variable is set to 'HTMLElementCard'
         expect(wrapper.findComponent({ name: mockActiveModal }).exists()).toBeTruthy();
-
     });
 
     it('should call the component method to close the modal when the #modal-wrapper is clicked', () => {

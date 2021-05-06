@@ -1,5 +1,5 @@
 import actions from '@/store/actions';
-import iAddSiblingPayload from '@/interfaces/iAddSiblingPayload';
+import iAddElementPayload from '@/interfaces/iAddElementPayload';
 import iTreeElement from '@/interfaces/iTreeElement';
 import { HTML_TD } from '@/constants/SupportedHTMLElementTypes';
 import HTMLAttribute from '@/classes/HTMLAttribute';
@@ -37,12 +37,12 @@ describe('actions.ts', () => {
             parentid: parentid,
             factory,
             pre
-         } as iAddSiblingPayload;
+         } as iAddElementPayload;
         
-        actions.addElementSibling(mockContext, payload);
+        actions.addTreeElement(mockContext, payload);
         
-        expect(actions.addElementSibling).toBeDefined();
-        expect(typeof actions.addElementSibling).toEqual('function');
+        expect(actions.addTreeElement).toBeDefined();
+        expect(typeof actions.addTreeElement).toEqual('function');
         expect(mockContext.commit).toHaveBeenCalled();
         expect(mockContext.commit).toHaveBeenCalledWith('updateTreeData', treeData);
     });

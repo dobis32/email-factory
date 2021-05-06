@@ -23,6 +23,10 @@ export default {
 		state.modalcb = DefaultStateIndex.modalcb
 	},
 
+	setValidChildren: (state: any, validChildren: Array<string>): void => { // TODO unit test
+		state.validChildren = validChildren;
+	},
+
 	setModalCB: (state: any, modalcb: Function): void => {
 		state.modalcb = modalcb;
 	}

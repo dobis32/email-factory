@@ -1,17 +1,22 @@
 import { mount } from '@vue/test-utils';
-import AddElementCard from '@/components/modal_cards/AddElementCard.vue';
-
-describe('AddElementCard.vue', () => {
+import HTMLElementCard from '@/components/modal_cards/HTMLElementCard.vue';
+import { HTML_TD } from '@/constants/SupportedHTMLElementTypes';
+describe('HTMLElementCard.vue', () => {
     let cb: Function;
+    let validChildren: Array<string>;
+    let siblingType: string;
 	let wrapper: any;
     let stopPropagation: Function;
     let provide: any;
     let dispatch: Function;
     let $store: any;
+
 	beforeEach(() => {
         cb = jest.fn(() => {
             return;
         });
+
+        validChildren = HTML_TD.getValidChildren();
 
         stopPropagation = jest.fn((e: Event) => { e.stopPropagation() });
 
@@ -20,17 +25,17 @@ describe('AddElementCard.vue', () => {
         dispatch = jest.fn();
 
         $store = {
-            dispatch
+            dispatch,
         }
 
-		wrapper = mount(AddElementCard, {
+		wrapper = mount(HTMLElementCard, {
 			data: () => {
-				return {
-
-                };
+				return {};
 			},
 			props: {
-				cb
+				cb,
+                validChildren,
+                siblingType
 			},
 			global: {
 				mocks: { $store },
@@ -100,6 +105,13 @@ describe('AddElementCard.vue', () => {
         expect(props.cb).toBeDefined();
         expect(typeof props.cb).toEqual('function');
         expect(props.cb).toEqual(cb);
+    });
+
+    it('should have a prop that provides an array containing the valid child element types of the parent element', () => {
+        const props = wrapper.props();
+        expect(props.validChildren).toBeDefined();
+        expect(Array.isArray(props.validChildren)).toEqual(true);
+        expect(props.validChildren).toEqual(HTML_TD.getValidChildren());
     });
 
     // Methods

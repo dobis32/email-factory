@@ -1,12 +1,12 @@
 /* eslint-disable */
-import iAddSiblingPayload from '@/interfaces/iAddSiblingPayload';
+import iAddElementPayload from '@/interfaces/iAddElementPayload';
 import iTreeElement from '@/interfaces/iTreeElement';
 export default {
-	addElementSibling: (context: any, payload: iAddSiblingPayload) => {
-		const { elementToAdd, parentid, pre, factory } = payload;
+	addTreeElement: (context: any, payload: iAddElementPayload) => { // TODO unit test
+		const { elementToAdd, parentid, pre } = payload; 
 		const treeData = context.state.treeData
-		const parentEl = factory.findElementByID(treeData, parentid) as iTreeElement;
-		parentEl.children = factory.addChildElement(parentEl, elementToAdd, pre);
+		// const parentEl = factory.findElementByID(treeData, parentid) as iTreeElement;
+		// parentEl.children = factory.addChildElement(parentEl, elementToAdd, pre);
 		context.commit('updateTreeData', context.state.treeData);
 	},
 	closeModal: (context: any) => {
@@ -20,6 +20,9 @@ export default {
 	},
 	resetModalCB: (context: any): void => {
 		context.commit('resetModalCB');
+	},
+	setValidChildren: (context: any, validChildren: Array<string>) => { // TODO unit test
+		context.commit('setValidChildren', validChildren);
 	},
 	setModalCB: (context: any, modalcb: Function): void => {
 		context.commit('setModalCB', modalcb);

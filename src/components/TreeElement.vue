@@ -27,7 +27,7 @@
       :children="child.children"
     />
 
-    <div v-if="children.length == 0" id="add-child-button">
+    <div v-if="children.length == 0" id="add-child-button" @click="addElement({ sibling: false, pre: false})">
       <h3>Add child</h3>
     </div>
   </div>
@@ -35,7 +35,7 @@
 
 <script lang="ts">
 import iTreeElement from "@/interfaces/iTreeElement";
-import iAddSiblingPayload from "@/interfaces/iAddSiblingPayload";
+import iAddElementPayload from "@/interfaces/iAddElementPayload";
 import HTMLAttribute from "@/classes/HTMLAttribute";
 import { Options, Vue } from "vue-class-component";
 
@@ -51,14 +51,16 @@ import { Options, Vue } from "vue-class-component";
     this.treeElementClass = `${this.element.getElementType()} ${this.treeElementClass}`;
   },
   methods: {
-    getNewElementCredentials() {
+    getNewElementCredentials() { // todo unit test
       return new Promise(resolve => {
         this.$store.dispatch("setModalCB", resolve);
-        this.$store.dispatch("openModal", "AddElementCard");
+        this.$store.dispatch("setModalValidChildren", this.element.getValidChildren()); // unit test probably doesn't check this
+        this.$store.dispatch("openModal", "HTMLElementCard");
       });
     },
-    async addSibling(pre: boolean) {
-      const {  alias } = await this.getNewElementCredentials();
+    async addElement(payload: { sibling: boolean, pre: boolean, testingID?: string}) {
+      const { sibling, pre } = payload;
+      const { alias } = await this.getNewElementCredentials();
       const factory = this.getTreeFactoryInstance();
       if (alias) {
         let newEl: iTreeElement = {
@@ -69,20 +71,19 @@ import { Options, Vue } from "vue-class-component";
           children: new Array<iTreeElement>(),
           attributes: new Array<HTMLAttribute>()
         };
-        const payload: iAddSiblingPayload = {
+        const payload: iAddElementPayload = {
           elementToAdd: newEl,
-          parentid: this.parentid,
+          parentid: sibling? this.parentid : this.id,
           pre,
-          factory
         };
-        this.$store.dispatch("addElementSibling", payload);
+        this.$store.dispatch("addTreeElement", payload);
       }
     },
     addSiblingBefore() {
-      this.addSibling(true);
+      this.addElement({ sibling: true, pre: true });
     },
     addSiblingAfter() {
-      this.addSibling(false);
+      this.addElement({ sibling: true, pre: false });
     }
   }
 })
