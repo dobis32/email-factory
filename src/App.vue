@@ -2,7 +2,7 @@
   <div>
     <TreeEditor :elementTreeData="getElementTree" />
     <ModuleOptions />
-    <Modal :activeState="getModalState" :activeModal="getActiveModal" :cb="getModalCB" :elementTreeData="getElementTree" />
+    <Modal :activeState="getModalState" :activeModal="getActiveModal" :cb="getModalCB" :elementTreeData="getElementTree" :validChildren="getValidChildren" />
   </div>
 </template>
 
@@ -32,6 +32,9 @@ const factory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_);
     },
     getModalCB() {
       return this.$store.getters.getModalCB;
+    },
+    getValidChildren() {
+      return this.$store.getters.getValidChildren;
     }
   },
   provide: {

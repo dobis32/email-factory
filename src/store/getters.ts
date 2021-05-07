@@ -11,5 +11,8 @@ export default {
 	},
 	getModalCB: (state: any) => {
 		return state.modalcb;
+	},
+	getValidChildren: (state: any) => {
+		return state.validChildren;
 	}
 };

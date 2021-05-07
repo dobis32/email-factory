@@ -1,6 +1,6 @@
 <template>
   <div id="modal-wrapper" v-if="activeState" @click="closeModal">
-    <HTMLElementCard v-if="activeModal == 'HTMLElementCard'" :cb="cb" />
+    <HTMLElementCard v-if="activeModal == 'HTMLElementCard'" :cb="cb" :validChildren="validChildren" />
     <GeneratedCodeCard v-if="activeModal == 'GeneratedCodeCard'" :cb="cb" :elementTreeData="elementTreeData"/>
     <!-- card components here -->
   </div>
@@ -12,7 +12,7 @@ import HTMLElementCard from "./modal_cards/HTMLElementCard.vue";
 import GeneratedCodeCard from "./modal_cards/GeneratedCodeCard.vue";
 
 @Options({
-  props: ["activeState", "activeModal", "cb", "elementTreeData"],
+  props: ["activeState", "activeModal", "cb", "elementTreeData", "validChildren"],
   components: { HTMLElementCard, GeneratedCodeCard },
   methods: {
     closeModal() {

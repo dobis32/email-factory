@@ -76,9 +76,9 @@ export default class ElementTreeFactory {
 			let attributes = '';
 			let content = '';
 			el.attributes.forEach((att: HTMLAttribute) => {
-				const attObject = att.getAttribute()
-				if(attObject.attributeName == 'innerText') content += attObject.attributeValue;
-				else attributes += `${attObject.attributeName}="${attObject.attributeValue}" `;
+				const data = att.getAttributeData()
+				if(data.attributeName == 'innerText') content += data.attributeValue;
+				else attributes += `${data.attributeName}="${data.attributeValue}" `;
 			})
 			const headTag = `${indent}<${el.element.getElementType()} ${attributes}>\n`;
 			const tailTag = `${indent}</${el.element.getElementType()}>\n`;

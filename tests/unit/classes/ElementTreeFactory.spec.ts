@@ -2,6 +2,7 @@ import ElementTreeFactory from '@/classes/ElementTreeFactory';
 import _SUPPORTED_HTML_ELEMENTS_ from '@/constants/SupportedHTMLElementTypes';
 import iTreeElement from '@/interfaces/iTreeElement';
 import { HTML_TABLE, HTML_TR, HTML_TD, HTML_P } from '@/constants/SupportedHTMLElementTypes';
+import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
 
 describe('ElementTreeFactory.ts', () => {
     let treeData: Array<iTreeElement>;
@@ -67,7 +68,6 @@ describe('ElementTreeFactory.ts', () => {
     });
 
     it('should return undefined if it tries to create a tree element that is not supported', () => {
-        
         const unsupportedElement = 'foobar';
         const supported = factory.elementIsSupported(unsupportedElement);
         expect(factory.createTreeElement).toBeDefined();
@@ -127,4 +127,5 @@ describe('ElementTreeFactory.ts', () => {
         expect(result1[0]).toEqual(elToAdd);
         expect(result2[1]).toEqual(elToAdd);
     });
+
 });

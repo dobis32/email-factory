@@ -8,7 +8,7 @@
     <div id="input-row">
       <h3>Element type:</h3>
       <select name="type" id="type-input">
-        <option v-for="(child) of validChildren" id="elementType" v-bind:key="child">child</option>
+        <option v-for="(child) of validChildren" id="elementType" v-bind:key="child">{{ child }}</option>
       </select>
     </div>
     <div id="submit-button" @click="submitData">Submit</div>
@@ -35,9 +35,9 @@ import { Options, Vue } from "vue-class-component";
       this.$store.dispatch("closeModal");
     }
   },
-  // beforeMount() {
-  //   this.supportedChildren = this.validChildren;
-  // },
+  beforeMount() {
+    console.log(this.validChildren);
+  },
   beforeUnmount() {
     if (!this.submitting) {
       this.elementAlias = "";
@@ -76,5 +76,9 @@ export default class HTMLElementCard extends Vue {}
 
 input {
   width: 120px;
+}
+
+select {
+  text-align: center;
 }
 </style>

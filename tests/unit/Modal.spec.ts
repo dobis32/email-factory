@@ -6,6 +6,7 @@ describe('Modal.vue', () => {
     let mockModalState: boolean = true;
     let mockActiveModal: string = 'HTMLElementCard'; // tests will definitely break if this value is NOT a valid modal element
     let mockModalCB: Function = () => { return; };
+    const mockValidChildren: Array<string> = ['tr'];
     const stopPropagation = jest.fn((e: Event) => { e.stopPropagation(); })
     const $store = {
         dispatch: jest.fn()
@@ -18,7 +19,8 @@ describe('Modal.vue', () => {
 			props: {
 				activeState: mockModalState,
                 activeModal: mockActiveModal,
-                cb: mockModalCB
+                cb: mockModalCB,
+                validChildren: mockValidChildren
 			},
 			global: {
 				mocks: {
@@ -65,6 +67,12 @@ describe('Modal.vue', () => {
         expect(props.cb).toBeDefined();
         expect(typeof props.cb).toEqual('function');
         expect(props.cb).toEqual(mockModalCB);
+    });
+
+    it('should have a prop for the valid children of an assumed tree element', () => {
+        const props = wrapper.props();
+        expect(props.validChildren).toBeDefined();
+        expect(Array.isArray(props.validChildren)).toBeTruthy();
     });
 
     // Methods

@@ -27,7 +27,7 @@
       :children="child.children"
     />
 
-    <div v-if="children.length == 0" id="add-child-button" @click="addElement({ sibling: false, pre: false})">
+    <div v-if="children.length == 0" id="add-child-button" @click="addChildElement">
       <h3>Add child</h3>
     </div>
   </div>
@@ -38,6 +38,7 @@ import iTreeElement from "@/interfaces/iTreeElement";
 import iAddElementPayload from "@/interfaces/iAddElementPayload";
 import HTMLAttribute from "@/classes/HTMLAttribute";
 import { Options, Vue } from "vue-class-component";
+import ElementTreeFactory from "@/classes/ElementTreeFactory";
 
 @Options({
   props: ["element", "alias", "id", "children", "parentid", "root", "attributes"],
@@ -51,17 +52,20 @@ import { Options, Vue } from "vue-class-component";
     this.treeElementClass = `${this.element.getElementType()} ${this.treeElementClass}`;
   },
   methods: {
-    getNewElementCredentials() { // todo unit test
+    getNewElementCredentials(validChildren: Array<string>) { // todo unit test
       return new Promise(resolve => {
+        // I don't know how to test this....
         this.$store.dispatch("setModalCB", resolve);
-        this.$store.dispatch("setModalValidChildren", this.element.getValidChildren()); // unit test probably doesn't check this
+        this.$store.dispatch("setValidChildren", this.root ? ['table'] : validChildren); 
         this.$store.dispatch("openModal", "HTMLElementCard");
       });
     },
-    async addElement(payload: { sibling: boolean, pre: boolean, testingID?: string}) {
+    async addElement(payload: { sibling: boolean, pre: boolean }) {
       const { sibling, pre } = payload;
-      const { alias } = await this.getNewElementCredentials();
-      const factory = this.getTreeFactoryInstance();
+      const factory: ElementTreeFactory = this.getTreeFactoryInstance();
+      const parent = factory.findElementByID(this.$store.state.treeData, this.parentid) as iTreeElement;
+      const validChildren = sibling ? parent.element.getValidChildren() : this.element.getValidChildren();
+      const { alias } = await this.getNewElementCredentials(validChildren);
       if (alias) {
         let newEl: iTreeElement = {
           id: factory.getNewElementID(),
@@ -84,6 +88,9 @@ import { Options, Vue } from "vue-class-component";
     },
     addSiblingAfter() {
       this.addElement({ sibling: true, pre: false });
+    },
+    addChildElement() {
+      this.addElement({ sibling: false, pre: false});
     }
   }
 })
