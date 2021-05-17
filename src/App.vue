@@ -2,7 +2,7 @@
   <div>
     <TreeEditor :elementTreeData="getElementTree" />
     <ModuleOptions />
-    <Modal :activeState="getModalState" :activeModal="getActiveModal" :cb="getModalCB" :elementTreeData="getElementTree" :validChildren="getValidChildren" />
+    <Modal :payload="getModalPayload" />
   </div>
 </template>
 
@@ -20,6 +20,7 @@ const factory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_);
     ModuleOptions,
     Modal
   },
+ 
   computed: {
     getElementTree() {
       return this.$store.getters.getElementTree;
@@ -35,6 +36,9 @@ const factory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_);
     },
     getValidChildren() {
       return this.$store.getters.getValidChildren;
+    },
+    getModalPayload() {
+      return this.$store.getters.getModalPayload;
     }
   },
   provide: {

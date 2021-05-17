@@ -4,8 +4,9 @@ import getters from './getters';
 import mutations from './mutations';
 import actions from './actions';
 import _DEFAULT_STATE_ from '@/constants/DefaultState';
+import iAppState from '@/interfaces/iAppState';
 export default createStore({
-	state: _DEFAULT_STATE_,
+	state: _DEFAULT_STATE_ as iAppState,
 	getters,
 	mutations,
 	actions

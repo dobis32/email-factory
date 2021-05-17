@@ -1,6 +1,7 @@
 import { HTML_TABLE, HTML_TR, HTML_TD, HTML_P } from '@/constants/SupportedHTMLElementTypes';
 import HTMLAttribute from '@/classes/HTMLAttribute';
 import iTreeElement from '@/interfaces/iTreeElement';
+import iAppState from '@/interfaces/iAppState';
 export default {
     treeData: [
         {
@@ -42,5 +43,6 @@ export default {
     modalState: false,
     activeModal: '',
     validChildren: new Array<string>(),
-    modalcb: (): void => { return; }
-}
+    modalcb: (): void => { return; },
+    activeElementID: ''
+} as iAppState;

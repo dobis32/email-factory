@@ -1,18 +1,18 @@
+import iModalPayload from "@/interfaces/iModalPayload";
+
 /* eslint-disable */
 export default {
 	getElementTree: (state: any) => {
 		return state.treeData;
 	},
-	getModalState: (state: any) => {
-		return state.modalState;
-	},
-	getActiveModal: (state: any) => {
-		return state.activeModal;
-	},
-	getModalCB: (state: any) => {
-		return state.modalcb;
-	},
-	getValidChildren: (state: any) => {
-		return state.validChildren;
+	getModalPayload: (state: any) => {
+		const payload = {
+			modalState: state.modalState,
+			activeModal: state.activeModal,
+			activeElementID: state.activeElementID,
+			modalcb: state.modalcb
+		} as iModalPayload;
+
+		return payload;
 	}
 };

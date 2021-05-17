@@ -1,7 +1,8 @@
 <template>
-  <div id="modal-wrapper" v-if="activeState" @click="closeModal">
-    <HTMLElementCard v-if="activeModal == 'HTMLElementCard'" :cb="cb" :validChildren="validChildren" />
-    <GeneratedCodeCard v-if="activeModal == 'GeneratedCodeCard'" :cb="cb" :elementTreeData="elementTreeData"/>
+  <div id="modal-wrapper" v-if="payload.modalState" @click="closeModal" >
+    <HTMLElementCard v-if="payload.activeModal == 'HTMLElementCard'" :cb="payload.cb" />
+    <GeneratedCodeCard v-if="payload.activeModal == 'GeneratedCodeCard'" :cb="payload.cb" />
+    <ElementControlsCard v-if="payload.activeModal == 'ElementControlsCard'" :activeElementID="payload.activeElementID"/>
     <!-- card components here -->
   </div>
 </template>
@@ -10,10 +11,10 @@
 import { Options, Vue } from "vue-class-component";
 import HTMLElementCard from "./modal_cards/HTMLElementCard.vue";
 import GeneratedCodeCard from "./modal_cards/GeneratedCodeCard.vue";
-
+import ElementControlsCard from "./modal_cards/ElementControlsCard.vue";
 @Options({
-  props: ["activeState", "activeModal", "cb", "elementTreeData", "validChildren"],
-  components: { HTMLElementCard, GeneratedCodeCard },
+  props: ["payload"],
+  components: { HTMLElementCard, GeneratedCodeCard, ElementControlsCard },
   methods: {
     closeModal() {
       this.$store.dispatch("closeModal");

@@ -1,33 +1,30 @@
 /* eslint-disable */
 import iTreeElement from '@/interfaces/iTreeElement';
 import DefaultStateIndex from '@/constants/DefaultState';
+import iAppState from '@/interfaces/iAppState';
 
 export default {
-	updateTreeData: (state: any, updatedTreeData: Array<iTreeElement>): void => {
+	setTreeData: (state: iAppState, updatedTreeData: Array<iTreeElement>): void => {
 		state.treeData = updatedTreeData;
 	},
 
-	updateModalState: (state: any, updatedState: boolean): void => {
+	setModalState: (state: iAppState, updatedState: boolean): void => {
 		state.modalState = updatedState;
 	},
 
-	resetModalCard: (state: any): void => {
-		state.activeModal = DefaultStateIndex.activeModal;
-	},
-
-	setModalCard: (state: any, modalCard: string): void => {
+	setModalCard: (state: iAppState, modalCard: string): void => {
 		state.activeModal = modalCard;
 	},
 
-	resetModalCB: (state: any): void => {
-		state.modalcb = DefaultStateIndex.modalcb
-	},
-
-	setValidChildren: (state: any, validChildren: Array<string>): void => { // TODO unit test
+	setValidChildren: (state: iAppState, validChildren: Array<string>): void => { // TODO unit test
 		state.validChildren = validChildren;
 	},
 
-	setModalCB: (state: any, modalcb: Function): void => {
+	setModalCB: (state: iAppState, modalcb: Function): void => {
 		state.modalcb = modalcb;
-	}
+	},
+
+	setActiveElementID: (state: iAppState, elementID: string): void => {
+		state.activeElementID = elementID;
+	},
 };
