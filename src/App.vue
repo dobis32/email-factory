@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div>foo
     <TreeEditor :elementTreeData="getElementTree" />
     <ModuleOptions />
     <Modal :payload="getModalPayload" />
