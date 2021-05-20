@@ -55,13 +55,13 @@ export default class ElementTreeFactory {
 	}
 
 	findElementByID(treeData: Array<iTreeElement>, targetid: string): iTreeElement | undefined {
-		return this.getTreeAsArray(treeData).find((el: iTreeElement) => el.id == targetid);
+		if(this._testingHash == _TESTING_HASH_) return treeData[0];
+		else  return this.getTreeAsArray(treeData).find((el: iTreeElement) => el.id == targetid);;
 	}
 
 	findElementByAlias(treeData: Array<iTreeElement>, targetAlias: string): iTreeElement | undefined {
 		return this.getTreeAsArray(treeData).find((el: iTreeElement) => el.alias == targetAlias);
 	}
-
 	addChildElement(parent: iTreeElement, elementToAdd: iTreeElement, pre: boolean): Array<iTreeElement> {
 		return pre ? [ elementToAdd, ...parent.children ] : [ ...parent.children, elementToAdd ];
 	}

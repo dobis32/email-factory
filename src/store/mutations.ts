@@ -24,7 +24,7 @@ export default {
 		state.modalcb = modalcb;
 	},
 
-	setActiveElementID: (state: iAppState, elementID: string): void => {
-		state.activeElementID = elementID;
+	setActiveElement: (state: iAppState, element: iTreeElement): void => {
+		state.activeElement = element;
 	},
 };

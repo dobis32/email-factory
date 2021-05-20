@@ -35,9 +35,6 @@ import { Options, Vue } from "vue-class-component";
       this.$store.dispatch("closeModal");
     }
   },
-  beforeMount() {
-    console.log(this.validChildren);
-  },
   beforeUnmount() {
     if (!this.submitting) {
       this.elementAlias = "";

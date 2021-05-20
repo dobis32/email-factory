@@ -1,27 +1,32 @@
 import { mount } from '@vue/test-utils';
 import Modal from '@/components/Modal.vue';
+import iModalPayload from '@/interfaces/iModalPayload';
+import iTreeElement from '@/interfaces/iTreeElement';
 
 describe('Modal.vue', () => {
     let wrapper: any;
     let mockModalState: boolean = true;
     let mockActiveModal: string = 'HTMLElementCard'; // tests will definitely break if this value is NOT a valid modal element
     let mockModalCB: Function = () => { return; };
-    const mockValidChildren: Array<string> = ['tr'];
+    const mockActiveElement = {} as iTreeElement;
     const stopPropagation = jest.fn((e: Event) => { e.stopPropagation(); })
     const $store = {
         dispatch: jest.fn()
     }
+    const mockPayload = {
+        modalState: mockModalState,
+        activeModal: mockActiveModal,
+        modalcb: mockModalCB,
+        activeElement: mockActiveElement
+    } as iModalPayload;
 	beforeEach(() => {
 		wrapper = mount(Modal, {
 			data: () => {
 				return {};
 			},
 			props: {
-				activeState: mockModalState,
-                activeModal: mockActiveModal,
-                cb: mockModalCB,
-                validChildren: mockValidChildren
-			},
+				payload: mockPayload
+			} ,
 			global: {
 				mocks: {
                     $store
@@ -48,31 +53,10 @@ describe('Modal.vue', () => {
     });
 
 	// Props
-    it('should have a prop for the active modal state', () => {
+    it('should have a payload for the modal', () => {
         const props = wrapper.props();
-        expect(props.activeState).toBeDefined();
-        expect(typeof props.activeState).toEqual('boolean');
-        expect(props.activeState).toEqual(mockModalState);
-    });
-
-    it('should have a props for the active modal card', () => {
-        const props = wrapper.props();
-        expect(props.activeModal).toBeDefined();
-        expect(typeof props.activeModal).toEqual('string');
-        expect(props.activeModal).toEqual(mockActiveModal);
-    });
-
-    it('should have a prop for the modal callback function', () => {
-        const props = wrapper.props();
-        expect(props.cb).toBeDefined();
-        expect(typeof props.cb).toEqual('function');
-        expect(props.cb).toEqual(mockModalCB);
-    });
-
-    it('should have a prop for the valid children of an assumed tree element', () => {
-        const props = wrapper.props();
-        expect(props.validChildren).toBeDefined();
-        expect(Array.isArray(props.validChildren)).toBeTruthy();
+        expect(props.payload).toBeDefined();
+        expect(props.payload).toEqual(mockPayload);
     });
 
     // Methods

@@ -20,6 +20,8 @@
 </template>
 
 <script lang="ts">
+import ElementTreeFactory from "@/classes/ElementTreeFactory";
+import iTreeElement from "@/interfaces/iTreeElement";
 import { Options, Vue } from "vue-class-component";
 
 @Options({
@@ -66,7 +68,10 @@ import { Options, Vue } from "vue-class-component";
     // },
     promptAction() {
       console.log('prompt action');
-      this.$store.dispatch('setActiveElementID', this.id);
+      const factory: ElementTreeFactory = this.getTreeFactoryInstance();
+      const id = this.id;
+      const payload = { factory, id };
+      this.$store.dispatch('setActiveElement', payload);
       this.$store.dispatch('openModal', 'ElementControlsCard');
       new Promise((resolve) => {
         this.$store.dispatch('setModalCB', resolve);

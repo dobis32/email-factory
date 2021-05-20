@@ -9,7 +9,7 @@ export default {
 		const payload = {
 			modalState: state.modalState,
 			activeModal: state.activeModal,
-			activeElementID: state.activeElementID,
+			activeElement: state.activeElement,
 			modalcb: state.modalcb
 		} as iModalPayload;
 

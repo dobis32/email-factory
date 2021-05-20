@@ -6,9 +6,10 @@ import HTMLAttribute from '@/classes/HTMLAttribute';
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
 import _SUPPORTED_HTML_ELEMENTS_ from '@/constants/SupportedHTMLElementTypes';
 import DefaultState from '@/constants/DefaultState';
+import { _TESTING_HASH_ } from '@/constants/Testing';
 
 let mockContext: any;
-const factory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_);
+const factory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_, _TESTING_HASH_);
 describe('actions.ts', () => {
 	beforeEach(() => {
         factory.getTreeAsArray = jest.fn(factory.getTreeAsArray);
@@ -44,7 +45,7 @@ describe('actions.ts', () => {
         expect(actions.addTreeElement).toBeDefined();
         expect(typeof actions.addTreeElement).toEqual('function');
         expect(mockContext.commit).toHaveBeenCalled();
-        expect(mockContext.commit).toHaveBeenCalledWith('updateTreeData', treeData);
+        expect(mockContext.commit).toHaveBeenCalledWith('setTreeData', treeData);
     });
 
     it('should have a function to close the modal', () => {
@@ -52,8 +53,8 @@ describe('actions.ts', () => {
         expect(actions.closeModal).toBeDefined();
         expect(typeof actions.closeModal).toEqual('function');
         expect(mockContext.commit).toHaveBeenCalledTimes(2);
-        expect(mockContext.commit).toHaveBeenCalledWith('updateModalState', false);
-        expect(mockContext.commit).toHaveBeenCalledWith('resetModalCard');
+        expect(mockContext.commit).toHaveBeenCalledWith('setModalState', false);
+        expect(mockContext.commit).toHaveBeenCalledWith('setModalCard', DefaultState.activeModal);
     });
 
     it('should have a function to open the modal', () => {
@@ -62,7 +63,7 @@ describe('actions.ts', () => {
         expect(actions.openModal).toBeDefined();
         expect(typeof actions.openModal).toEqual('function');
         expect(mockContext.commit).toHaveBeenCalledTimes(2);
-        expect(mockContext.commit).toHaveBeenCalledWith('updateModalState', true);
+        expect(mockContext.commit).toHaveBeenCalledWith('setModalState', true);
         expect(mockContext.commit).toHaveBeenCalledWith('setModalCard', card);
     });
 
@@ -71,7 +72,7 @@ describe('actions.ts', () => {
         expect(actions.resetModalCB).toBeDefined();
         expect(typeof actions.resetModalCB).toEqual('function');
         expect(mockContext.commit).toHaveBeenCalled();
-        expect(mockContext.commit).toHaveBeenCalledWith('resetModalCB');
+        expect(mockContext.commit).toHaveBeenCalledWith('setModalCB', DefaultState.modalcb);
     });
 
     it('should have a function that resets the modal CB', () => {

@@ -2,7 +2,7 @@
   <div id="modal-wrapper" v-if="payload.modalState" @click="closeModal" >
     <HTMLElementCard v-if="payload.activeModal == 'HTMLElementCard'" :cb="payload.cb" />
     <GeneratedCodeCard v-if="payload.activeModal == 'GeneratedCodeCard'" :cb="payload.cb" />
-    <ElementControlsCard v-if="payload.activeModal == 'ElementControlsCard'" :activeElementID="payload.activeElementID"/>
+    <ElementControlsCard v-if="payload.activeModal == 'ElementControlsCard'"  :activeElement="payload.activeElement"/>
     <!-- card components here -->
   </div>
 </template>

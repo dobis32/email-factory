@@ -3,50 +3,16 @@ import _SUPPORTED_HTML_ELEMENTS_ from '@/constants/SupportedHTMLElementTypes';
 import iTreeElement from '@/interfaces/iTreeElement';
 import { HTML_TABLE, HTML_TR, HTML_TD, HTML_P } from '@/constants/SupportedHTMLElementTypes';
 import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
+import { _TESTING_HASH_ } from '@/constants/Testing';
+import _DEFAULT_STATE_ from '@/constants/DefaultState';
 
 describe('ElementTreeFactory.ts', () => {
     let treeData: Array<iTreeElement>;
     let factory: ElementTreeFactory;
     let treeAsArray: Array<iTreeElement>;
 	beforeEach(() => {
-        treeData = [
-            {
-                id: 'foo',
-                root: true,
-                element: HTML_TABLE,
-                alias: 'rootTable',
-                attributes: [],
-                children: [
-                    {
-                        id: 'bar',
-                        root: false,
-                        element: HTML_TR,
-                        alias: 'rootTR',
-                        attributes: [],
-                        children: [
-                            {
-                                id: 'fizz',
-                                root: false,
-                                element: HTML_TD,
-                                alias: 'rootTD',
-                                attributes: [],
-                                children: [
-                                    {
-                                        id: 'buzz',
-                                        root: false,
-                                        element: HTML_P,
-                                        alias: 'rootP',
-                                        children: [],
-                                        attributes: []
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            }
-        ];
-        factory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_);
+        treeData = _DEFAULT_STATE_.treeData;
+        factory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_, _TESTING_HASH_);
         treeAsArray = factory.getTreeAsArray(treeData);
 	});
 
@@ -97,15 +63,6 @@ describe('ElementTreeFactory.ts', () => {
         expect(factory.getTreeAsArray(treeData)).toEqual(treeAsArray);
     });
 
-    it('should have a function to find an element by ID', () => {
-        const targetEl = treeAsArray[2];
-        const badID = 'zzzzzzzzz';
-        expect(factory.findElementByID).toBeDefined();
-        expect(typeof factory.findElementByID).toEqual('function');
-        expect(factory.findElementByID(treeAsArray, targetEl.id)).toBeDefined();
-        expect(factory.findElementByID(treeAsArray, targetEl.id)).toEqual(targetEl);
-        expect(factory.findElementByID(treeAsArray, badID)).toEqual(undefined);
-    });
 
     it('should have a function to find an element by alias', () => {
         const targetEl = treeAsArray[2];

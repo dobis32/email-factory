@@ -44,5 +44,5 @@ export default {
     activeModal: '',
     validChildren: new Array<string>(),
     modalcb: (): void => { return; },
-    activeElementID: ''
+    activeElement: {} as iTreeElement
 } as iAppState;

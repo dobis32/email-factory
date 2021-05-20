@@ -32,10 +32,10 @@ describe('mutations.ts', () => {
     const newData = [...state.treeData]
     newData[0].children = new Array<iTreeElement>();
 
-    mutations.updateTreeData(state, newData);
+    mutations.setTreeData(state, newData);
 
-    expect(mutations.updateTreeData).toBeDefined();
-    expect(typeof mutations.updateTreeData).toEqual('function');
+    expect(mutations.setTreeData).toBeDefined();
+    expect(typeof mutations.setTreeData).toEqual('function');
     expect(oldData == state.treeData).toEqual(false);
    });
 
@@ -43,21 +43,21 @@ describe('mutations.ts', () => {
     const oldState = state.modalState;
     const newState = !state.modalState;
 
-    mutations.updateModalState(state, newState);
+    mutations.setModalState(state, newState);
     
-    expect(mutations.updateModalState).toBeDefined();
-    expect(typeof mutations.updateModalState).toEqual('function');
+    expect(mutations.setModalState).toBeDefined();
+    expect(typeof mutations.setModalState).toEqual('function');
     expect(oldState == state.modalState).toEqual(false);
    });
 
    it('should have a function to reset the active modal card of the state index', () => {
-    const card = 'card';
+    const card = DefaultStateIndex.activeModal;
     state.activeModal = card;
 
-    mutations.resetModalCard(state);
+    mutations.setModalCard(state, card);
     
-    expect(mutations.resetModalCard).toBeDefined();
-    expect(typeof mutations.resetModalCard).toEqual('function');
+    expect(mutations.setModalCard).toBeDefined();
+    expect(typeof mutations.setModalCard).toEqual('function');
     expect(state.activeModal).toEqual(DefaultStateIndex.activeModal);
    });
 
@@ -77,10 +77,10 @@ describe('mutations.ts', () => {
     const oldCB = () => { return false; }
     state.modalcb = oldCB;
 
-    mutations.resetModalCB(state);
+    mutations.setModalCB(state, DefaultStateIndex.modalcb);
     
-    expect(mutations.resetModalCB).toBeDefined();
-    expect(typeof mutations.resetModalCB).toEqual('function');
+    expect(mutations.setModalCB).toBeDefined();
+    expect(typeof mutations.setModalCB).toEqual('function');
     expect(state.modalcb).toEqual(DefaultStateIndex.modalcb);
     expect(oldCB == state.modalcb).toEqual(false);
    });

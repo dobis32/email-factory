@@ -1,6 +1,8 @@
+import iTreeElement from "./iTreeElement";
+
 export default interface iModalPayload {
     modalState: boolean,
     activeModal: string,
-    activeElementID: string,
+    activeElement: iTreeElement,
     modalcb: Function
 }

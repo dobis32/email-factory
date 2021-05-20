@@ -1,7 +1,7 @@
 <template>
   <div id="modal-card" @click="stopPropagation">
-    <h1>{{ this.activeElement.alias }}</h1>
-    <h2>{{ this.activeElement.element.getElementType() }}</h2>
+    <h1>{{ activeElement.alias }}</h1>
+    <h2>{{ activeElement.element.getElementType() }}</h2>
     <div id="edit-button" class="action-button" @click="selectAction('edit')">
       Edit
     </div>
@@ -15,35 +15,25 @@
 </template>
 
 <script lang="ts">
-import iTreeElement from "@/interfaces/iTreeElement";
 import { Options, Vue } from "vue-class-component";
 
 @Options({
-  props: ["activeElementID"],
+  props: ["activeElement"],
   data: () => {
     return {
       selectedAction: '',
-      activeElement: {} as iTreeElement
     }
   },
-  inject: ["stopPropagation", "getTreeFactoryInstance"],
+  inject: ["stopPropagation"],
   methods: {
-      selectAction(action: string) {
-        this.selectedAction = action;
-        
-      },
-      closeModal() {
-        this.$store.dispatch('resetActiveElementID');
-        this.$store.dispatch('closeModal');
-
-      }
+    selectAction(action: string) {
+      this.selectedAction = action;  
+    },
+    closeModal() {
+      this.$store.dispatch('resetActiveElement');
+      this.$store.dispatch('closeModal');
+    },
   },
-  beforeMount() { // idk how to test this lol
-    const factory = this.getTreeFactoryInstance();
-    const el = factory.findElementByID(this.activeElementID);
-    if (el) this.activeElement = el;
-    else this.closeModal(); 
-  }
 })
 export default class ElementControlsCard extends Vue {}
 </script>

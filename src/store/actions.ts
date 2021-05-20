@@ -2,6 +2,7 @@
 import iAddElementPayload from '@/interfaces/iAddElementPayload';
 import iTreeElement from '@/interfaces/iTreeElement';
 import _DEFAULT_STATE_ from '@/constants/DefaultState';
+import ElementTreeFactory from '@/classes/ElementTreeFactory';
 export default {
 	addTreeElement: (context: any, payload: iAddElementPayload) => { // TODO unit test
 		const { elementToAdd, parentid, pre } = payload; 
@@ -25,11 +26,12 @@ export default {
 	resetModalCB: (context: any): void => {
 		context.commit('setModalCB', _DEFAULT_STATE_.modalcb);
 	},
-	setActiveElementID: (context: any, id: string): void => {
-		context.commit('setActiveElementID', id)
+	setActiveElement: (context: any, el: iTreeElement): void => {
+		context.commit('setActiveElement', el ? el : {} as iTreeElement);
+		
 	},
-	resetActiveElementID: (context: any, id: string): void => {
-		context.commit('setActiveElementID', _DEFAULT_STATE_.activeElementID);
+	resetActiveElement: (context: any): void => {
+		context.commit('setActiveElement', _DEFAULT_STATE_.activeElement);
 	},
 	performAction: (context: any): void => {
 		console.log('FOOBAR')
