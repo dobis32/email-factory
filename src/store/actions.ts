@@ -1,6 +1,6 @@
 /* eslint-disable */
 import iAddElementPayload from '@/interfaces/iAddElementPayload';
-import iTreeElement from '@/interfaces/iTreeElement';
+import iElementDescriptor from '@/interfaces/iElementDescriptor';
 import _DEFAULT_STATE_ from '@/constants/DefaultState';
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
 export default {
@@ -26,8 +26,8 @@ export default {
 	resetModalCB: (context: any): void => {
 		context.commit('setModalCB', _DEFAULT_STATE_.modalcb);
 	},
-	setActiveElement: (context: any, el: iTreeElement): void => {
-		context.commit('setActiveElement', el ? el : {} as iTreeElement);
+	setActiveElement: (context: any, el: iElementDescriptor): void => {
+		context.commit('setActiveElement', el ? el : {} as iElementDescriptor);
 		
 	},
 	resetActiveElement: (context: any): void => {

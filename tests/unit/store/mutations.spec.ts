@@ -1,5 +1,5 @@
 import mutations from '@/store/mutations';
-import iTreeElement from '@/interfaces/iTreeElement';
+import iTreeElement from '@/interfaces/iElementDescriptor';
 import DefaultStateIndex from '@/constants/DefaultState';
 
 describe('mutations.ts', () => {

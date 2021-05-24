@@ -1,10 +1,11 @@
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
 import _SUPPORTED_HTML_ELEMENTS_ from '@/constants/SupportedHTMLElementTypes';
-import iTreeElement from '@/interfaces/iTreeElement';
+import iTreeElement from '@/interfaces/iElementDescriptor';
 import { HTML_TABLE, HTML_TR, HTML_TD, HTML_P } from '@/constants/SupportedHTMLElementTypes';
 import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
 import { _TESTING_HASH_ } from '@/constants/Testing';
 import _DEFAULT_STATE_ from '@/constants/DefaultState';
+import iElementDescriptor from '@/interfaces/iElementDescriptor';
 
 describe('ElementTreeFactory.ts', () => {
     let treeData: Array<iTreeElement>;
@@ -57,13 +58,6 @@ describe('ElementTreeFactory.ts', () => {
         expect(factory.elementIsSupported(elType2)).toEqual(false);
     });
 
-    it('should have a function to get a given tree as an array', () => {
-        expect(factory.getTreeAsArray).toBeDefined();
-        expect(typeof factory.getTreeAsArray).toEqual('function');
-        expect(factory.getTreeAsArray(treeData)).toEqual(treeAsArray);
-    });
-
-
     it('should have a function to find an element by alias', () => {
         const targetEl = treeAsArray[2];
         const badAlias = 'zzzzzzzzzzzzz';
@@ -75,7 +69,7 @@ describe('ElementTreeFactory.ts', () => {
     });
 
     it('should have a function to add a sibling element', () => {
-        const elToAdd = factory.createTreeElement('td') as iTreeElement;
+        const elToAdd = factory.createTreeElement('td');
         const parent = treeData[0].children[0]; // tr element
         const result1 = factory.addChildElement(parent, elToAdd, true);
         const result2 =  factory.addChildElement(parent, elToAdd, false);

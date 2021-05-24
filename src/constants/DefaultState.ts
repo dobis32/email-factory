@@ -2,6 +2,7 @@ import { HTML_TABLE, HTML_TR, HTML_TD, HTML_P } from '@/constants/SupportedHTMLE
 import HTMLAttribute from '@/classes/HTMLAttribute';
 import iTreeElement from '@/interfaces/iTreeElement';
 import iAppState from '@/interfaces/iAppState';
+import iElementDescriptor from '@/interfaces/iElementDescriptor';
 export default {
     treeData: [
         {
@@ -11,38 +12,40 @@ export default {
             alias: 'rootTable',
             attributes: new Array<HTMLAttribute>(),
             children: [
-                {
-                    id: 'bar',
-                    root: false,
-                    element: HTML_TR,
-                    alias: 'rootTR',
-                    attributes: new Array<HTMLAttribute>(),
-                    children: [
-                        {
-                            id: 'fizz',
-                            root: false,
-                            element: HTML_TD,
-                            alias: 'rootTD',
-                            attributes: new Array<HTMLAttribute>(),
-                            children: [
-                                {
-                                    id: 'buzz',
-                                    root: false,
-                                    element: HTML_P,
-                                    alias: 'rootP',
-                                    attributes: new Array<HTMLAttribute>(),
-                                    children: [] as Array<iTreeElement>
-                                }
-                            ] as Array<iTreeElement>
-                        }
-                    ] as Array<iTreeElement>
-                }
-            ] as Array<iTreeElement>
+                'bar'
+            ] as Array<string>
+        },
+        {
+            id: 'bar',
+            root: false,
+            element: HTML_TR,
+            alias: 'rootTR',
+            attributes: new Array<HTMLAttribute>(),
+            children: [
+                'fizz'   
+            ] as Array<string>
+        },
+        {
+            id: 'fizz',
+            root: false,
+            element: HTML_TD,
+            alias: 'rootTD',
+            attributes: new Array<HTMLAttribute>(),
+            children: [
+                'buzz'
+            ] as Array<string>
+        },
+        {
+            id: 'buzz',
+            root: false,
+            element: HTML_P,
+            alias: 'rootP',
+            attributes: new Array<HTMLAttribute>(),
+            children: [] as Array<string>
         }
-    ] as Array<iTreeElement>,
+    ]  as Array<iTreeElement>,
     modalState: false,
     activeModal: '',
-    validChildren: new Array<string>(),
     modalcb: (): void => { return; },
-    activeElement: {} as iTreeElement
+    activeElement: {} as iElementDescriptor
 } as iAppState;

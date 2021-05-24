@@ -1,10 +1,9 @@
-import iTreeElement from "./iTreeElement";
-
+import iElementDescriptor from "./iElementDescriptor";
+import iTreeElement from '@/interfaces/iTreeElement';
 export default interface iAppState {
     treeData: Array<iTreeElement>,
     modalState: boolean,
     activeModal: string,
-    validChildren: Array<string>,
     modalcb: Function,
-    activeElement: iTreeElement
+    activeElement: iElementDescriptor
 }

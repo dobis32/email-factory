@@ -6,6 +6,6 @@ export default interface iElementDescriptor {
 	root: boolean;
 	element: SupportedHTMLElement,
 	alias: string;
-    attributes: Array<HTMLAttribute>;
-	children: Array<string>;
+	children: Array<iElementDescriptor>;
+	attributes: Array<HTMLAttribute>;
 };

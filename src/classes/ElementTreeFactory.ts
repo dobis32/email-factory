@@ -1,8 +1,10 @@
-import iTreeElement from '@/interfaces/iTreeElement';
+import iElementDescriptor from '@/interfaces/iElementDescriptor';
 import * as crypto from 'crypto';
 import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
 import HTMLAttribute from '@/classes/HTMLAttribute';
 import { _TESTING_HASH_ } from '@/constants/Testing';
+import iTreeElement from '@/interfaces/iTreeElement';
+import iTreeRootDescriptor from '@/interfaces/iTreeRootDescriptor';
 
 export default class ElementTreeFactory {
 	private _SUPPORTED_HTML_ELEMENTS: Array<SupportedHTMLElement>;
@@ -23,7 +25,7 @@ export default class ElementTreeFactory {
 			element,
 			root: element.getElementType() == 'table' ? true : false,
 			alias: alias ? alias : id,
-			children: new Array<iTreeElement>(),
+			children: new Array<string>(),
 			attributes:  new Array<HTMLAttribute>()
 		}
 	}
@@ -41,34 +43,21 @@ export default class ElementTreeFactory {
 		return this._SUPPORTED_HTML_ELEMENTS.find((el: SupportedHTMLElement) => el.getElementType() == targetType) ? true : false;
 	}
 
-	getTreeAsArray(treeData: Array<iTreeElement>): Array<iTreeElement> {
-		const treeAsArray = new Array<iTreeElement>();
-		const aux = [ ...treeData ];
-		while(aux.length) {
-			const el = aux.shift() as iTreeElement;
-			treeAsArray.push(el);
-			el?.children.forEach((child: iTreeElement) => {
-				aux.push(child);
-			});
-		}
-		return treeAsArray;
-	}
-
-	findElementByID(treeData: Array<iTreeElement>, targetid: string): iTreeElement | undefined {
+	findElementByID(treeData: Array<iElementDescriptor>, targetid: string): iElementDescriptor | undefined {
 		if(this._testingHash == _TESTING_HASH_) return treeData[0];
-		else  return this.getTreeAsArray(treeData).find((el: iTreeElement) => el.id == targetid);;
+		else  return treeData.find((el: iElementDescriptor) => el.id == targetid);;
 	}
 
-	findElementByAlias(treeData: Array<iTreeElement>, targetAlias: string): iTreeElement | undefined {
-		return this.getTreeAsArray(treeData).find((el: iTreeElement) => el.alias == targetAlias);
+	findElementByAlias(treeData: Array<iElementDescriptor>, targetAlias: string): iElementDescriptor | undefined {
+		return treeData.find((el: iElementDescriptor) => el.alias == targetAlias);
 	}
-	addChildElement(parent: iTreeElement, elementToAdd: iTreeElement, pre: boolean): Array<iTreeElement> {
+	addChildElement(parent: iTreeElement, elementToAdd: string, pre: boolean): Array<string> {
 		return pre ? [ elementToAdd, ...parent.children ] : [ ...parent.children, elementToAdd ];
 	}
 
-	generateCode(tree: Array<iTreeElement>, nestLevel = 0): string { // TODO unit test
+	generateCode(roots: Array<iElementDescriptor | iTreeRootDescriptor>, nestLevel = 0): string { // TODO unit test
 		let retString = '';
-		tree.forEach((el: iTreeElement) => {
+		roots.forEach((el: iElementDescriptor) => {
 			let indent = '';
 			for(let i = 0; i < nestLevel; i++) {
 				indent += '\t';
@@ -91,4 +80,16 @@ export default class ElementTreeFactory {
 		});
         return retString;
     }
+
+	buildTree(treeData: Array<iTreeElement>): Array<iTreeRootDescriptor> {
+		const roots = treeData.filter((el: iTreeElement) => el.root);
+		const builtTree = [ ...roots ];
+		builtTree.forEach((root: iTreeElement) => {
+			root.children(() => {
+				
+			});
+		});
+
+		return builtTree;
+	}	
 }

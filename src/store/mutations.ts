@@ -1,10 +1,10 @@
 /* eslint-disable */
-import iTreeElement from '@/interfaces/iTreeElement';
+import iElementDescriptor from '@/interfaces/iElementDescriptor';
 import DefaultStateIndex from '@/constants/DefaultState';
 import iAppState from '@/interfaces/iAppState';
 
 export default {
-	setTreeData: (state: iAppState, updatedTreeData: Array<iTreeElement>): void => {
+	setTreeData: (state: iAppState, updatedTreeData: Array<iElementDescriptor>): void => {
 		state.treeData = updatedTreeData;
 	},
 

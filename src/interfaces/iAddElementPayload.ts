@@ -1,7 +1,7 @@
-import iTreeElement from './iTreeElement';
+import iElementDescriptor from './iElementDescriptor';
 
 export default interface iAddElementPayload {
-	elementToAdd: iTreeElement;
+	elementToAdd: iElementDescriptor;
 	parentid: string;
 	pre: boolean;
 };

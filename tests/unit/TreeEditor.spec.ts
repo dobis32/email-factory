@@ -5,6 +5,7 @@ import iTreeElement from '@/interfaces/iTreeElement';
 import _DEFAULT_STATE_ from '@/constants/DefaultState';
 import _SUPPORTED_HTML_ELEMENTS_ from "@/constants/SupportedHTMLElementTypes";
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
+
 describe('TreeEditor.vue', () => {
 	let mockElementTreeData: Array<iTreeElement>;
 	const factory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_);
@@ -16,7 +17,6 @@ describe('TreeEditor.vue', () => {
 
 	beforeEach(() => {
 		mockElementTreeData = _DEFAULT_STATE_.treeData;
-		numberOfElements = factory.getTreeAsArray(mockElementTreeData).length;
 		const mockProps =  {
 			elementTreeData: mockElementTreeData
 		}

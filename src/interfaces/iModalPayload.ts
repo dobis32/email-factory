@@ -1,4 +1,4 @@
-import iTreeElement from "./iTreeElement";
+import iTreeElement from "./iElementDescriptor";
 
 export default interface iModalPayload {
     modalState: boolean,

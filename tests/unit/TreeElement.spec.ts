@@ -1,6 +1,6 @@
 import { mount, shallowMount, flushPromises } from '@vue/test-utils';
 import TreeElement from '@/components/TreeElement.vue';
-import iTreeElement from '@/interfaces/iTreeElement';
+import iTreeElement from '@/interfaces/iElementDescriptor';
 import iAddElementPayload from '@/interfaces/iAddElementPayload';
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
 import _SUPPORTED_HTML_ELEMENTS_ from '@/constants/SupportedHTMLElementTypes';

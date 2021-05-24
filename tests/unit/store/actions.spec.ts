@@ -1,6 +1,6 @@
 import actions from '@/store/actions';
 import iAddElementPayload from '@/interfaces/iAddElementPayload';
-import iTreeElement from '@/interfaces/iTreeElement';
+import iTreeElement from '@/interfaces/iElementDescriptor';
 import { HTML_TD } from '@/constants/SupportedHTMLElementTypes';
 import HTMLAttribute from '@/classes/HTMLAttribute';
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
@@ -12,7 +12,6 @@ let mockContext: any;
 const factory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_, _TESTING_HASH_);
 describe('actions.ts', () => {
 	beforeEach(() => {
-        factory.getTreeAsArray = jest.fn(factory.getTreeAsArray);
         factory.findElementByID = jest.fn(factory.findElementByID);
         factory.addChildElement = jest.fn(factory.addChildElement);
 
@@ -27,7 +26,8 @@ describe('actions.ts', () => {
     it('should have a function for adding a sibling to the assumed element', () => {
         const elementToAdd = { id: 'foo',  root: false, element: HTML_TD, alias: 'foo', children: [] as Array<iTreeElement>, attributes: [] as Array<HTMLAttribute> } as iTreeElement;
         const treeData = DefaultState.treeData;
-        const parentid =  DefaultState.treeData[0].children[0].id;
+        const builtTree = factory.buildTree(treeData)
+        const parentid =  builtTree[0].children[0].id;
         const pre = true;
 		const parentEl = factory.findElementByID(treeData, parentid) as iTreeElement;
 		

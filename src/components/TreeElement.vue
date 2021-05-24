@@ -21,7 +21,7 @@
 
 <script lang="ts">
 import ElementTreeFactory from "@/classes/ElementTreeFactory";
-import iTreeElement from "@/interfaces/iTreeElement";
+import iTreeElement from "@/interfaces/iElementDescriptor";
 import { Options, Vue } from "vue-class-component";
 
 @Options({
