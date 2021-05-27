@@ -1,16 +1,8 @@
 /* eslint-disable */
-import iAddElementPayload from '@/interfaces/iAddElementPayload';
-import iElementDescriptor from '@/interfaces/iElementDescriptor';
-import _DEFAULT_STATE_ from '@/constants/DefaultState';
-import ElementTreeFactory from '@/classes/ElementTreeFactory';
+import _DEFAULT_STATE_ from '@/constants/DefaultState'
+import iTreeElement from '@/interfaces/iTreeElement'
 export default {
-	addTreeElement: (context: any, payload: iAddElementPayload) => { // TODO unit test
-		const { elementToAdd, parentid, pre } = payload; 
-		const treeData = context.state.treeData
-		// const parentEl = factory.findElementByID(treeData, parentid) as iTreeElement;
-		// parentEl.children = factory.addChildElement(parentEl, elementToAdd, pre);
-		context.commit('setTreeData', context.state.treeData);
-	},
+
 	closeModal: (context: any) => {
 		context.commit('setModalState', false);
 		context.commit('setModalCard', _DEFAULT_STATE_.activeModal);
@@ -26,9 +18,8 @@ export default {
 	resetModalCB: (context: any): void => {
 		context.commit('setModalCB', _DEFAULT_STATE_.modalcb);
 	},
-	setActiveElement: (context: any, el: iElementDescriptor): void => {
-		context.commit('setActiveElement', el ? el : {} as iElementDescriptor);
-		
+	setActiveElement: (context: any, el: iTreeElement): void => {
+		context.commit('setActiveElement', el);
 	},
 	resetActiveElement: (context: any): void => {
 		context.commit('setActiveElement', _DEFAULT_STATE_.activeElement);

@@ -1,12 +1,11 @@
 import mutations from '@/store/mutations';
-import iTreeElement from '@/interfaces/iElementDescriptor';
+import iTreeElement from '@/interfaces/iTreeElement';
 import DefaultStateIndex from '@/constants/DefaultState';
 
 describe('mutations.ts', () => {
     let treeData: Array<iTreeElement> 
     let modalState: boolean;
     let activeModal: string;
-    let validChildren: Array<string>;
     let modalcb: Function;
     let state: any;
 
@@ -15,14 +14,12 @@ describe('mutations.ts', () => {
         treeData = DefaultStateIndex.treeData
         modalState = DefaultStateIndex.modalState;
         activeModal = DefaultStateIndex.activeModal;
-        validChildren = DefaultStateIndex.validChildren;
         modalcb = DefaultStateIndex.modalcb;
 
 		state = {
             treeData,
             modalState,
             activeModal,
-            validChildren,
             modalcb
         }
 	});
@@ -85,17 +82,6 @@ describe('mutations.ts', () => {
     expect(oldCB == state.modalcb).toEqual(false);
    });
    
-   it('should have a function to set the valid children of the state index', () => {
-    const oldChildren = ['foobar'];
-    const updatedChildren = ['fizzbuzz'];
-
-    state.validChildren = oldChildren;
-    mutations.setValidChildren(state, updatedChildren);
-
-    expect(mutations.setValidChildren).toBeDefined();
-    expect(typeof mutations.setValidChildren).toEqual('function');
-    
-   });
 
    it('should have a function to set the modal callback function of the state index', () => {
     const newCB = () => { return false; }

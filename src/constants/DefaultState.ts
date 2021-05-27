@@ -2,7 +2,6 @@ import { HTML_TABLE, HTML_TR, HTML_TD, HTML_P } from '@/constants/SupportedHTMLE
 import HTMLAttribute from '@/classes/HTMLAttribute';
 import iTreeElement from '@/interfaces/iTreeElement';
 import iAppState from '@/interfaces/iAppState';
-import iElementDescriptor from '@/interfaces/iElementDescriptor';
 export default {
     treeData: [
         {
@@ -19,7 +18,7 @@ export default {
             id: 'bar',
             root: false,
             element: HTML_TR,
-            alias: 'rootTR',
+            alias: 'initTR',
             attributes: new Array<HTMLAttribute>(),
             children: [
                 'fizz'   
@@ -29,7 +28,7 @@ export default {
             id: 'fizz',
             root: false,
             element: HTML_TD,
-            alias: 'rootTD',
+            alias: 'initTD',
             attributes: new Array<HTMLAttribute>(),
             children: [
                 'buzz'
@@ -39,7 +38,7 @@ export default {
             id: 'buzz',
             root: false,
             element: HTML_P,
-            alias: 'rootP',
+            alias: 'initP',
             attributes: new Array<HTMLAttribute>(),
             children: [] as Array<string>
         }
@@ -47,5 +46,5 @@ export default {
     modalState: false,
     activeModal: '',
     modalcb: (): void => { return; },
-    activeElement: {} as iElementDescriptor
+    activeElement: {} as iTreeElement
 } as iAppState;

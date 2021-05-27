@@ -1,5 +1,5 @@
 import getters from '@/store/getters';
-import iTreeElement from '@/interfaces/iElementDescriptor';
+import iTreeElement from '@/interfaces/iTreeElement';
 import DefaultStateIndex from '@/constants/DefaultState';
 import iModalPayload from '@/interfaces/iModalPayload';
 

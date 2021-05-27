@@ -1,10 +1,9 @@
 /* eslint-disable */
-import iElementDescriptor from '@/interfaces/iElementDescriptor';
-import DefaultStateIndex from '@/constants/DefaultState';
 import iAppState from '@/interfaces/iAppState';
+import iTreeElement from '@/interfaces/iTreeElement';
 
 export default {
-	setTreeData: (state: iAppState, updatedTreeData: Array<iElementDescriptor>): void => {
+	setTreeData: (state: iAppState, updatedTreeData: Array<iTreeElement>): void => {
 		state.treeData = updatedTreeData;
 	},
 
@@ -14,10 +13,6 @@ export default {
 
 	setModalCard: (state: iAppState, modalCard: string): void => {
 		state.activeModal = modalCard;
-	},
-
-	setValidChildren: (state: iAppState, validChildren: Array<string>): void => { // TODO unit test
-		state.validChildren = validChildren;
 	},
 
 	setModalCB: (state: iAppState, modalcb: Function): void => {

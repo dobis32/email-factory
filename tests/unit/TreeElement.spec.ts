@@ -1,13 +1,13 @@
-import { mount, shallowMount, flushPromises } from '@vue/test-utils';
+import { mount, flushPromises } from '@vue/test-utils';
 import TreeElement from '@/components/TreeElement.vue';
-import iTreeElement from '@/interfaces/iElementDescriptor';
-import iAddElementPayload from '@/interfaces/iAddElementPayload';
+import iTreeElement from '@/interfaces/iTreeElement';
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
 import _SUPPORTED_HTML_ELEMENTS_ from '@/constants/SupportedHTMLElementTypes';
 import _DEFAULT_STATE_ from '@/constants/DefaultState';
 import { HTML_TABLE, HTML_P, HTML_TD, HTML_TR } from '@/constants/SupportedHTMLElementTypes';
 import HTMLAttribute from '@/classes/HTMLAttribute';
 import { _TESTING_HASH_ } from '@/constants/testing';
+
 const elFactory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_, _TESTING_HASH_);
 describe('TreeElement.vue', () => {
 	const mockChildren: Array<iTreeElement> = [
@@ -17,43 +17,34 @@ describe('TreeElement.vue', () => {
 			element: HTML_TR,
 			alias: 'rootTR',
 			children: [
-				{
-					id: 'fizz',
-					root: false,
-					element: HTML_TD,
-					alias: 'rootTD',
-					children: [
-						{
-							id: 'buzz',
-							root: false,
-							element: HTML_P,
-							alias: 'rootP',
-							children: [],
-							attributes: new Array<HTMLAttribute>()
-						}
-					],
-					attributes: new Array<HTMLAttribute>()
-				}
+				'fizz'
 			],
+			attributes: new Array<HTMLAttribute>()
+		},
+		{
+			id: 'fizz',
+			root: false,
+			element: HTML_TD,
+			alias: 'rootTD',
+			children: [
+				'buzz'
+			],
+			attributes: new Array<HTMLAttribute>()
+		},
+		{
+			id: 'buzz',
+			root: false,
+			element: HTML_P,
+			alias: 'rootP',
+			children: [],
 			attributes: new Array<HTMLAttribute>()
 		}
 	];
-	const getNumberOfElementsInTree = function(elementTree: Array<iTreeElement>) {
-		let elements: number = 0;
 
-		const adder = (el: iTreeElement, n: number) => {
-			elements++;
-			return el.children.forEach(adder);
-		};
-
-		elementTree.forEach(adder);
-
-		return elements;
-	};
 	const mockElement = HTML_TABLE;
 	const mockAlias = 'rootTable';
 	const mockParentid = _TESTING_HASH_;
-	const numberOfChildren = getNumberOfElementsInTree(mockChildren);
+	const numberOfChildren = mockChildren.length;
 	const mockTreeElement = 'tree-element';
 	const mockID = _TESTING_HASH_;
 	let mockProps: any;
