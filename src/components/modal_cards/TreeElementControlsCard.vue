@@ -1,9 +1,18 @@
 <template>
   <div id="modal-card" @click="stopPropagation">
-    <h2>{{alias}}</h2>
-    <h3>{{type}}</h3>
-    <div id="action" @click="chooseAction('foobar')">
-      <h3>foobar</h3>
+    <h1>{{ activeElement.alias }}</h1>
+    <h3>{{ activeElement.element.getElementType() }}</h3>
+    <div id="add-button" class="action-button" @click="selectAction('add')">
+      Add Child
+    </div>
+    <div id="edit-button" class="action-button" @click="selectAction('edit')">
+      Edit Element
+    </div>
+    <div id="duplicate-button" class="action-button" @click="selectAction('copy')">
+      Copy Branch
+    </div>
+    <div id="delete-button" class="action-button" @click="selectAction('delete')">
+      Delete Branch
     </div>
   </div>
 </template>
@@ -12,22 +21,29 @@
 import { Options, Vue } from "vue-class-component";
 
 @Options({
+  props: ["activeElement", "cb"],
   data: () => {
     return {
-      chosenAction: ''
+      selectedAction: '',
+      submitting: false
     }
   },
-  props: ["alias", "type", "cb"],
   inject: ["stopPropagation"],
-  beforeUnmount() {
-    this.cb(this.chosenAction)
-    this.$store.dispatch("resetModalCB");
-  },
   methods: {
-    chooseAction(action: string) {
-      this.chosenAction = action;
-    }
-  }
+    selectAction(action: string) {
+      this.submitting = true;
+      this.selectedAction = action;  
+      this.closeModal();
+
+    },
+    closeModal() {
+      this.$store.dispatch('closeModal');
+    },
+  },
+  beforeUnmount() {
+    if (!this.submitting) this.selectedAction = '';
+    this.cb(this.selectedAction);
+  } 
 })
 export default class TreeElementControlsCard extends Vue {}
 </script>
@@ -37,14 +53,24 @@ export default class TreeElementControlsCard extends Vue {}
 #modal-card {
   z-index: 10; /* Sit on top */
   background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
+  margin: 30px auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 800px; /* Could be more or less, depending on screen size */
+  width: 200px;   
   text-align: center;
 }
 
 .input-row {
   padding-bottom: 20px;
+}
+
+.action-button {
+  width: 180px;
+  padding: 10px 0px;
+  text-align: center;
+  margin: 8px auto;
+  background-color: darkcyan;
+  color: #fff;
+  cursor: pointer;
 }
 </style>

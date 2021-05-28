@@ -6,7 +6,6 @@ export default interface iTreeElement {
 	root: boolean;
 	element: SupportedHTMLElement,
 	alias: string;
-	type: string;
     attributes: Array<HTMLAttribute>;
 	children: Array<string>;
 };

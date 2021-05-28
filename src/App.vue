@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TreeEditor :elementTreeData="getElementTree" />
+    <TreeEditor :elementTreeData="getTreeData" />
     <ModuleOptions />
     <Modal :payload="getModalPayload" />
   </div>
@@ -20,10 +20,9 @@ const factory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_);
     ModuleOptions,
     Modal
   },
- 
   computed: {
-    getElementTree() {
-      return this.$store.getters.getElementTree;
+    getTreeData() {
+      return this.$store.getters.getTreeData;
     },
     getModalState() {
       return this.$store.getters.getModalState;

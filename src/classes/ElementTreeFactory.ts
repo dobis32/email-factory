@@ -59,7 +59,7 @@ export default class ElementTreeFactory {
 			const node = {
 				id: r.id,
 				alias: r.alias,
-				type: r.type,
+				type: r.element.getElementType(),
 				root: r.root,
 				children: this.getChildNodes(r.children, treeData)
 			} as iNode;
@@ -77,7 +77,7 @@ export default class ElementTreeFactory {
 			const node = {
 				id: el.id,
 				alias: el.alias,
-				type: el.type,
+				type:  el.element.getElementType(),
 				root: el.root,
 				children: this.getChildNodes(el.children, treeData)
 			} as iNode;

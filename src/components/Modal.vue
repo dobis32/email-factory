@@ -1,8 +1,8 @@
 <template>
   <div id="modal-wrapper" v-if="payload.modalState" @click="closeModal" >
-    <HTMLElementCard v-if="payload.activeModal == 'HTMLElementCard'" :cb="payload.cb" />
-    <GeneratedCodeCard v-if="payload.activeModal == 'GeneratedCodeCard'" :cb="payload.cb" />
-    <ElementControlsCard v-if="payload.activeModal == 'ElementControlsCard'"  :activeElement="payload.activeElement"/>
+    <HTMLElementCard v-if="payload.activeModal == 'HTMLElementCard'" :cb="payload.modalcb" />
+    <GeneratedCodeCard v-if="payload.activeModal == 'GeneratedCodeCard'" :cb="payload.modalcb" />
+    <TreeElementControlsCard v-if="payload.activeModal == 'ElementControlsCard'"  :activeElement="payload.activeElement" :cb="payload.modalcb" />
     <!-- card components here -->
   </div>
 </template>
@@ -11,10 +11,10 @@
 import { Options, Vue } from "vue-class-component";
 import HTMLElementCard from "./modal_cards/HTMLElementCard.vue";
 import GeneratedCodeCard from "./modal_cards/GeneratedCodeCard.vue";
-import ElementControlsCard from "./modal_cards/ElementControlsCard.vue";
+import TreeElementControlsCard from "./modal_cards/TreeElementControlsCard.vue";
 @Options({
   props: ["payload"],
-  components: { HTMLElementCard, GeneratedCodeCard, ElementControlsCard },
+  components: { HTMLElementCard, GeneratedCodeCard, TreeElementControlsCard },
   methods: {
     closeModal() {
       this.$store.dispatch("closeModal");
@@ -34,7 +34,7 @@ export default class Modal extends Vue {}
   top: 0;
   width: 100%; /* Full width */
   height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
+  overflow: none; /* Enable scroll if needed */
   background-color: rgb(0, 0, 0); /* Fallback color */
   background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }

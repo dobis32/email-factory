@@ -2,12 +2,10 @@
 import _DEFAULT_STATE_ from '@/constants/DefaultState'
 import iTreeElement from '@/interfaces/iTreeElement'
 export default {
-
 	closeModal: (context: any) => {
 		context.commit('setModalState', false);
 		context.commit('setModalCard', _DEFAULT_STATE_.activeModal);
 	},
-
 	openModal: (context: any, modalCard: string) => {
 		context.commit('setModalState', true);
 		context.commit('setModalCard', modalCard);

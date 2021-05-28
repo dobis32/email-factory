@@ -2,7 +2,7 @@ import iModalPayload from "@/interfaces/iModalPayload";
 
 /* eslint-disable */
 export default {
-	getElementTree: (state: any) => {
+	getTreeData: (state: any) => {
 		return state.treeData;
 	},
 	getModalPayload: (state: any) => {

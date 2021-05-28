@@ -66,19 +66,37 @@ import { Options, Vue } from "vue-class-component";
     //     this.$store.dispatch("addTreeElement", payload);
     //   }
     // },
-    promptAction() {
+    async promptAction() {
       console.log('prompt action');
       const factory: ElementTreeFactory = this.getTreeFactoryInstance();
+      const treeData = this.$store.state.treeData;
       const id = this.id;
-      const payload = { factory, id };
-      this.$store.dispatch('setActiveElement', payload);
+      const el = factory.findElementByID(treeData, id);
+      this.$store.dispatch('setActiveElement', el ? el : {});
       this.$store.dispatch('openModal', 'ElementControlsCard');
-      new Promise((resolve) => {
+      const result = await new Promise((resolve) => {
         this.$store.dispatch('setModalCB', resolve);
       });
+      this.performAction(result);
     },
     performAction(action: string) {
-      this.$store.dispatch('foobar');
+        switch(action) {
+          case 'add':
+            console.log('add a child');
+            
+            break;
+          case 'copy':
+            console.log('copy a branch');
+            break;
+          case 'edit':
+            console.log('edit an element');
+            break;
+          case 'delete':
+            console.log('delete a branch');
+            break;
+          default:
+            console.log('Did not recognize that action...');
+        }
     }
   }
 })

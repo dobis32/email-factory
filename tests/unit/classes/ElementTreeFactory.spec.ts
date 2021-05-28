@@ -10,7 +10,7 @@ describe('ElementTreeFactory.ts', () => {
     let treeData: Array<iTreeElement>;
     let factory: ElementTreeFactory;
 	beforeEach(() => {
-       
+        factory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_);
 	});
 
     it('should have a function to create a new tree element', () => {

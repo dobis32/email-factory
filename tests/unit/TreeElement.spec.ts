@@ -40,7 +40,7 @@ describe('TreeElement.vue', () => {
 			attributes: new Array<HTMLAttribute>()
 		}
 	];
-
+	const mockBuiltBranch = elFactory.buildTree(mockChildren);
 	const mockElement = HTML_TABLE;
 	const mockAlias = 'rootTable';
 	const mockParentid = _TESTING_HASH_;
@@ -61,8 +61,8 @@ describe('TreeElement.vue', () => {
 			root: false,
 			element: mockElement,
 			alias: mockAlias,
-			id: _TESTING_HASH_,
-			children: mockChildren,
+			id: mockID,
+			children: mockBuiltBranch,
 			parentid: mockParentid,
 			attributes: new Array<HTMLAttribute>()
 		}
