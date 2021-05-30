@@ -4,7 +4,7 @@
       v-for="(el) of builtTree"
       :key="el.id"
       :root="el.root"
-      :element="el.element"
+      :type="el.type"
       :alias="el.alias"
       :id="el.id"
       :attributes="el.attributes"

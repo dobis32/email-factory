@@ -2,14 +2,14 @@
   <div class="tree-element-wrapper">
     <div :class="treeElementClass" @click="promptAction">
       <h3 id="alias">{{alias}}</h3>
-      <h4 id="type">({{element.getElementType()}})</h4>
+      <!-- <h4 id="type">({{element.getElementType()}})</h4> -->
     </div>
   
     <TreeElement
       v-for="(child) of children"
       :key="child.id"
       :root="child.root"
-      :element="child.element"
+      :type="child.type"
       :alias="child.alias"
       :id="child.id"
       :attributes="child.attributes"
@@ -21,11 +21,10 @@
 
 <script lang="ts">
 import ElementTreeFactory from "@/classes/ElementTreeFactory";
-import iTreeElement from "@/interfaces/iTreeElement";
 import { Options, Vue } from "vue-class-component";
 
 @Options({
-  props: ["element", "alias", "id", "children", "parentid", "root", "attributes"],
+  props: ["type", "alias", "id", "children", "parentid", "root", "attributes"],
   inject: ["getTreeFactoryInstance"],
   data: () => {
     return {
@@ -33,7 +32,7 @@ import { Options, Vue } from "vue-class-component";
     };
   },
   created() {
-    this.treeElementClass = `${this.element.getElementType()} ${this.treeElementClass}`;
+    this.treeElementClass = `${this.type} ${this.treeElementClass}`;
   },
   methods: {
     // getNewElementCredentials(validChildren: Array<string>) { // todo unit test

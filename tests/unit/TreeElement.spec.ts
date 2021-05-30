@@ -41,7 +41,7 @@ describe('TreeElement.vue', () => {
 		}
 	];
 	const mockBuiltBranch = elFactory.buildTree(mockChildren);
-	const mockElement = HTML_TABLE;
+	const mockElement = HTML_TABLE.getElementType();
 	const mockAlias = 'rootTable';
 	const mockParentid = _TESTING_HASH_;
 	const numberOfChildren = mockChildren.length;
@@ -129,10 +129,8 @@ describe('TreeElement.vue', () => {
 	// Props
 	it('should have a prop for the type of the assumed tree element', () => {
 		const props = wrapper.props();
-		expect(props.element.getElementType()).toEqual(mockProps.element.getElementType());
-		expect(typeof props.element.getElementType()).toEqual('string');
-		expect( Array.isArray(props.element.getValidChildren())).toEqual(true);
-
+		expect(props.type).toEqual(mockProps.element.getElementType());
+		expect(typeof props.element.type).toEqual('string');
 	});
 
 	it('should have a prop for the alias of the assumed tree element', () => {

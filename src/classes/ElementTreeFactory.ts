@@ -87,7 +87,32 @@ export default class ElementTreeFactory {
 		return childNodes;
 	}
 
-	
+	addBranch(branchToAdd: Array<iNode>, treeData: Array<iTreeElement>) {
+		const flattenedBranch = new Array<iTreeElement>();
+		const newData = [ ...treeData ];
+		
+
+		return newData;
+	}
+
+	private nodeToTreeElement(n: iNode): iTreeElement {
+		const el = this.getSupportedElement(n.type);
+		const childrenAsElements = new Array<string>();
+		n.children.forEach((c: iNode) => {
+			const childAsElement = this.nodeToTreeElement(c);
+			childrenAsElements.push(c.id);
+		});
+		if (!el) throw new Error(`HTML element of type ${n.type} is not supported`)
+		return {
+			id: n.id,
+			root: n.root,
+			element: el,
+			alias: n.alias,
+			attributes: new Array<HTMLAttribute>(),
+			children: childrenAsElements
+		} as iTreeElement;
+	}
+
 
 	// generateCode(roots: Array<iElementDescriptor | iTreeRootDescriptor>, nestLevel = 0): string { // TODO unit test
 	// 	let retString = '';
