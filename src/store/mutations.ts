@@ -22,4 +22,8 @@ export default {
 	setActiveElement: (state: iAppState, element: iTreeElement): void => {
 		state.activeElement = element;
 	},
+
+	setValidChildren: (state: iAppState, validChildren: Array<string>): void => {
+		state.validChildren = validChildren;
+	},
 };

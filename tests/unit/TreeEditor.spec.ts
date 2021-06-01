@@ -34,9 +34,7 @@ describe('TreeEditor.vue', () => {
 	});
 
 	// DOM
-	it('should render the assumed element tree', () => {
-		expect(wrapper.findAllComponents(TreeElement).length).toEqual(numberOfElements);
-	});
+	
 
 	// Props
 	it('should have a prop for the assumed element tree', () => {

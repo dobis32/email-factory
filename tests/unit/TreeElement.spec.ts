@@ -59,7 +59,7 @@ describe('TreeElement.vue', () => {
 	beforeEach(() => {
 		mockProps = {
 			root: false,
-			element: mockElement,
+			type: mockElement,
 			alias: mockAlias,
 			id: mockID,
 			children: mockBuiltBranch,
@@ -100,7 +100,7 @@ describe('TreeElement.vue', () => {
 
 	// Data
 	it('should concatenate the default tree-element css class with the appropriate element type', () => {
-		expect(wrapper.vm.treeElementClass).toEqual(`${mockProps.element.getElementType()} ${mockTreeElement}`);
+		expect(wrapper.vm.treeElementClass).toEqual(`${mockProps.type} ${mockTreeElement}`);
 	});
 
 	// DOM
@@ -108,29 +108,23 @@ describe('TreeElement.vue', () => {
 		expect(wrapper.find('#alias').exists()).toBeTruthy();
 	});
 
-	it('should have the type of the assumed tree element rendered to the DOM', () => {
-		expect(wrapper.find('#type').exists()).toBeTruthy();
-	});
-
-	it('should render the assumed tree element and all child tree elements to the DOM', () => {
-		expect(wrapper.findAll(`.tree-element`).length).toEqual(1 + numberOfChildren);
-	});
-
 	// Method
 	it('should have an action for prompting the user for an action', () => {
+		const id = wrapper.props().id;
+		const el = elFactory.findElementByID(state.treeData, id);
 		wrapper.vm.promptAction();
 
 		expect(wrapper.vm.promptAction).toBeDefined();
 		expect(typeof wrapper.vm.promptAction).toEqual('function');
-		expect(dispatch).toHaveBeenCalledWith('setActiveElement', {factory: mockGetTreeFactoryInstance(), id: mockProps.id})
+		expect(dispatch).toHaveBeenCalledWith('setActiveElement', el)
 		expect(dispatch).toHaveBeenCalledWith('openModal', 'ElementControlsCard');
 	});
 
 	// Props
 	it('should have a prop for the type of the assumed tree element', () => {
 		const props = wrapper.props();
-		expect(props.type).toEqual(mockProps.element.getElementType());
-		expect(typeof props.element.type).toEqual('string');
+		expect(props.type).toEqual(mockProps.type);
+		expect(typeof props.type).toEqual('string');
 	});
 
 	it('should have a prop for the alias of the assumed tree element', () => {

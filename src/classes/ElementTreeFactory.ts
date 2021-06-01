@@ -34,42 +34,56 @@ export default class ElementTreeFactory {
 		return treeData.find((el: iTreeElement) => el.alias == targetAlias);
 	}
 
-	addChildElement(parent: iTreeElement, elementToAdd: string, pre: boolean): Array<string> {
-		return pre ? [ elementToAdd, ...parent.children ] : [ ...parent.children, elementToAdd ];
+	addChildElement(treeData: Array<iTreeElement>, parentID: string, childID: string, pre: boolean): Array<string> {
+		const parent = this.findElementByID(treeData, parentID);
+		if (!parent) throw new Error()
+		return pre ? [ childID, ...parent.children ] : [ ...parent.children, childID ];
 	}
 
-	createTreeElement(type: string, alias: string, isRoot?: boolean): iTreeElement {
-		const supportedElement = this.getSupportedElement(type);
-		const rootDefined = isRoot != undefined;
-		if (!supportedElement) throw new Error(`Element of type "${type}" is not supported.`);
-		const el = {} as iTreeElement;
-		el.id = this.getNewElementID();
-		el.root = rootDefined ? isRoot as boolean : false;
-		el.element = supportedElement as SupportedHTMLElement;
-		el.alias = alias;
-		el.attributes = new Array<HTMLAttribute>();
-		el.children = new Array<string>();
-		return el;
+	createTreeElement(type: string,  isRoot: boolean, alias?: string,): iTreeElement | undefined {
+		try {
+			const supportedElement = this.getSupportedElement(type);
+			const rootDefined = isRoot != undefined;
+			if (!supportedElement) throw new Error(`Element of type "${type}" is not supported.`);
+			const el = {} as iTreeElement;
+			const id = this.getNewElementID();
+			el.id = id;
+			el.root = rootDefined ? isRoot as boolean : false;
+			el.element = supportedElement as SupportedHTMLElement;
+			el.alias = alias ? alias : id;
+			el.attributes = new Array<HTMLAttribute>();
+			el.children = new Array<string>();
+			return el;
+		} catch(e) {
+			console.log(e);
+			return undefined;
+		}
+		
 	}
 
 	buildTree(treeData: Array<iTreeElement>): Array<iNode> {
 		const builtTree = new Array<iNode>();
 		const roots = treeData.filter((el: iTreeElement) => el.root == true);
 		roots.forEach((r: iTreeElement) => {
-			const node = {
-				id: r.id,
-				alias: r.alias,
-				type: r.element.getElementType(),
-				root: r.root,
-				children: this.getChildNodes(r.children, treeData)
-			} as iNode;
-			builtTree.push(node);
+			const branch = this.buildBranch(treeData, r)
+			builtTree.push(branch);
 		});
 		
 		return builtTree;
 	}
 
-	private getChildNodes(childIDs: Array<string>, treeData: Array<iTreeElement>): Array<iNode> {
+	buildBranch(treeData: Array<iTreeElement>, head: iTreeElement): iNode {
+		const builtBranch = {
+			id: head.id,
+			alias: head.alias,
+			type: head.element.getElementType(),
+			root: head.root,
+			children: this.getChildNodes(treeData, head.children)
+		} as iNode;
+		return builtBranch;
+	}
+
+	private getChildNodes(treeData: Array<iTreeElement>, childIDs: Array<string>): Array<iNode> {
 		const childNodes = new Array<iNode>();
 		childIDs.forEach((cid: string) => {
 			const el = treeData.find((el: iTreeElement) => el.id == cid);
@@ -79,7 +93,7 @@ export default class ElementTreeFactory {
 				alias: el.alias,
 				type:  el.element.getElementType(),
 				root: el.root,
-				children: this.getChildNodes(el.children, treeData)
+				children: this.getChildNodes(treeData, el.children)
 			} as iNode;
 			childNodes.push(node);
 		});
@@ -87,57 +101,12 @@ export default class ElementTreeFactory {
 		return childNodes;
 	}
 
-	addBranch(branchToAdd: Array<iNode>, treeData: Array<iTreeElement>) {
-		const flattenedBranch = new Array<iTreeElement>();
-		const newData = [ ...treeData ];
-		
+	copyBranch(head: iTreeElement, children: Array<iNode>): Array<iTreeElement> {
+		const copiedBranch = new Array<iTreeElement>();
+		// need to change IDs of all the nodes
+		// must traverse to the end of a branch before copying (?)
+		// I think you need to know the new ID's of copied children before copying an given element
 
-		return newData;
+		return copiedBranch;
 	}
-
-	private nodeToTreeElement(n: iNode): iTreeElement {
-		const el = this.getSupportedElement(n.type);
-		const childrenAsElements = new Array<string>();
-		n.children.forEach((c: iNode) => {
-			const childAsElement = this.nodeToTreeElement(c);
-			childrenAsElements.push(c.id);
-		});
-		if (!el) throw new Error(`HTML element of type ${n.type} is not supported`)
-		return {
-			id: n.id,
-			root: n.root,
-			element: el,
-			alias: n.alias,
-			attributes: new Array<HTMLAttribute>(),
-			children: childrenAsElements
-		} as iTreeElement;
-	}
-
-
-	// generateCode(roots: Array<iElementDescriptor | iTreeRootDescriptor>, nestLevel = 0): string { // TODO unit test
-	// 	let retString = '';
-	// 	roots.forEach((el: iElementDescriptor) => {
-	// 		let indent = '';
-	// 		for(let i = 0; i < nestLevel; i++) {
-	// 			indent += '\t';
-	// 		}
-	// 		let attributes = '';
-	// 		let content = '';
-	// 		el.attributes.forEach((att: HTMLAttribute) => {
-	// 			const data = att.getAttributeData()
-	// 			if(data.attributeName == 'innerText') content += data.attributeValue;
-	// 			else attributes += `${data.attributeName}="${data.attributeValue}" `;
-	// 		})
-	// 		const headTag = `${indent}<${el.element.getElementType()} ${attributes}>\n`;
-	// 		const tailTag = `${indent}</${el.element.getElementType()}>\n`;
-	// 		if(!content.length) {
-	// 			content = this.generateCode(el.children, nestLevel + 1);
-	// 		}
-	// 		retString += headTag;
-	// 		retString += `${content}`;
-	// 		retString += tailTag;
-	// 	});
-    //     return retString;
-    // }
-
 }

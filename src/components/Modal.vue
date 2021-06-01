@@ -3,6 +3,8 @@
     <HTMLElementCard v-if="payload.activeModal == 'HTMLElementCard'" :cb="payload.modalcb" />
     <GeneratedCodeCard v-if="payload.activeModal == 'GeneratedCodeCard'" :cb="payload.modalcb" />
     <TreeElementControlsCard v-if="payload.activeModal == 'ElementControlsCard'"  :activeElement="payload.activeElement" :cb="payload.modalcb" />
+    <CreateChildElementCard v-if="payload.activeModal == 'CreateChildElementCard'"  :validChildren="payload.validChildren" :cb="payload.modalcb" />
+
     <!-- card components here -->
   </div>
 </template>
@@ -12,9 +14,11 @@ import { Options, Vue } from "vue-class-component";
 import HTMLElementCard from "./modal_cards/HTMLElementCard.vue";
 import GeneratedCodeCard from "./modal_cards/GeneratedCodeCard.vue";
 import TreeElementControlsCard from "./modal_cards/TreeElementControlsCard.vue";
+import CreateChildElementCard from "./modal_cards/CreateChildElementCard.vue";
+
 @Options({
   props: ["payload"],
-  components: { HTMLElementCard, GeneratedCodeCard, TreeElementControlsCard },
+  components: { HTMLElementCard, GeneratedCodeCard, TreeElementControlsCard, CreateChildElementCard },
   methods: {
     closeModal() {
       this.$store.dispatch("closeModal");

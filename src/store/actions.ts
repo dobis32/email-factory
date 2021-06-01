@@ -22,7 +22,7 @@ export default {
 	resetActiveElement: (context: any): void => {
 		context.commit('setActiveElement', _DEFAULT_STATE_.activeElement);
 	},
-	performAction: (context: any): void => {
-		console.log('FOOBAR')
-	}	
+	setValidChildren: (context: any, validChildren: Array<string>): void => {
+		context.commit('setValidChildren', validChildren);
+	}
 };

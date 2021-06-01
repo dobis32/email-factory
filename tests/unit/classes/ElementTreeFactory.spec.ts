@@ -7,17 +7,18 @@ import { _TESTING_HASH_ } from '@/constants/Testing';
 import _DEFAULT_STATE_ from '@/constants/DefaultState';
 
 describe('ElementTreeFactory.ts', () => {
-    let treeData: Array<iTreeElement>;
+    let mockTreeData: Array<iTreeElement>;
     let factory: ElementTreeFactory;
 	beforeEach(() => {
         factory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_);
+        mockTreeData = _DEFAULT_STATE_.treeData;
 	});
 
     it('should have a function to create a new tree element', () => {
         const type = 'table';
         const alias = 'newTable';
         const isRoot = true;
-        const el = factory.createTreeElement(type, alias, isRoot) as iTreeElement;
+        const el = factory.createTreeElement(type, isRoot, alias) as iTreeElement;
         expect(factory.createTreeElement).toBeDefined();
         expect(typeof factory.createTreeElement).toEqual('function');
         expect(el).toBeDefined();
@@ -25,20 +26,21 @@ describe('ElementTreeFactory.ts', () => {
         expect(el.element.getElementType()).toEqual(type);
     });
 
-    it('should return an Obj<iTreeElement> with an alias that matches the ID if no alias is provided', () => {
+    it('should return an element with an alias that matches the ID if no alias is provided', () => {
         const type = 'table';
-        const alias = 'newTable';
-        const el = factory.createTreeElement(type, alias) as iTreeElement;
+        const el: iTreeElement = factory.createTreeElement(type, true) as iTreeElement;
         expect(el.alias).toEqual(el.id);
     });
 
     it('should return undefined if it tries to create a tree element that is not supported', () => {
         const unsupportedElement = 'foobar';
-        const supported = factory.getSupportedElement(unsupportedElement);
+        const isRoot = true;
+        const el = factory.getSupportedElement(unsupportedElement);
+        const result = factory.createTreeElement(unsupportedElement, isRoot, 'alias')
         expect(factory.createTreeElement).toBeDefined();
         expect(typeof factory.createTreeElement).toEqual('function');
-        expect(supported).toEqual(false);
-        expect(factory.createTreeElement(unsupportedElement, 'alias')).toEqual(undefined);
+        expect(el).toEqual(undefined);
+        expect(result).toEqual(el);
     });
 
     it('should have a function that creates a unique ID', () => {
@@ -52,29 +54,28 @@ describe('ElementTreeFactory.ts', () => {
         const elType2 = 'foobar';
         expect(factory.getSupportedElement).toBeDefined();
         expect(typeof factory.getSupportedElement).toEqual('function');
-        expect(factory.getSupportedElement(elType1.getElementType())).toEqual(true);
-        expect(factory.getSupportedElement(elType2)).toEqual(false);
+        expect(factory.getSupportedElement(elType1.getElementType())).toBeDefined();
+        expect(factory.getSupportedElement(elType2)).toBeUndefined();
     });
 
     it('should have a function to find an element by alias', () => {
-        const targetEl = treeData[2];
+        const targetEl = mockTreeData[2];
         const badAlias = 'zzzzzzzzzzzzz';
         expect(factory.findElementByAlias).toBeDefined();
         expect(typeof factory.findElementByAlias).toEqual('function');
-        expect(factory.findElementByAlias(treeData, targetEl.alias)).toBeDefined();
-        expect(factory.findElementByAlias(treeData, targetEl.alias)).toEqual(targetEl);
-        expect(factory.findElementByAlias(treeData, badAlias)).toEqual(undefined);
+        expect(factory.findElementByAlias(mockTreeData, targetEl.alias)).toBeDefined();
+        expect(factory.findElementByAlias(mockTreeData, targetEl.alias)).toEqual(targetEl);
+        expect(factory.findElementByAlias(mockTreeData, badAlias)).toEqual(undefined);
     });
 
-    it('should have a function to add a sibling element', () => {
-        const elToAdd = factory.createTreeElement('td', 'alias');
-        const parent = treeData[1]; // tr element
-        const result1 = factory.addChildElement(parent, elToAdd.id, true);
-        const result2 =  factory.addChildElement(parent, elToAdd.id, false);
-        expect(factory.addChildElement).toBeDefined();
-        expect(typeof factory.addChildElement).toEqual('function');
-        expect(result1[0]).toEqual(elToAdd);
-        expect(result2[1]).toEqual(elToAdd);
+    it('should have a function to find an element by ID', () => {
+        const targetEl =  mockTreeData[2]
+        const targetID = targetEl.id;
+        const result = factory.findElementByID(mockTreeData, targetID) as iTreeElement;
+        expect(factory.findElementByID).toBeDefined();
+        expect(typeof factory.findElementByID).toEqual('function');
+        expect(result.id).toEqual(targetID);
     });
 
+    
 });

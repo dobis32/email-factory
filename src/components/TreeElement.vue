@@ -21,6 +21,7 @@
 
 <script lang="ts">
 import ElementTreeFactory from "@/classes/ElementTreeFactory";
+import iTreeElement from "@/interfaces/iTreeElement";
 import { Options, Vue } from "vue-class-component";
 
 @Options({
@@ -82,10 +83,11 @@ import { Options, Vue } from "vue-class-component";
         switch(action) {
           case 'add':
             console.log('add a child');
-            
+            this.addChild();
             break;
           case 'copy':
             console.log('copy a branch');
+            this.copyBranch();
             break;
           case 'edit':
             console.log('edit an element');
@@ -96,6 +98,24 @@ import { Options, Vue } from "vue-class-component";
           default:
             console.log('Did not recognize that action...');
         }
+    },
+    async addChild() { // TODO unit test
+      const f = this.getTreeFactoryInstance() as ElementTreeFactory;
+      const el = f.getSupportedElement(this.type)
+      if (!el) throw new Error(`[Tree element Vue] element of type ${this.type} is not supported`);
+      this.$store.dispatch('setValidChildren', el.getValidChildren());
+      this.$store.dispatch('openModal', 'CreateChildElementCard');
+      const result = await new Promise((resolve) => {
+        this.$store.dispatch('setModalCB', resolve);
+      });
+      console.log('[Tree element VUE] create child result:', result);
+    },
+    copyBranch() {
+      const f = this.getTreeFactoryInstance() as ElementTreeFactory;
+      const treeData = this.$store.state.treeData;
+      const head = treeData.find((el: iTreeElement) => el.id === this.id);
+      if (!head) throw new Error(`[Tree Element Vue] Element with id ${this.id} not found.`)
+      const flattenedTree = f.copyBranch(head, this.children);
     }
   }
 })

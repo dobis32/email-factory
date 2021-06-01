@@ -46,5 +46,6 @@ export default {
     modalState: false,
     activeModal: '',
     modalcb: (): void => { return; },
-    activeElement: {} as iTreeElement
+    activeElement: {} as iTreeElement,
+    validChildren: new Array<string>()
 } as iAppState;

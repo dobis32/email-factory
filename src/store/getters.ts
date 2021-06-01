@@ -10,7 +10,8 @@ export default {
 			modalState: state.modalState,
 			activeModal: state.activeModal,
 			activeElement: state.activeElement,
-			modalcb: state.modalcb
+			modalcb: state.modalcb,
+			validChildren: state.validChildren
 		} as iModalPayload;
 
 		return payload;
