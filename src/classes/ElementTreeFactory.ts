@@ -61,29 +61,33 @@ export default class ElementTreeFactory {
 		
 	}
 
-	buildTree(treeData: Array<iTreeElement>): Array<iNode> {
+	static buildTree(treeData: Array<iTreeElement>): Array<iNode> {
+		console.log('build tree')
 		const builtTree = new Array<iNode>();
 		const roots = treeData.filter((el: iTreeElement) => el.root == true);
 		roots.forEach((r: iTreeElement) => {
-			const branch = this.buildBranch(treeData, r)
+			console.log('building root', r)
+			const branch = ElementTreeFactory.buildBranch(treeData, r)
 			builtTree.push(branch);
 		});
 		
 		return builtTree;
 	}
 
-	buildBranch(treeData: Array<iTreeElement>, head: iTreeElement): iNode {
+	static buildBranch(treeData: Array<iTreeElement>, head: iTreeElement): iNode {
+		console.log('build branch');
 		const builtBranch = {
 			id: head.id,
 			alias: head.alias,
 			type: head.element.getElementType(),
 			root: head.root,
-			children: this.getChildNodes(treeData, head.children)
+			attributes: head.attributes,
+			children: ElementTreeFactory.getChildNodes(treeData, head.children)
 		} as iNode;
 		return builtBranch;
 	}
 
-	private getChildNodes(treeData: Array<iTreeElement>, childIDs: Array<string>): Array<iNode> {
+	private static getChildNodes(treeData: Array<iTreeElement>, childIDs: Array<string>): Array<iNode> {
 		const childNodes = new Array<iNode>();
 		childIDs.forEach((cid: string) => {
 			const el = treeData.find((el: iTreeElement) => el.id == cid);
@@ -93,6 +97,7 @@ export default class ElementTreeFactory {
 				alias: el.alias,
 				type:  el.element.getElementType(),
 				root: el.root,
+				attributes: el.attributes,
 				children: this.getChildNodes(treeData, el.children)
 			} as iNode;
 			childNodes.push(node);
@@ -101,12 +106,57 @@ export default class ElementTreeFactory {
 		return childNodes;
 	}
 
-	copyBranch(head: iTreeElement, children: Array<iNode>): Array<iTreeElement> {
+	copyBranch(treeData: Array<iTreeElement>, headID: string): Array<iTreeElement> {
 		const copiedBranch = new Array<iTreeElement>();
 		// need to change IDs of all the nodes
 		// must traverse to the end of a branch before copying (?)
 		// I think you need to know the new ID's of copied children before copying an given element
-
+		const headElement = treeData.find((el: iTreeElement) => el.id === headID);
+		if (!headElement) throw new Error(`[ Element Tree Factory ] Failed to find element with id ${headID}`)
+		const builtBranch: iNode = ElementTreeFactory.buildBranch(treeData, headElement);
+		builtBranch
 		return copiedBranch;
+	}
+
+	copyNode(n: iNode): iNode {
+		const children = new Array<iNode>();
+		n.children.forEach((c: iNode) => {
+			const c_copy = this.copyNode(c);
+			children.push(c_copy);
+		});
+		const copy: iNode = {
+			id: this.getNewElementID(),
+			root: n.root,
+			type: n.type,
+			alias: n.alias,
+			attributes: n.attributes,
+			children
+		}
+		return copy;
+	}
+
+	flattenBranch(head: iNode): Array<iTreeElement> {
+		const flattenedBranch = new Array<iTreeElement>();
+		const aux = new Array<iNode>();
+		aux.push(head);
+		head.children.forEach((c: iNode) => {
+			aux.push(c);
+		});
+		while (aux.length) {
+			const n = aux.shift() as iNode;
+			const htmlElement = this.getSupportedElement(head.type);
+			if (!htmlElement) throw new Error(`[ Element Tree Factory ] Failed to find supported element of type ${head.type}`)
+			const childIDs = n.children.map((c: iNode) => c.id);
+			const el = {
+				id: n.id,
+				root: n.root,
+				element: htmlElement,
+				alias: n.alias,
+				attributes: n.attributes,
+				children: childIDs
+			} as iTreeElement;
+			flattenedBranch.push(el);
+		}
+		return flattenedBranch;
 	}
 }

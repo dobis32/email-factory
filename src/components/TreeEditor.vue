@@ -1,7 +1,7 @@
 <template>
   <div class="tree-editor-wrapper">
     <TreeElement
-      v-for="(el) of builtTree"
+      v-for="(el) of elementTree"
       :key="el.id"
       :root="el.root"
       :type="el.type"
@@ -22,17 +22,7 @@ import TreeElement from "./TreeElement.vue";
   components: {
     TreeElement
   },
-  data: () => {
-    return {
-      builtTree: []
-    };
-  },
-  beforeMount() {
-    const f = this.getTreeFactoryInstance();
-    this.builtTree = f.buildTree(this.elementTreeData);
-  },
-  props: ["elementTreeData"],
-  inject: ["getTreeFactoryInstance"]
+  props: ["elementTree"],
 })
 export default class TreeEditor extends Vue {}
 </script>

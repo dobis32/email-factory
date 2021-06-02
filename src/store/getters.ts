@@ -1,9 +1,14 @@
+import ElementTreeFactory from "@/classes/ElementTreeFactory";
 import iModalPayload from "@/interfaces/iModalPayload";
 
 /* eslint-disable */
 export default {
 	getTreeData: (state: any) => {
 		return state.treeData;
+	},
+	getBuiltTree: (state: any) => {
+		console.log('get the built tree');
+		return ElementTreeFactory.buildTree(state.treeData);
 	},
 	getModalPayload: (state: any) => {
 		const payload = {

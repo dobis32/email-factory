@@ -24,5 +24,11 @@ export default {
 	},
 	setValidChildren: (context: any, validChildren: Array<string>): void => {
 		context.commit('setValidChildren', validChildren);
+	},
+	addBranch: (context: any, branch: Array<iTreeElement>): void => {
+		const treeData = context.state.treeData;
+		const newData = [ ...treeData, ...branch ];
+		console.log('adding branch...');
+		context.commit('setTreeData', newData);
 	}
 };

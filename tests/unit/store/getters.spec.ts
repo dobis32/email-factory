@@ -11,13 +11,14 @@ describe('getters.ts', () => {
     let activeElement: iTreeElement;
     let state: any;
     let mockPayload: iModalPayload;
+    let validChildren: Array<string>;
 
 	beforeEach(() => {
         treeData = DefaultStateIndex.treeData
         modalState = DefaultStateIndex.modalState;
         activeModal = DefaultStateIndex.activeModal;
         modalcb = DefaultStateIndex.modalcb;
-
+        validChildren = DefaultStateIndex.validChildren;
 		state = {
             treeData,
             modalState,
@@ -29,7 +30,8 @@ describe('getters.ts', () => {
             modalState,
             activeModal,
             activeElement,
-            modalcb
+            modalcb,
+            validChildren
         }
 	});
 

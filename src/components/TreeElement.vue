@@ -26,7 +26,7 @@ import { Options, Vue } from "vue-class-component";
 
 @Options({
   props: ["type", "alias", "id", "children", "parentid", "root", "attributes"],
-  inject: ["getTreeFactoryInstance"],
+  // inject: ["getTreeFactoryInstance"],
   data: () => {
     return {
       treeElementClass: "tree-element"
@@ -112,10 +112,11 @@ import { Options, Vue } from "vue-class-component";
     },
     copyBranch() {
       const f = this.getTreeFactoryInstance() as ElementTreeFactory;
-      const treeData = this.$store.state.treeData;
-      const head = treeData.find((el: iTreeElement) => el.id === this.id);
-      if (!head) throw new Error(`[Tree Element Vue] Element with id ${this.id} not found.`)
-      const flattenedTree = f.copyBranch(head, this.children);
+      const headID = this.id;
+      const treeData: Array<iTreeElement> = this.$store.state.treeData;
+      const flattenedBranch = f.copyBranch(treeData, headID);
+      this.$store.dispatch('addBranch', flattenedBranch);
+    
     }
   }
 })
