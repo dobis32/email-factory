@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-
+import ElementTreeFactory from "@/classes/ElementTreeFactory";
 @Options({
   data: () => {
     return {
@@ -14,9 +14,9 @@ import { Options, Vue } from "vue-class-component";
     }
   },
   props: ["elementTreeData"],
-  inject: ["stopPropagation", "getTreeFactoryInstance"],
+  inject: ["stopPropagation"],
   beforeMount() {
-    this.generatedCode = this.getTreeFactoryInstance().generateCode(this.elementTreeData);
+    // this.generatedCode = ElementTreeFactory.generateCode(this.elementTreeData);
   },
   beforeUnmount() {
     this.$store.dispatch("resetModalCB");

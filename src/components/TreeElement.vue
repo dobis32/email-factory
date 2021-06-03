@@ -26,7 +26,6 @@ import { Options, Vue } from "vue-class-component";
 
 @Options({
   props: ["type", "alias", "id", "children", "parentid", "root", "attributes"],
-  // inject: ["getTreeFactoryInstance"],
   data: () => {
     return {
       treeElementClass: "tree-element"
@@ -36,42 +35,12 @@ import { Options, Vue } from "vue-class-component";
     this.treeElementClass = `${this.type} ${this.treeElementClass}`;
   },
   methods: {
-    // getNewElementCredentials(validChildren: Array<string>) { // todo unit test
-    //   return new Promise(resolve => {
-    //     // I don't know how to test this....
-    //     this.$store.dispatch("setModalCB", resolve);
-    //     this.$store.dispatch("openModal", "HTMLElementCard");
-    //   });
-    // },
-    // async addElement(payload: { sibling: boolean, pre: boolean }) {
-    //   const { sibling, pre } = payload;
-    //   const factory: ElementTreeFactory = this.getTreeFactoryInstance();
-    //   const parent = factory.findElementByID(this.$store.state.treeData, this.parentid) as iTreeElement;
-    //   const validChildren = sibling ? parent.element.getValidChildren() : this.element.getValidChildren();
-    //   const { alias } = await this.getNewElementCredentials(validChildren);
-    //   if (alias) {
-    //     let newEl: iTreeElement = {
-    //       id: factory.getNewElementID(),
-    //       root: this.root ? true : false,
-    //       element: this.element,
-    //       alias,
-    //       children: new Array<iTreeElement>(),
-    //       attributes: new Array<HTMLAttribute>()
-    //     };
-    //     const payload: iAddElementPayload = {
-    //       elementToAdd: newEl,
-    //       parentid: sibling? this.parentid : this.id,
-    //       pre,
-    //     };
-    //     this.$store.dispatch("addTreeElement", payload);
-    //   }
-    // },
     async promptAction() {
       console.log('prompt action');
-      const factory: ElementTreeFactory = this.getTreeFactoryInstance();
+      const f: ElementTreeFactory = this.$store.state.elementTreeFactory;
       const treeData = this.$store.state.treeData;
       const id = this.id;
-      const el = factory.findElementByID(treeData, id);
+      const el = f.findElementByID(treeData, id);
       this.$store.dispatch('setActiveElement', el ? el : {});
       this.$store.dispatch('openModal', 'ElementControlsCard');
       const result = await new Promise((resolve) => {
@@ -100,23 +69,23 @@ import { Options, Vue } from "vue-class-component";
         }
     },
     async addChild() { // TODO unit test
-      const f = this.getTreeFactoryInstance() as ElementTreeFactory;
+      const f: ElementTreeFactory = this.$store.state.elementTreeFactory;
       const el = f.getSupportedElement(this.type)
-      if (!el) throw new Error(`[Tree element Vue] element of type ${this.type} is not supported`);
+      if (!el) throw new Error(`[ Tree element Vue ] element of type ${this.type} is not supported`);
       this.$store.dispatch('setValidChildren', el.getValidChildren());
       this.$store.dispatch('openModal', 'CreateChildElementCard');
       const result = await new Promise((resolve) => {
         this.$store.dispatch('setModalCB', resolve);
       });
-      console.log('[Tree element VUE] create child result:', result);
+      console.log('[ Tree element VUE ] create child result:', result);
     },
     copyBranch() {
-      const f = this.getTreeFactoryInstance() as ElementTreeFactory;
+      const f: ElementTreeFactory = this.$store.state.elementTreeFactory;
       const headID = this.id;
       const treeData: Array<iTreeElement> = this.$store.state.treeData;
       const flattenedBranch = f.copyBranch(treeData, headID);
-      this.$store.dispatch('addBranch', flattenedBranch);
-    
+      const parentID = this.parentid;
+      this.$store.dispatch('addBranch', { branch: flattenedBranch, parentID });
     }
   }
 })

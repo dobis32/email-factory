@@ -25,10 +25,12 @@ export default {
 	setValidChildren: (context: any, validChildren: Array<string>): void => {
 		context.commit('setValidChildren', validChildren);
 	},
-	addBranch: (context: any, branch: Array<iTreeElement>): void => {
+	addBranch: (context: any, payload: {branch: Array<iTreeElement>, parentID: string}): void => {
+		const { branch, parentID } = payload;
 		const treeData = context.state.treeData;
+		const parent = treeData.find((el: iTreeElement) => el.id == parentID);
+		parent.children.push(branch[0].id); // This assumes the head node is at index 0
 		const newData = [ ...treeData, ...branch ];
-		console.log('adding branch...');
 		context.commit('setTreeData', newData);
 	}
 };

@@ -1,6 +1,7 @@
 import * as crypto from 'crypto';
 import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
 import { _TESTING_HASH_ } from '@/constants/Testing';
+import SUPPORTED_HTML_ELEMENTS from '@/constants/SupportedHTMLElementTypes';
 import iTreeElement from '@/interfaces/iTreeElement';
 import iNode from '@/interfaces/iNode';
 import HTMLAttribute from './HTMLAttribute';
@@ -9,7 +10,6 @@ import HTMLAttribute from './HTMLAttribute';
 export default class ElementTreeFactory {
     private _SUPPORTED_HTML_ELEMENTS: Array<SupportedHTMLElement>;
 	private _testingHash: string;
-	
 
 	constructor(supportedElements: Array<SupportedHTMLElement>, testing?: string) {
 		this._SUPPORTED_HTML_ELEMENTS = supportedElements;
@@ -27,7 +27,7 @@ export default class ElementTreeFactory {
 
 	findElementByID(treeData: Array<iTreeElement>, targetid: string): iTreeElement | undefined {
 		if(this._testingHash == _TESTING_HASH_) return treeData[0];
-		else  return treeData.find((el: iTreeElement) => el.id == targetid);
+		else return treeData.find((el: iTreeElement) => el.id == targetid);
 	}
 
 	findElementByAlias(treeData: Array<iTreeElement>, targetAlias: string): iTreeElement | undefined {
@@ -61,33 +61,31 @@ export default class ElementTreeFactory {
 		
 	}
 
-	static buildTree(treeData: Array<iTreeElement>): Array<iNode> {
-		console.log('build tree')
+	buildTree(treeData: Array<iTreeElement>): Array<iNode> {
 		const builtTree = new Array<iNode>();
 		const roots = treeData.filter((el: iTreeElement) => el.root == true);
 		roots.forEach((r: iTreeElement) => {
-			console.log('building root', r)
-			const branch = ElementTreeFactory.buildBranch(treeData, r)
+			const branch = this.buildBranch(treeData, r)
 			builtTree.push(branch);
 		});
 		
 		return builtTree;
 	}
 
-	static buildBranch(treeData: Array<iTreeElement>, head: iTreeElement): iNode {
-		console.log('build branch');
+	buildBranch(treeData: Array<iTreeElement>, head: iTreeElement): iNode {
+		console.log('build branch')
 		const builtBranch = {
 			id: head.id,
 			alias: head.alias,
 			type: head.element.getElementType(),
 			root: head.root,
 			attributes: head.attributes,
-			children: ElementTreeFactory.getChildNodes(treeData, head.children)
+			children: this.getChildNodes(treeData, head.children)
 		} as iNode;
 		return builtBranch;
 	}
 
-	private static getChildNodes(treeData: Array<iTreeElement>, childIDs: Array<string>): Array<iNode> {
+	private getChildNodes(treeData: Array<iTreeElement>, childIDs: Array<string>): Array<iNode> {
 		const childNodes = new Array<iNode>();
 		childIDs.forEach((cid: string) => {
 			const el = treeData.find((el: iTreeElement) => el.id == cid);
@@ -107,56 +105,70 @@ export default class ElementTreeFactory {
 	}
 
 	copyBranch(treeData: Array<iTreeElement>, headID: string): Array<iTreeElement> {
+		let newHead: iTreeElement = {} as iTreeElement;
 		const copiedBranch = new Array<iTreeElement>();
-		// need to change IDs of all the nodes
-		// must traverse to the end of a branch before copying (?)
-		// I think you need to know the new ID's of copied children before copying an given element
-		const headElement = treeData.find((el: iTreeElement) => el.id === headID);
-		if (!headElement) throw new Error(`[ Element Tree Factory ] Failed to find element with id ${headID}`)
-		const builtBranch: iNode = ElementTreeFactory.buildBranch(treeData, headElement);
-		builtBranch
-		return copiedBranch;
-	}
-
-	copyNode(n: iNode): iNode {
-		const children = new Array<iNode>();
-		n.children.forEach((c: iNode) => {
-			const c_copy = this.copyNode(c);
-			children.push(c_copy);
-		});
-		const copy: iNode = {
-			id: this.getNewElementID(),
-			root: n.root,
-			type: n.type,
-			alias: n.alias,
-			attributes: n.attributes,
-			children
-		}
-		return copy;
-	}
-
-	flattenBranch(head: iNode): Array<iTreeElement> {
-		const flattenedBranch = new Array<iTreeElement>();
-		const aux = new Array<iNode>();
-		aux.push(head);
-		head.children.forEach((c: iNode) => {
-			aux.push(c);
-		});
+		const aux = new Array<string>();
+		aux.push(headID);
 		while (aux.length) {
-			const n = aux.shift() as iNode;
-			const htmlElement = this.getSupportedElement(head.type);
-			if (!htmlElement) throw new Error(`[ Element Tree Factory ] Failed to find supported element of type ${head.type}`)
-			const childIDs = n.children.map((c: iNode) => c.id);
-			const el = {
-				id: n.id,
-				root: n.root,
-				element: htmlElement,
-				alias: n.alias,
-				attributes: n.attributes,
-				children: childIDs
-			} as iTreeElement;
-			flattenedBranch.push(el);
-		}
-		return flattenedBranch;
+			const target = aux.shift();
+			const el = treeData.find((te: iTreeElement) => te.id == target);
+			if (!el) throw new Error(`[ Element Tree Factory ] Element with ID ${target} not found.`);
+			el.children.forEach((c: string) => { aux.push(c) });
+			const copiedElement = this.copyElement(el);
+			if (target === headID) newHead = copiedElement;
+			else copiedBranch.push(copiedElement);
+		}	
+
+
+		return [ newHead, ...copiedBranch ]; // Add branch state action assumes head is at index 0
 	}
+
+	copyElement(elementToCopy: iTreeElement): iTreeElement {
+		return {
+			... elementToCopy,
+			id: this.getNewElementID(),
+		} as iTreeElement;
+	}
+
+	// copyNode(n: iNode): iNode {
+	// 	const children = new Array<iNode>();
+	// 	n.children.forEach((c: iNode) => {
+	// 		const c_copy = this.copyNode(c);
+	// 		children.push(c_copy);
+	// 	});
+	// 	const copy: iNode = {
+	// 		id: this.getNewElementID(),
+	// 		root: n.root,
+	// 		type: n.type,
+	// 		alias: n.alias,
+	// 		attributes: n.attributes,
+	// 		children
+	// 	}
+	// 	return copy;
+	// }
+
+	// flattenBranch(head: iNode): Array<iTreeElement> {
+	// 	const flattenedBranch = new Array<iTreeElement>();
+	// 	const aux = new Array<iNode>();
+	// 	aux.push(head);
+	// 	head.children.forEach((c: iNode) => {
+	// 		aux.push(c);
+	// 	});
+	// 	while (aux.length) {
+	// 		const n = aux.shift() as iNode;
+	// 		const htmlElement = this.getSupportedElement(head.type);
+	// 		if (!htmlElement) throw new Error(`[ Element Tree Factory ] Failed to find supported element of type ${head.type}`)
+	// 		const childIDs = n.children.map((c: iNode) => c.id);
+	// 		const el = {
+	// 			id: n.id,
+	// 			root: n.root,
+	// 			element: htmlElement,
+	// 			alias: n.alias,
+	// 			attributes: n.attributes,
+	// 			children: childIDs
+	// 		} as iTreeElement;
+	// 		flattenedBranch.push(el);
+	// 	}
+	// 	return flattenedBranch;
+	// }
 }

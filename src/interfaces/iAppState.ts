@@ -1,3 +1,4 @@
+import ElementTreeFactory from '@/classes/ElementTreeFactory';
 import iTreeElement from '@/interfaces/iTreeElement';
 export default interface iAppState {
     treeData: Array<iTreeElement>,
@@ -5,5 +6,6 @@ export default interface iAppState {
     activeModal: string,
     modalcb: Function,
     activeElement: iTreeElement,
-    validChildren: Array<string>
+    validChildren: Array<string>,
+    elementTreeFactory: ElementTreeFactory
 }

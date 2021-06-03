@@ -4,7 +4,6 @@ import iTreeElement from '@/interfaces/iTreeElement';
 
 export default {
 	setTreeData: (state: iAppState, updatedTreeData: Array<iTreeElement>): void => {
-		console.log('updating tree data', state.treeData != updatedTreeData)
 		state.treeData = updatedTreeData;
 	},
 

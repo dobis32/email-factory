@@ -1,7 +1,9 @@
 import { HTML_TABLE, HTML_TR, HTML_TD, HTML_P } from '@/constants/SupportedHTMLElementTypes';
+import SUPPORTED_HTML_ELEMENTS from '@/constants/SupportedHTMLElementTypes';
 import HTMLAttribute from '@/classes/HTMLAttribute';
 import iTreeElement from '@/interfaces/iTreeElement';
 import iAppState from '@/interfaces/iAppState';
+import ElementTreeFactory from '@/classes/ElementTreeFactory';
 export default {
     treeData: [
         {
@@ -47,5 +49,6 @@ export default {
     activeModal: '',
     modalcb: (): void => { return; },
     activeElement: {} as iTreeElement,
-    validChildren: new Array<string>()
+    validChildren: new Array<string>(),
+    elementTreeFactory: new ElementTreeFactory(SUPPORTED_HTML_ELEMENTS)
 } as iAppState;

@@ -13,7 +13,7 @@ import ModuleOptions from "./components/ModuleOptions.vue";
 import Modal from "./components/Modal.vue";
 import ElementTreeFactory from "./classes/ElementTreeFactory";
 import _SUPPORTED_HTML_ELEMENTS_ from "./constants/SupportedHTMLElementTypes"
-const factory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_);
+// const factory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_);
 @Options({
   components: {
     TreeEditor,
@@ -22,7 +22,7 @@ const factory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_);
   },
   computed: {
     getTree() {
-      return ElementTreeFactory.buildTree(this.$store.getters.getBuiltTree);
+      return this.$store.getters.getBuiltTree;
     },
     getTreeData() {
       return this.$store.getters.getTreeData;
@@ -47,9 +47,6 @@ const factory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_);
     stopPropagation: (e: Event) => {
       e.stopPropagation();
     },
-    getTreeFactoryInstance: () => {
-      return factory;
-    }
   }
 })
 export default class App extends Vue {}
