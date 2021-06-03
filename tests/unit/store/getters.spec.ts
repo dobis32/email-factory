@@ -2,7 +2,6 @@ import getters from '@/store/getters';
 import iTreeElement from '@/interfaces/iTreeElement';
 import DefaultStateIndex from '@/constants/DefaultState';
 import iModalPayload from '@/interfaces/iModalPayload';
-
 describe('getters.ts', () => {
     let treeData: Array<iTreeElement> 
     let modalState: boolean;
@@ -18,12 +17,16 @@ describe('getters.ts', () => {
         modalState = DefaultStateIndex.modalState;
         activeModal = DefaultStateIndex.activeModal;
         modalcb = DefaultStateIndex.modalcb;
+        activeElement = DefaultStateIndex.activeElement
         validChildren = DefaultStateIndex.validChildren;
-		state = {
+		
+        state = {
             treeData,
             modalState,
             activeModal,
-            modalcb
+            modalcb,
+            activeElement,
+            validChildren
         }
 
         mockPayload = {

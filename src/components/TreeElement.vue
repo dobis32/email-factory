@@ -23,7 +23,7 @@
 import ElementTreeFactory from "@/classes/ElementTreeFactory";
 import iTreeElement from "@/interfaces/iTreeElement";
 import { Options, Vue } from "vue-class-component";
-
+import IS_ROOT_ELEMENT from "@/constants/IsRootElement";
 @Options({
   props: ["type", "alias", "id", "children", "parentid", "root", "attributes"],
   data: () => {
@@ -84,7 +84,12 @@ import { Options, Vue } from "vue-class-component";
       const headID = this.id;
       const treeData: Array<iTreeElement> = this.$store.state.treeData;
       const flattenedBranch = f.copyBranch(treeData, headID);
-      const parentID = this.parentid;
+      let parentID: string;
+      if (this.root) {
+        parentID = IS_ROOT_ELEMENT;
+      } else {
+        parentID = this.parentid;
+      }
       this.$store.dispatch('addBranch', { branch: flattenedBranch, parentID });
     }
   }

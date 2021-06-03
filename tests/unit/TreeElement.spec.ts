@@ -46,7 +46,7 @@ describe('TreeElement.vue', () => {
 	const mockParentid = _TESTING_HASH_;
 	const numberOfChildren = mockChildren.length;
 	const mockTreeElement = 'tree-element';
-	const mockID = _TESTING_HASH_;
+	const mockID = _DEFAULT_STATE_.treeData[0].id;
 	let mockProps: any;
 	let wrapper: any;
 	let dispatch: any;

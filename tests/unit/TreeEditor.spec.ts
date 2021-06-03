@@ -7,7 +7,7 @@ import _SUPPORTED_HTML_ELEMENTS_ from "@/constants/SupportedHTMLElementTypes";
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
 
 describe('TreeEditor.vue', () => {
-	let mockElementTreeData: Array<iTreeElement>;
+	let mockElementTree: Array<iTreeElement>;
 	const factory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_);
 	const getTreeFactoryInstance = () => {
 		return factory;
@@ -16,9 +16,9 @@ describe('TreeEditor.vue', () => {
 	let wrapper: any;
 
 	beforeEach(() => {
-		mockElementTreeData = _DEFAULT_STATE_.treeData;
+		mockElementTree = _DEFAULT_STATE_.treeData;
 		const mockProps =  {
-			elementTreeData: mockElementTreeData
+			elementTree: mockElementTree
 		}
 		wrapper = mount(TreeEditor, {
 			
@@ -39,7 +39,7 @@ describe('TreeEditor.vue', () => {
 	// Props
 	it('should have a prop for the assumed element tree', () => {
 		const props = wrapper.props();
-		expect(props.elementTreeData).toBeDefined();
-		expect(Array.isArray(props.elementTreeData)).toBeTruthy();
+		expect(props.elementTree).toBeDefined();
+		expect(Array.isArray(props.elementTree)).toBeTruthy();
 	});	
 });

@@ -1,6 +1,8 @@
 /* eslint-disable */
-import _DEFAULT_STATE_ from '@/constants/DefaultState'
-import iTreeElement from '@/interfaces/iTreeElement'
+import _DEFAULT_STATE_ from '@/constants/DefaultState';
+import IS_ROOT_ELEMENT from '@/constants/IsRootElement';
+import iTreeElement from '@/interfaces/iTreeElement';
+
 export default {
 	closeModal: (context: any) => {
 		context.commit('setModalState', false);
@@ -29,7 +31,10 @@ export default {
 		const { branch, parentID } = payload;
 		const treeData = context.state.treeData;
 		const parent = treeData.find((el: iTreeElement) => el.id == parentID);
-		parent.children.push(branch[0].id); // This assumes the head node is at index 0
+		if (parentID != IS_ROOT_ELEMENT) {
+			if (parent === undefined) throw new Error(`[ Store Actions ] Parent element with ID ${parentID} not found`)
+			parent.children.push(branch[0].id); // This assumes the head node is at index 0
+		} 
 		const newData = [ ...treeData, ...branch ];
 		context.commit('setTreeData', newData);
 	}
