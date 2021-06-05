@@ -107,6 +107,7 @@ export default class ElementTreeFactory {
 	copyBranch(treeData: Array<iTreeElement>, headID: string): Array<iTreeElement> {
 		let newHead: iTreeElement = {} as iTreeElement;
 		const copiedBranch = new Array<iTreeElement>();
+		const copyPairs = new Array<any>();
 		const aux = new Array<string>();
 		aux.push(headID);
 		while (aux.length) {
@@ -114,13 +115,34 @@ export default class ElementTreeFactory {
 			const el = treeData.find((te: iTreeElement) => te.id == target);
 			if (!el) throw new Error(`[ Element Tree Factory ] Element with ID ${target} not found.`);
 			el.children.forEach((c: string) => { aux.push(c) });
-			const copiedElement = this.copyElement(el);
-			if (target === headID) newHead = copiedElement;
-			else copiedBranch.push(copiedElement);
-		}	
+			const elCopy = this.copyElement(el);
+			copyPairs.push({old: el, new: elCopy});
+			if (target === headID) newHead = elCopy;
+			else copiedBranch.push(elCopy);
+		}
 
+		const updatedChildren = new Array<iTreeElement>();
+		copiedBranch.forEach((el: iTreeElement) => {
+			const updated = this.updateChildren(el, copyPairs);
+			updatedChildren.push(updated);
+		});
 
-		return [ newHead, ...copiedBranch ]; // Add branch state action assumes head is at index 0
+		const updatedHead = this.updateChildren(newHead, copyPairs);
+
+		return [ updatedHead, ...updatedChildren ]; // Add branch state action assumes head is at index 0
+	}
+
+	updateChildren(el: iTreeElement, copyPairs: Array<any>): iTreeElement {
+		const updatedChildren = new Array<string>();
+		el.children.forEach((c: string) => {
+			const targetPair = copyPairs.find((pair: any) => pair.old.id === c)
+			updatedChildren.push(targetPair.new.id);
+		});
+		const foo = {
+			...el, children: updatedChildren
+		}
+		console.log('old children:', el, 'new children', foo);
+		return foo;
 	}
 
 	copyElement(elementToCopy: iTreeElement): iTreeElement {

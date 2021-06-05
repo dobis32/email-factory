@@ -84,6 +84,7 @@ import IS_ROOT_ELEMENT from "@/constants/IsRootElement";
       const headID = this.id;
       const treeData: Array<iTreeElement> = this.$store.state.treeData;
       const flattenedBranch = f.copyBranch(treeData, headID);
+      console.log('flattened branch', flattenedBranch)
       let parentID: string;
       if (this.root) {
         parentID = IS_ROOT_ELEMENT;
