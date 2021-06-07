@@ -70,7 +70,7 @@ import IS_ROOT_ELEMENT from "@/constants/IsRootElement";
     },
     async addChild() { // TODO unit test
       const f: ElementTreeFactory = this.$store.state.elementTreeFactory;
-      const el = f.getSupportedElement(this.type)
+      const el = f.getSupportedElement(this.type);
       if (!el) throw new Error(`[ Tree element Vue ] element of type ${this.type} is not supported`);
       this.$store.dispatch('setValidChildren', el.getValidChildren());
       this.$store.dispatch('openModal', 'CreateChildElementCard');
