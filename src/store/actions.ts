@@ -37,5 +37,16 @@ export default {
 		} 
 		const newData = [ ...treeData, ...branch ];
 		context.commit('setTreeData', newData);
+	},
+	addChild: (context: any, payload: {newElement: iTreeElement, parentID: string}): void => {
+		const { newElement, parentID } = payload;
+		const treeData = context.state.treeData;
+		const parent = treeData.find((el: iTreeElement) => el.id == parentID);
+		if (parentID != IS_ROOT_ELEMENT) {
+			if (parent === undefined) throw new Error(`[ Store Actions ] Parent element with ID ${parentID} not found`)
+			parent.children.push(newElement.id);
+		}
+		const newData = [ ...treeData, newElement ];
+		context.commit('setTreeData', newData);
 	}
 };

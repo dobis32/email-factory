@@ -74,10 +74,12 @@ import IS_ROOT_ELEMENT from "@/constants/IsRootElement";
       if (!el) throw new Error(`[ Tree element Vue ] element of type ${this.type} is not supported`);
       this.$store.dispatch('setValidChildren', el.getValidChildren());
       this.$store.dispatch('openModal', 'CreateChildElementCard');
-      const result = await new Promise((resolve) => {
+      const result: { alias: string, type: string } = await new Promise((resolve) => {
         this.$store.dispatch('setModalCB', resolve);
       });
       console.log('[ Tree element VUE ] create child result:', result);
+      const newEl = f.createTreeElement(result.type, false, result.alias)
+      this.$store.dispatch('addChild', { newElement: newEl, parentID: this.parentid});
     },
     copyBranch() {
       const f: ElementTreeFactory = this.$store.state.elementTreeFactory;
@@ -92,6 +94,7 @@ import IS_ROOT_ELEMENT from "@/constants/IsRootElement";
         parentID = this.parentid;
       }
       this.$store.dispatch('addBranch', { branch: flattenedBranch, parentID });
+
     }
   }
 })

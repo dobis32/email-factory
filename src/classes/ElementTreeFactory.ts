@@ -151,46 +151,4 @@ export default class ElementTreeFactory {
 			id: this.getNewElementID(),
 		} as iTreeElement;
 	}
-
-	// copyNode(n: iNode): iNode {
-	// 	const children = new Array<iNode>();
-	// 	n.children.forEach((c: iNode) => {
-	// 		const c_copy = this.copyNode(c);
-	// 		children.push(c_copy);
-	// 	});
-	// 	const copy: iNode = {
-	// 		id: this.getNewElementID(),
-	// 		root: n.root,
-	// 		type: n.type,
-	// 		alias: n.alias,
-	// 		attributes: n.attributes,
-	// 		children
-	// 	}
-	// 	return copy;
-	// }
-
-	// flattenBranch(head: iNode): Array<iTreeElement> {
-	// 	const flattenedBranch = new Array<iTreeElement>();
-	// 	const aux = new Array<iNode>();
-	// 	aux.push(head);
-	// 	head.children.forEach((c: iNode) => {
-	// 		aux.push(c);
-	// 	});
-	// 	while (aux.length) {
-	// 		const n = aux.shift() as iNode;
-	// 		const htmlElement = this.getSupportedElement(head.type);
-	// 		if (!htmlElement) throw new Error(`[ Element Tree Factory ] Failed to find supported element of type ${head.type}`)
-	// 		const childIDs = n.children.map((c: iNode) => c.id);
-	// 		const el = {
-	// 			id: n.id,
-	// 			root: n.root,
-	// 			element: htmlElement,
-	// 			alias: n.alias,
-	// 			attributes: n.attributes,
-	// 			children: childIDs
-	// 		} as iTreeElement;
-	// 		flattenedBranch.push(el);
-	// 	}
-	// 	return flattenedBranch;
-	// }
 }
