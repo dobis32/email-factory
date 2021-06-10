@@ -34,7 +34,7 @@ export default {
 		if (parentID != IS_ROOT_ELEMENT) {
 			if (parent === undefined) throw new Error(`[ Store Actions ] Parent element with ID ${parentID} not found`)
 			parent.children.push(branch[0].id); // This assumes the head node is at index 0
-		} 
+		}
 		const newData = [ ...treeData, ...branch ];
 		context.commit('setTreeData', newData);
 	},
