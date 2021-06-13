@@ -1,1 +1,0 @@
-export default 'IS_ROOT_ELEMENT';

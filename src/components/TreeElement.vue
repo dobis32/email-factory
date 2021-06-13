@@ -2,13 +2,13 @@
   <div class="tree-element-wrapper">
     <div :class="treeElementClass" @click="promptAction">
       <h3 id="alias">{{alias}}</h3>
-      <!-- <h4 id="type">({{element.getElementType()}})</h4> -->
+      <h4 id="type">({{ type }})</h4>
     </div>
   
     <TreeElement
       v-for="(child) of children"
       :key="child.id"
-      :root="child.root"
+      :isRoot="child.root"
       :type="child.type"
       :alias="child.alias"
       :id="child.id"
@@ -23,9 +23,8 @@
 import ElementTreeFactory from "@/classes/ElementTreeFactory";
 import iTreeElement from "@/interfaces/iTreeElement";
 import { Options, Vue } from "vue-class-component";
-import IS_ROOT_ELEMENT from "@/constants/IsRootElement";
 @Options({
-  props: ["type", "alias", "id", "children", "parentid", "root", "attributes"],
+  props: ["type", "alias", "id", "children", "parentid", "isRoot", "attributes"],
   data: () => {
     return {
       treeElementClass: "tree-element"
@@ -34,6 +33,9 @@ import IS_ROOT_ELEMENT from "@/constants/IsRootElement";
   created() {
     this.treeElementClass = `${this.type} ${this.treeElementClass}`;
   },
+  inject: [
+    'openModal'
+  ],
   methods: {
     async promptAction() {
       console.log('prompt action');
@@ -41,11 +43,11 @@ import IS_ROOT_ELEMENT from "@/constants/IsRootElement";
       const treeData = this.$store.state.treeData;
       const id = this.id;
       const el = f.findElementByID(treeData, id);
-      this.$store.dispatch('setActiveElement', el ? el : {});
-      this.$store.dispatch('openModal', 'ElementControlsCard');
-      const result = await new Promise((resolve) => {
-        this.$store.dispatch('setModalCB', resolve);
-      });
+      const activeElement = el ? el : {};
+      const card = 'ElementControlsCard'
+      const data = { activeElement }
+      this.$store.dispatch('setModal', { card, data });
+      const result = await this.openModal();
       this.performAction(result);
     },
     performAction(action: string) {
@@ -68,33 +70,30 @@ import IS_ROOT_ELEMENT from "@/constants/IsRootElement";
             console.log('Did not recognize that action...');
         }
     },
-    async addChild() { // TODO unit test
+    async addChild() {
       const f: ElementTreeFactory = this.$store.state.elementTreeFactory;
-      const el = f.getSupportedElement(this.type);
-      if (!el) throw new Error(`[ Tree element Vue ] element of type ${this.type} is not supported`);
-      this.$store.dispatch('setValidChildren', el.getValidChildren());
-      this.$store.dispatch('openModal', 'CreateChildElementCard');
-      const result: { alias: string, type: string } = await new Promise((resolve) => {
-        this.$store.dispatch('setModalCB', resolve);
-      });
-      console.log('[ Tree element VUE ] create child result:', result);
-      const newEl = f.createTreeElement(result.type, false, result.alias)
-      this.$store.dispatch('addChild', { newElement: newEl, parentID: this.parentid});
+      const treeData: Array<iTreeElement> = this.$store.state.treeData;
+      const el = f.findElementByID(treeData, this.id);
+      if (!el) throw new Error(`[ Tree element Vue ] element of type ${this.id} is not supported`);
+      const activeElement = el ? el : {};
+      const card = 'CreateChildElementCard';
+      const data = { activeElement };
+      this.$store.dispatch('setModal', { card, data });
+      const result: { alias: string, type: string } = await this.openModal();
+      const { alias, type } = result;
+      if (type) {
+        const newEl = f.createTreeElement(type, false, alias);
+        this.$store.dispatch('addChild', { newElement: newEl, parentID: this.id});
+      }
     },
     copyBranch() {
       const f: ElementTreeFactory = this.$store.state.elementTreeFactory;
       const headID = this.id;
       const treeData: Array<iTreeElement> = this.$store.state.treeData;
       const flattenedBranch = f.copyBranch(treeData, headID);
-      console.log('flattened branch', flattenedBranch)
-      let parentID: string;
-      if (this.root) {
-        parentID = IS_ROOT_ELEMENT;
-      } else {
-        parentID = this.parentid;
-      }
+      let parentID: string | undefined;
+      if (!this.isRoot) parentID = this.parentid;
       this.$store.dispatch('addBranch', { branch: flattenedBranch, parentID });
-
     }
   }
 })
@@ -131,6 +130,10 @@ export default class TreeElement extends Vue {}
 
 .td {
   background-color: coral;
+}
+
+.th {
+  background-color: seagreen;
 }
 
 .p {

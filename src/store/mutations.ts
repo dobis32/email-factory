@@ -15,7 +15,7 @@ export default {
 		state.activeModal = modalCard;
 	},
 
-	setModalCB: (state: iAppState, modalcb: Function): void => {
+	setModalCallback: (state: iAppState, modalcb: Function): void => {
 		state.modalcb = modalcb;
 	},
 

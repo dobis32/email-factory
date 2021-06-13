@@ -36,54 +36,35 @@ describe('actions.ts', () => {
         actions.openModal(mockContext, card);
         expect(actions.openModal).toBeDefined();
         expect(typeof actions.openModal).toEqual('function');
-        expect(mockContext.commit).toHaveBeenCalledTimes(2);
+        expect(mockContext.commit).toHaveBeenCalled();
         expect(mockContext.commit).toHaveBeenCalledWith('setModalState', true);
-        expect(mockContext.commit).toHaveBeenCalledWith('setModalCard', card);
     });
 
-    it('should have a function that resets the modal CB', () => {
-        actions.resetModalCB(mockContext)
-        expect(actions.resetModalCB).toBeDefined();
-        expect(typeof actions.resetModalCB).toEqual('function');
+    it('should have a function for setting the modal callback function', () => {
+        const cb = () => true
+        actions.setModalCallback(mockContext, cb);
+        expect(actions.setModalCallback).toBeDefined();
+        expect(typeof actions.setModalCallback).toEqual('function');
         expect(mockContext.commit).toHaveBeenCalled();
-        expect(mockContext.commit).toHaveBeenCalledWith('setModalCB', DefaultState.modalcb);
+        expect(mockContext.commit).toHaveBeenCalledWith('setModalCallback', cb);
     });
 
-    it('should have a function that resets the modal CB', () => {
-        const cb = () => { return true; }
-        actions.setModalCB(mockContext, cb);
-        expect(actions.setModalCB).toBeDefined();
-        expect(typeof actions.setModalCB).toEqual('function');
+    it('should have a function for adding a branch to the element tree', () => {
+        const treeData = mockContext.state.treeData;
+        const headID = treeData[1].id;
+        const branch = factory.copyBranch(treeData, headID);
+        const parent = treeData[0];
+        const parentID = parent.id;
+        const payload = { branch, parentID };
+        const updatedTreeData = [ ...treeData, ...branch ];
+        parent.children.push(branch[0].id); // assumes branch head is at index 0
+        actions.addBranch(mockContext, payload);
+        expect(actions.addBranch).toBeDefined();
+        expect(typeof actions.addBranch).toEqual('function');
         expect(mockContext.commit).toHaveBeenCalled();
-        expect(mockContext.commit).toHaveBeenCalledWith('setModalCB', cb);
+        expect(mockContext.commit).toHaveBeenCalledWith('setTreeData', updatedTreeData);
     });
 
-    it('should have a function for setting the active element', () => {
-        const activeElement = DefaultState.treeData[1];
-        actions.setActiveElement(mockContext, activeElement);
-        expect(actions.setActiveElement).toBeDefined();
-        expect(typeof actions.setActiveElement).toEqual('function');
-        expect(mockContext.commit).toHaveBeenCalled();
-        expect(mockContext.commit).toHaveBeenCalledWith('setActiveElement', activeElement);
-    });
-
-    it('should have a function for resetting the active element', () => {
-        const defaultElement = DefaultState.activeElement;
-        actions.resetActiveElement(mockContext);
-        expect(actions.resetActiveElement).toBeDefined();
-        expect(typeof actions.resetActiveElement).toEqual('function');
-        expect(mockContext.commit).toHaveBeenCalled();
-        expect(mockContext.commit).toHaveBeenCalledWith('setActiveElement', defaultElement);
-    });
-
-    it('should have a function for setting validchildren', () => {
-        const validChildren = DefaultState.treeData[1].children;
-        actions.setValidChildren(mockContext, validChildren);
-        expect(actions.setValidChildren).toBeDefined();
-        expect(typeof actions.setValidChildren).toEqual('function');
-        expect(mockContext.commit).toHaveBeenCalled();
-        expect(mockContext.commit).toHaveBeenCalledWith('setValidChildren', validChildren);
-    });
 
     it('should have a function for adding a child to a given parent', () => {
         const treeData = mockContext.state.treeData;
@@ -91,15 +72,13 @@ describe('actions.ts', () => {
         const parentID = DefaultState.treeData[0].id; // expect root table
         const payload: {newElement: iTreeElement, parentID: string } = { newElement, parentID }
         const parentEl = mockContext.state.treeData.find((el: iTreeElement) => el.id == parentID);
-        const expectedResult = [ ...treeData, newElement]
-        parentEl.children.push(newElement.id);
-        const finalChildren = [ ...parentEl.children, newElement.id  ]
+        const expectedResult = [ ...treeData, newElement ]
         actions.addChild(mockContext, payload);
         expect(actions.addChild).toBeDefined();
         expect(typeof actions.addChild).toEqual('function');
         expect(mockContext.commit).toHaveBeenCalled();
         expect(mockContext.commit).toHaveBeenCalledTimes(1);
         expect(mockContext.commit).toHaveBeenCalledWith('setTreeData', expectedResult);
-        expect(finalChildren).toEqual([ ...parentEl.children, newElement.id ]);
+        expect(parentEl.children.find((c: string) => c == newElement.id)).toBeDefined();
     });
 });

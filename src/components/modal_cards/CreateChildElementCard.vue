@@ -45,7 +45,7 @@ import { Options, Vue } from "vue-class-component";
       this.elementType = "";
     }
     this.cb({ alias: this.elementAlias, type: this.elementType });
-    this.$store.dispatch("resetModalCB");
+    this.$store.dispatch("resetModalCallback");
   }
 })
 export default class CreateChildElementCard extends Vue {}

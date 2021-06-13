@@ -9,10 +9,9 @@ import ElementTreeFactory from '@/classes/ElementTreeFactory';
 describe('TreeEditor.vue', () => {
 	let mockElementTree: Array<iTreeElement>;
 	const factory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_);
-	const getTreeFactoryInstance = () => {
-		return factory;
+	const openModal = () => {
+		return Promise.resolve();
 	}
-	let numberOfElements: number;
 	let wrapper: any;
 
 	beforeEach(() => {
@@ -28,7 +27,7 @@ describe('TreeEditor.vue', () => {
 			props: mockProps,
 			global: {
 				mocks: {},
-				provide: { getTreeFactoryInstance }
+				provide: { openModal }
 			}
 		});
 	});
@@ -41,5 +40,5 @@ describe('TreeEditor.vue', () => {
 		const props = wrapper.props();
 		expect(props.elementTree).toBeDefined();
 		expect(Array.isArray(props.elementTree)).toBeTruthy();
-	});	
+	});
 });

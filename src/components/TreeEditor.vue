@@ -3,7 +3,7 @@
     <TreeElement
       v-for="(el) of elementTree"
       :key="el.id"
-      :root="el.root"
+      :isRoot="el.root"
       :type="el.type"
       :alias="el.alias"
       :id="el.id"

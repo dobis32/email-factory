@@ -2,8 +2,8 @@
   <div id="modal-wrapper" v-if="payload.modalState" @click="closeModal" >
     <HTMLElementCard v-if="payload.activeModal == 'HTMLElementCard'" :cb="payload.modalcb" />
     <GeneratedCodeCard v-if="payload.activeModal == 'GeneratedCodeCard'" :cb="payload.modalcb" />
-    <TreeElementControlsCard v-if="payload.activeModal == 'ElementControlsCard'"  :activeElement="payload.activeElement" :cb="payload.modalcb" />
-    <CreateChildElementCard v-if="payload.activeModal == 'CreateChildElementCard'"  :validChildren="payload.validChildren" :cb="payload.modalcb" />
+    <TreeElementControlsCard v-if="payload.activeModal == 'ElementControlsCard'"  :activeElement="payload.modalData.activeElement" :cb="payload.modalcb" />
+    <CreateChildElementCard v-if="payload.activeModal == 'CreateChildElementCard'"  :validChildren="payload.modalData.activeElement.element.getValidChildren()" :cb="payload.modalcb" />
 
     <!-- card components here -->
   </div>

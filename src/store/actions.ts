@@ -1,6 +1,5 @@
 /* eslint-disable */
 import _DEFAULT_STATE_ from '@/constants/DefaultState';
-import IS_ROOT_ELEMENT from '@/constants/IsRootElement';
 import iTreeElement from '@/interfaces/iTreeElement';
 
 export default {
@@ -10,42 +9,37 @@ export default {
 	},
 	openModal: (context: any, modalCard: string) => {
 		context.commit('setModalState', true);
-		context.commit('setModalCard', modalCard);
 	},
-	setModalCB: (context: any, modalcb: Function): void => {
-		context.commit('setModalCB', modalcb);
+	setModal: (context: any, payload: { card: string, data: { activeElement: iTreeElement} }): void => {
+		const { card, data } = payload;
+		const { activeElement } = data;
+		context.commit('setModalCard', card);
+		context.commit('setActiveElement', activeElement);
 	},
-	resetModalCB: (context: any): void => {
-		context.commit('setModalCB', _DEFAULT_STATE_.modalcb);
+	resetModalCallback: (context: any): void => {
+		context.commit('setModalCallback', _DEFAULT_STATE_.modalcb);
 	},
-	setActiveElement: (context: any, el: iTreeElement): void => {
-		context.commit('setActiveElement', el);
+	setModalCallback: (context: any, cb: Function) : void => {
+		context.commit('setModalCallback', cb);
 	},
-	resetActiveElement: (context: any): void => {
-		context.commit('setActiveElement', _DEFAULT_STATE_.activeElement);
-	},
-	setValidChildren: (context: any, validChildren: Array<string>): void => {
-		context.commit('setValidChildren', validChildren);
-	},
-	addBranch: (context: any, payload: {branch: Array<iTreeElement>, parentID: string}): void => {
+	addBranch: (context: any, payload: {branch: Array<iTreeElement>, parentID: string | undefined}): void => {
 		const { branch, parentID } = payload;
 		const treeData = context.state.treeData;
-		const parent = treeData.find((el: iTreeElement) => el.id == parentID);
-		if (parentID != IS_ROOT_ELEMENT) {
-			if (parent === undefined) throw new Error(`[ Store Actions ] Parent element with ID ${parentID} not found`)
+		if (parentID) {
+			const parent = treeData.find((el: iTreeElement) => el.id == parentID);
+			if (parent === undefined) throw new Error(`[ Store Actions ] Failed to add branch. Parent element with ID ${parentID} not found`);
 			parent.children.push(branch[0].id); // This assumes the head node is at index 0
 		}
 		const newData = [ ...treeData, ...branch ];
+		console.log('adding new branch... ', branch)
 		context.commit('setTreeData', newData);
 	},
 	addChild: (context: any, payload: {newElement: iTreeElement, parentID: string}): void => {
 		const { newElement, parentID } = payload;
 		const treeData = context.state.treeData;
 		const parent = treeData.find((el: iTreeElement) => el.id == parentID);
-		if (parentID != IS_ROOT_ELEMENT) {
-			if (parent === undefined) throw new Error(`[ Store Actions ] Parent element with ID ${parentID} not found`)
-			parent.children.push(newElement.id);
-		}
+		if (parent === undefined) throw new Error(`[ Store Actions ] Failed to add child. Parent element with ID ${parentID} not found`);
+		parent.children.push(newElement.id);
 		const newData = [ ...treeData, newElement ];
 		context.commit('setTreeData', newData);
 	}

@@ -47,6 +47,16 @@ import _SUPPORTED_HTML_ELEMENTS_ from "./constants/SupportedHTMLElementTypes"
     stopPropagation: (e: Event) => {
       e.stopPropagation();
     },
+    // setModalCallback() { new Promise((resolve) => {
+    //     this.$store.dispatch('setModalCB', resolve);
+    //   });
+    // }
+    openModal() {
+      return new Promise((resolve) => {
+        this.$store.dispatch('setModalCallback', resolve);
+        this.$store.dispatch('openModal');
+      });
+    }
   }
 })
 export default class App extends Vue {}

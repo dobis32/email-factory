@@ -14,9 +14,10 @@ export default {
 		const payload = {
 			modalState: state.modalState,
 			activeModal: state.activeModal,
-			activeElement: state.activeElement,
 			modalcb: state.modalcb,
-			validChildren: state.validChildren
+			modalData: {
+				activeElement: state.activeElement
+			}
 		} as iModalPayload;
 
 		return payload;

@@ -1,7 +1,6 @@
 import * as crypto from 'crypto';
 import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
 import { _TESTING_HASH_ } from '@/constants/Testing';
-import SUPPORTED_HTML_ELEMENTS from '@/constants/SupportedHTMLElementTypes';
 import iTreeElement from '@/interfaces/iTreeElement';
 import iNode from '@/interfaces/iNode';
 import HTMLAttribute from './HTMLAttribute';
@@ -138,11 +137,7 @@ export default class ElementTreeFactory {
 			const targetPair = copyPairs.find((pair: any) => pair.old.id === c)
 			updatedChildren.push(targetPair.new.id);
 		});
-		const foo = {
-			...el, children: updatedChildren
-		}
-		console.log('old children:', el, 'new children', foo);
-		return foo;
+		return { ...el, children: updatedChildren };
 	}
 
 	copyElement(elementToCopy: iTreeElement): iTreeElement {

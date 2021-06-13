@@ -52,13 +52,11 @@ describe('TreeElement.vue', () => {
 	let dispatch: any;
 	let state: any;
 	let $store: any;
-	let mockGetTreeFactoryInstance = () => {
-		return elFactory;
-
-	}
+	let modalResult: any;
+	const openModal = () => Promise.resolve(modalResult);
 	beforeEach(() => {
 		mockProps = {
-			root: false,
+			isRoot: false,
 			type: mockElement,
 			alias: mockAlias,
 			id: mockID,
@@ -67,9 +65,12 @@ describe('TreeElement.vue', () => {
 			attributes: new Array<HTMLAttribute>()
 		}
 
-		dispatch = jest.fn();
+		dispatch = jest.fn((action: string, payload: any) => {
+			if (action === 'setModalCB') state.modalcb = payload;
+		});
 
 		state = _DEFAULT_STATE_;
+		state.elementTreeFactory = elFactory; // replace with testing instance 
 
 		$store = {
 			state,
@@ -90,12 +91,16 @@ describe('TreeElement.vue', () => {
 			props: mockProps,
 			global: {
 				mocks: { $store },
-				provide: { getTreeFactoryInstance: mockGetTreeFactoryInstance }
+				provide: { openModal }
 				
 			}
 		});
 
 		flushPromises();
+	});
+
+	afterEach(() => {
+		state.modalcb()
 	});
 
 	// Data
@@ -108,16 +113,57 @@ describe('TreeElement.vue', () => {
 		expect(wrapper.find('#alias').exists()).toBeTruthy();
 	});
 
+	it('should have the type of the assumed tree element rendered to the DOM', () => {
+		expect(wrapper.find('#type').exists()).toBeTruthy();
+	});
+
 	// Method
 	it('should have an action for prompting the user for an action', () => {
 		const id = wrapper.props().id;
 		const el = elFactory.findElementByID(state.treeData, id);
+		const payload = { card: 'ElementControlsCard', data: { activeElement: el }};
 		wrapper.vm.promptAction();
-
 		expect(wrapper.vm.promptAction).toBeDefined();
 		expect(typeof wrapper.vm.promptAction).toEqual('function');
-		expect(dispatch).toHaveBeenCalledWith('setActiveElement', el)
-		expect(dispatch).toHaveBeenCalledWith('openModal', 'ElementControlsCard');
+		expect(dispatch).toHaveBeenCalledWith('setModal', payload);
+	});
+
+	it('should have a function for performing an action on the assumed tree element', () => {
+		wrapper.vm.addChild = jest.fn(wrapper.vm.addChild);
+		const action  = 'add';
+		wrapper.vm.performAction(action);
+		expect(wrapper.vm.performAction).toBeDefined();
+		expect(typeof wrapper.vm.performAction).toEqual('function');
+		expect(wrapper.vm.addChild).toHaveBeenCalled();
+	});
+
+	it('should have a function to add a child to the assumed tree element', async () => {
+		wrapper.vm.performAction = jest.fn(wrapper.vm.performAction);
+		const supportedElement = elFactory.getSupportedElement(mockProps.type);
+		const assumedElement = elFactory.findElementByID(state.treeData, mockProps.id) as iTreeElement;
+		const card = 'CreateChildElementCard';
+		const data = { activeElement: assumedElement };
+		const payload1 = { card, data };
+		modalResult = { alias: 'foobar', type: assumedElement.children[0] };
+		const newEl = elFactory.createTreeElement(modalResult.type, modalResult.alias);
+		const payload2 = { newElement: newEl, parentID: mockProps.id };
+		await wrapper.vm.addChild();
+		expect(wrapper.vm.addChild).toBeDefined();
+		expect(typeof wrapper.vm.addChild).toEqual('function');
+		expect(dispatch).toHaveBeenCalled();
+		expect(dispatch).toHaveBeenCalledWith('setModal', payload1);
+		expect(dispatch).toHaveBeenCalledWith('addChild', payload2);
+	});
+
+	it('should have a function to copy the branch of the element tree where the assumed element is the head', () => {
+		const flatBranch = elFactory.copyBranch(state.treeData, mockProps.id);
+		const parentid = mockProps.parentid;
+		const payload = { branch: flatBranch, parentID: parentid };
+		wrapper.vm.copyBranch();
+		expect(wrapper.vm.copyBranch).toBeDefined();
+		expect(typeof wrapper.vm.copyBranch).toEqual('function');
+		expect(dispatch).toHaveBeenCalled();
+		expect(dispatch).toHaveBeenCalledWith('addBranch', payload);
 	});
 
 	// Props
@@ -154,6 +200,12 @@ describe('TreeElement.vue', () => {
 	it('should have a prop for attributes associated with the assumed tree element', () => {
 		const props = wrapper.props();
 		expect(props.attributes).toEqual(mockProps.attributes);
-		expect(typeof props.parentid).toEqual('string');
+		expect( Array.isArray(props.attributes)).toBeTruthy();
+	});
+
+	it('should have a prop for determining if the assumed tree element is a root element', () => {
+		const props = wrapper.props();
+		expect(props.isRoot).toEqual(mockProps.isRoot);
+		expect(typeof props.isRoot).toEqual('boolean');
 	});
 });

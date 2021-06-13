@@ -24,7 +24,7 @@ describe('mutations.ts', () => {
         }
 	});
 
-   it('should have a function to update the tree data of the state index', () => {
+   it('should have a function to update the tree data of the state', () => {
     const oldData = state.treeData;
     const newData = [...state.treeData]
     newData[0].children = new Array<iTreeElement>();
@@ -36,7 +36,7 @@ describe('mutations.ts', () => {
     expect(oldData == state.treeData).toEqual(false);
    });
 
-   it('should have a function to update the modal state of the state index', () => {
+   it('should have a function to update the modal state of the state', () => {
     const oldState = state.modalState;
     const newState = !state.modalState;
 
@@ -47,7 +47,7 @@ describe('mutations.ts', () => {
     expect(oldState == state.modalState).toEqual(false);
    });
 
-   it('should have a function to reset the active modal card of the state index', () => {
+   it('should have a function to reset the active modal card of the state', () => {
     const card = DefaultStateIndex.activeModal;
     state.activeModal = card;
 
@@ -58,7 +58,7 @@ describe('mutations.ts', () => {
     expect(state.activeModal).toEqual(DefaultStateIndex.activeModal);
    });
 
-   it('should have a function to set the active modal card of the state index', () => {
+   it('should have a function to set the active modal card of the state', () => {
     const oldCard = state.activeModal;
     const card = 'card';
 
@@ -70,26 +70,33 @@ describe('mutations.ts', () => {
     expect(oldCard == state.activeModal).toEqual(false);
    });
 
-   it('should have a function to reset the modal callback function of the state index', () => {
-    const oldCB = () => { return false; }
-    state.modalcb = oldCB;
-
-    mutations.setModalCB(state, DefaultStateIndex.modalcb);
-    
-    expect(mutations.setModalCB).toBeDefined();
-    expect(typeof mutations.setModalCB).toEqual('function');
-    expect(state.modalcb).toEqual(DefaultStateIndex.modalcb);
-    expect(oldCB == state.modalcb).toEqual(false);
-   });
-   
-
-   it('should have a function to set the modal callback function of the state index', () => {
+   it('should have a function to set the modal callback function of the state', () => {
     const newCB = () => { return false; }
 
-    mutations.setModalCB(state, newCB);
+    mutations.setModalCallback(state, newCB);
     
-    expect(mutations.setModalCB).toBeDefined();
-    expect(typeof mutations.setModalCB).toEqual('function');
+    expect(mutations.setModalCallback).toBeDefined();
+    expect(typeof mutations.setModalCallback).toEqual('function');
     expect(state.modalcb).toEqual(newCB);
+   });
+
+   it('should have a function to set the active tree element', () => {
+    const activeElement = treeData[1];
+
+    mutations.setActiveElement(state, activeElement);
+
+    expect(mutations.setActiveElement).toBeDefined();
+    expect(typeof mutations.setActiveElement).toEqual('function');
+    expect(state.activeElement).toEqual(activeElement);
+   });
+
+   it('should have a function that sets the valid child elements in the state', () => {
+    const validChildren = treeData[1].children;
+
+    mutations.setValidChildren(state, validChildren);
+
+    expect(mutations.setActiveElement).toBeDefined();
+    expect(typeof mutations.setActiveElement).toEqual('function');
+    expect(state.validChildren).toEqual(validChildren);
    });
 });
