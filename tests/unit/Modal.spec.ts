@@ -17,7 +17,9 @@ describe('Modal.vue', () => {
         modalState: mockModalState,
         activeModal: mockActiveModal,
         modalcb: mockModalCB,
-        activeElement: mockActiveElement
+        modalData: {
+            activeElement: mockActiveElement
+        }
     } as iModalPayload;
 	beforeEach(() => {
 		wrapper = mount(Modal, {

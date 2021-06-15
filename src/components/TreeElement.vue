@@ -65,6 +65,7 @@ import { Options, Vue } from "vue-class-component";
             break;
           case 'delete':
             console.log('delete a branch');
+            this.deleteBranch();
             break;
           default:
             console.log('Did not recognize that action...');
@@ -94,6 +95,9 @@ import { Options, Vue } from "vue-class-component";
       let parentID: string | undefined;
       if (!this.isRoot) parentID = this.parentid;
       this.$store.dispatch('addBranch', { branch: flattenedBranch, parentID });
+    },
+    deleteBranch() {
+      this.$store.dispatch('deleteBranch', this.id, this.parentid);
     }
   }
 })

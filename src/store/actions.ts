@@ -31,7 +31,6 @@ export default {
 			parent.children.push(branch[0].id); // This assumes the head node is at index 0
 		}
 		const newData = [ ...treeData, ...branch ];
-		console.log('adding new branch... ', branch)
 		context.commit('setTreeData', newData);
 	},
 	addChild: (context: any, payload: {newElement: iTreeElement, parentID: string}): void => {
@@ -42,5 +41,10 @@ export default {
 		parent.children.push(newElement.id);
 		const newData = [ ...treeData, newElement ];
 		context.commit('setTreeData', newData);
+	},
+	deleteBranch: (context: any, idToRemove: string, parent?: string) : void => {
+		const treeData = context.state.treeData;
+		const updatedTreeData = context.state.elementTreeFactory.deleteBranch(treeData, idToRemove, parent);
+		context.commit('setTreeData', updatedTreeData);
 	}
 };

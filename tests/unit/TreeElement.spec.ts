@@ -117,6 +117,12 @@ describe('TreeElement.vue', () => {
 		expect(wrapper.find('#type').exists()).toBeTruthy();
 	});
 
+	it('should call the promptAction function when the tree element is clicked', () => {
+		wrapper.vm.promptAction = jest.fn();
+		wrapper.find('.tree-element').trigger('click');
+		expect(wrapper.vm.promptAction).toHaveBeenCalled();
+	});
+
 	// Method
 	it('should have an action for prompting the user for an action', () => {
 		const id = wrapper.props().id;

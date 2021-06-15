@@ -7,7 +7,6 @@ export default {
 		return state.treeData;
 	},
 	getBuiltTree: (state: any) => {
-		console.log('getting built tree', state.treeData);
 		return state.elementTreeFactory.buildTree(state.treeData);
 	},
 	getModalPayload: (state: any) => {

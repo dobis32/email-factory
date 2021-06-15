@@ -72,7 +72,6 @@ export default class ElementTreeFactory {
 	}
 
 	buildBranch(treeData: Array<iTreeElement>, head: iTreeElement): iNode {
-		console.log('build branch')
 		const builtBranch = {
 			id: head.id,
 			alias: head.alias,
@@ -106,7 +105,7 @@ export default class ElementTreeFactory {
 	copyBranch(treeData: Array<iTreeElement>, headID: string): Array<iTreeElement> {
 		let newHead: iTreeElement = {} as iTreeElement;
 		const copiedBranch = new Array<iTreeElement>();
-		const copyPairs = new Array<any>();
+		const copyPairs = new Array<{ old: iTreeElement, new: iTreeElement}>();
 		const aux = new Array<string>();
 		aux.push(headID);
 		while (aux.length) {
@@ -131,16 +130,37 @@ export default class ElementTreeFactory {
 		return [ updatedHead, ...updatedChildren ]; // Add branch state action assumes head is at index 0
 	}
 
-	updateChildren(el: iTreeElement, copyPairs: Array<any>): iTreeElement {
+	deleteBranch(treeData: Array<iTreeElement>, head: string, parent?: string): Array<iTreeElement> {
+		const idsToRemove = [ head ];
+		const aux = [ head ];
+		while (aux.length) {
+			const target = aux.shift();
+			const element = treeData.find((el: iTreeElement) => el.id === target);
+			if (!element) throw new Error(`[ Element Tree Factory ] Element with ID ${head} not found.`);
+
+			element.children.forEach((cid: string) => {
+				idsToRemove.push(cid);
+				aux.push(cid);
+			});
+			
+		}
+		if (parent) { // remove head's ID from parent element's children
+			const parentElement = treeData.find((el: iTreeElement) => el.id === parent) as iTreeElement;
+			parentElement.children = parentElement.children.filter((cid: string) => cid != head);
+		}
+		return treeData.filter((el: iTreeElement) => idsToRemove.find((id: string) => id === el.id) === undefined); // filter out elements with IDs in idsToRemove
+	}
+
+	private updateChildren(el: iTreeElement, childPairs: Array<any>): iTreeElement {
 		const updatedChildren = new Array<string>();
 		el.children.forEach((c: string) => {
-			const targetPair = copyPairs.find((pair: any) => pair.old.id === c)
+			const targetPair = childPairs.find((pair: any) => pair.old.id === c)
 			updatedChildren.push(targetPair.new.id);
 		});
 		return { ...el, children: updatedChildren };
 	}
 
-	copyElement(elementToCopy: iTreeElement): iTreeElement {
+	private copyElement(elementToCopy: iTreeElement): iTreeElement {
 		return {
 			... elementToCopy,
 			id: this.getNewElementID(),
