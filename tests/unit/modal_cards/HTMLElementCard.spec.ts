@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils';
-import HTMLElementCard from '@/components/modal_cards/HTMLElementCard.vue';
+import EditTreeElementCard from '@/components/modal_cards/EditTreeElementCard.vue';
 import { HTML_TD } from '@/constants/SupportedHTMLElementTypes';
-describe('HTMLElementCard.vue', () => {
+describe('EditTreeElementCard.vue', () => {
     let cb: Function;
     let validChildren: Array<string>;
     let siblingType: string;
@@ -28,7 +28,7 @@ describe('HTMLElementCard.vue', () => {
             dispatch,
         }
 
-		wrapper = mount(HTMLElementCard, {
+		wrapper = mount(EditTreeElementCard, {
 			data: () => {
 				return {};
 			},

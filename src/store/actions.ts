@@ -12,9 +12,9 @@ export default {
 	},
 	setModal: (context: any, payload: { card: string, data: { activeElement: iTreeElement} }): void => {
 		const { card, data } = payload;
-		const { activeElement } = data;
+		// const { activeElement } = data;
 		context.commit('setModalCard', card);
-		context.commit('setActiveElement', activeElement);
+		context.commit('setModalData', data);
 	},
 	resetModalCallback: (context: any): void => {
 		context.commit('setModalCallback', _DEFAULT_STATE_.modalcb);

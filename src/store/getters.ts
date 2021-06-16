@@ -14,9 +14,7 @@ export default {
 			modalState: state.modalState,
 			activeModal: state.activeModal,
 			modalcb: state.modalcb,
-			modalData: {
-				activeElement: state.activeElement
-			}
+			modalData: state.modalData
 		} as iModalPayload;
 
 		return payload;

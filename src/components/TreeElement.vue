@@ -62,6 +62,7 @@ import { Options, Vue } from "vue-class-component";
             break;
           case 'edit':
             console.log('edit an element');
+            this.editElement();
             break;
           case 'delete':
             console.log('delete a branch');
@@ -71,6 +72,7 @@ import { Options, Vue } from "vue-class-component";
             console.log('Did not recognize that action...');
         }
     },
+
     async addChild() {
       const f: ElementTreeFactory = this.$store.state.elementTreeFactory;
       const treeData: Array<iTreeElement> = this.$store.state.treeData;
@@ -87,6 +89,7 @@ import { Options, Vue } from "vue-class-component";
         this.$store.dispatch('addChild', { newElement: newEl, parentID: this.id});
       }
     },
+
     copyBranch() {
       const f: ElementTreeFactory = this.$store.state.elementTreeFactory;
       const headID = this.id;
@@ -96,8 +99,20 @@ import { Options, Vue } from "vue-class-component";
       if (!this.isRoot) parentID = this.parentid;
       this.$store.dispatch('addBranch', { branch: flattenedBranch, parentID });
     },
+
     deleteBranch() {
       this.$store.dispatch('deleteBranch', this.id, this.parentid);
+    },
+
+    async editElement() {
+      const card = 'EditTreeElementCard';
+      const data = {
+        alias: this.alias,
+        attributes: this.attributes
+      };
+      this.$store.dispatch('setModal', { card, data });
+      const result = await this.openModal();
+      console.log(result);
     }
   }
 })

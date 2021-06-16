@@ -12,6 +12,6 @@ export default class HTMLAttribute {
     }
 
     getAttributeData(): iHTMLAttribute {
-        return { attributeName: this._attributeName, attributeValue: this._attributeValue };
+        return { name: this._attributeName, value: this._attributeValue };
     }
 }

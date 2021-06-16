@@ -1,6 +1,6 @@
 import { HTML_TABLE, HTML_TR, HTML_TD, HTML_P } from '@/constants/SupportedHTMLElementTypes';
 import SUPPORTED_HTML_ELEMENTS from '@/constants/SupportedHTMLElementTypes';
-import HTMLAttribute from '@/classes/HTMLAttribute';
+import iHTMLAttribute from '@/interfaces/iHTMLAttribute';
 import iTreeElement from '@/interfaces/iTreeElement';
 import iAppState from '@/interfaces/iAppState';
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
@@ -11,7 +11,7 @@ export default {
             root: true,
             element: HTML_TABLE,
             alias: 'rootTable',
-            attributes: new Array<HTMLAttribute>(),
+            attributes: new Array<iHTMLAttribute>(),
             children: [
                 'bar'
             ] as Array<string>
@@ -21,7 +21,7 @@ export default {
             root: false,
             element: HTML_TR,
             alias: 'initTR',
-            attributes: new Array<HTMLAttribute>(),
+            attributes: new Array<iHTMLAttribute>(),
             children: [
                 'fizz'   
             ] as Array<string>
@@ -31,7 +31,7 @@ export default {
             root: false,
             element: HTML_TD,
             alias: 'initTD',
-            attributes: new Array<HTMLAttribute>(),
+            attributes: new Array<iHTMLAttribute>(),
             children: [
                 'buzz'
             ] as Array<string>
@@ -41,14 +41,13 @@ export default {
             root: false,
             element: HTML_P,
             alias: 'initP',
-            attributes: new Array<HTMLAttribute>(),
+            attributes: new Array<iHTMLAttribute>(),
             children: [] as Array<string>
         }
     ]  as Array<iTreeElement>,
     modalState: false,
     activeModal: '',
     modalcb: (): void => { return; },
-    activeElement: {} as iTreeElement,
-    validChildren: new Array<string>(),
+    modalData: {},
     elementTreeFactory: new ElementTreeFactory(SUPPORTED_HTML_ELEMENTS)
 } as iAppState;

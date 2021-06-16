@@ -1,10 +1,10 @@
-import HTMLAttribute from "@/classes/HTMLAttribute";
+import iHTMLAttribute from "@/interfaces/iHTMLAttribute";
 
 export default interface iNode {
     id: string;
     alias: string;
     type: string;
     root: boolean;
-    attributes: Array<HTMLAttribute>;
+    attributes: Array<iHTMLAttribute>;
     children: Array<iNode>;
 }

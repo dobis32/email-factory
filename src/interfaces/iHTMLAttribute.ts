@@ -1,4 +1,4 @@
 export default interface iHTMLAttribute {
-    attributeName: string;
-    attributeValue: string;
+    name: string;
+    value: string;
 }

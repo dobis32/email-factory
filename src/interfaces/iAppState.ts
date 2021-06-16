@@ -5,7 +5,6 @@ export default interface iAppState {
     modalState: boolean,
     activeModal: string,
     modalcb: Function,
-    activeElement: iTreeElement,
-    validChildren: Array<string>,
+    modalData: any,
     elementTreeFactory: ElementTreeFactory
 }

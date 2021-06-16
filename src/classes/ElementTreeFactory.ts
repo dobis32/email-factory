@@ -3,7 +3,7 @@ import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
 import { _TESTING_HASH_ } from '@/constants/Testing';
 import iTreeElement from '@/interfaces/iTreeElement';
 import iNode from '@/interfaces/iNode';
-import HTMLAttribute from './HTMLAttribute';
+import iHTMLAttribute from '@/interfaces/iHTMLAttribute';
 
 
 export default class ElementTreeFactory {
@@ -50,7 +50,7 @@ export default class ElementTreeFactory {
 			el.root = rootDefined ? isRoot as boolean : false;
 			el.element = supportedElement as SupportedHTMLElement;
 			el.alias = alias ? alias : id;
-			el.attributes = new Array<HTMLAttribute>();
+			el.attributes = new Array<iHTMLAttribute>();
 			el.children = new Array<string>();
 			return el;
 		} catch(e) {

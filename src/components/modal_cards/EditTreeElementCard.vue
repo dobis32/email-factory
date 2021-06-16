@@ -2,14 +2,15 @@
   <div id="modal-card" @click="stopPropagation">
     <div class="input-row">
       <h3>Element alias:</h3>
-      <input type="text" v-model="elementAlias" name="alias" id="alias-input" />
+      <input type="text" v-model="newAlias" name="alias" id="alias-input" />
       
     </div>
     <div id="input-row">
-      <h3>Element type:</h3>
-      <select name="type" id="type-input">
-        <option v-for="(child) of validChildren" id="elementType" v-bind:key="child">{{ child }}</option>
-      </select>
+      <h3>Attributes:</h3>
+      <div v-for="(att) of newAttributes" v-bind:key="att" :id="`attribute-${att.name}`" class="input-row" >
+        <h3>{{ att.name }}:</h3>
+        <input type="text" v-model="att.value" :name="att.name" class="attribute-input" />
+      </div>
     </div>
     <div id="submit-button" @click="submitData">Submit</div>
   </div>
@@ -17,33 +18,42 @@
 
 <script lang="ts">
 import SupportedHTMLElement from "@/classes/SupportedHTMLElement";
+import iHTMLAttribute from "@/interfaces/iHTMLAttribute";
 import { Options, Vue } from "vue-class-component";
 
 @Options({
   data: () => {
     return { 
-    elementAlias: "", 
+    newAlias: '',
+    newAttributes: new Array<iHTMLAttribute>(),
     submitting: false, 
     supportedChildren: new Array<SupportedHTMLElement>()
     };
   },
   inject: [ "stopPropagation" ],
-  props: [ "cb", "validChildren" ],
+  props: [ "cb", "alias", "attributes" ],
   methods: {
     submitData() {
       this.submitting = true;
       this.$store.dispatch("closeModal");
     }
   },
+  beforeMount() {
+    this.newAlias = this.alias
+    this.newAttributes = [ ...this.attributes ];
+  },
   beforeUnmount() {
     if (!this.submitting) {
       this.elementAlias = "";
     }
-    this.cb({ alias: this.elementAlias });
+    this.cb({ 
+      alias: this.newAlias,
+      attributes: this.newAttributes 
+    });
     this.$store.dispatch("resetModalCB");
   }
 })
-export default class HTMLElementCard extends Vue {}
+export default class EditTreeElementCard extends Vue {}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

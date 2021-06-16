@@ -79,24 +79,4 @@ describe('mutations.ts', () => {
     expect(typeof mutations.setModalCallback).toEqual('function');
     expect(state.modalcb).toEqual(newCB);
    });
-
-   it('should have a function to set the active tree element', () => {
-    const activeElement = treeData[1];
-
-    mutations.setActiveElement(state, activeElement);
-
-    expect(mutations.setActiveElement).toBeDefined();
-    expect(typeof mutations.setActiveElement).toEqual('function');
-    expect(state.activeElement).toEqual(activeElement);
-   });
-
-   it('should have a function that sets the valid child elements in the state', () => {
-    const validChildren = treeData[1].children;
-
-    mutations.setValidChildren(state, validChildren);
-
-    expect(mutations.setActiveElement).toBeDefined();
-    expect(typeof mutations.setActiveElement).toEqual('function');
-    expect(state.validChildren).toEqual(validChildren);
-   });
 });

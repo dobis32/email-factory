@@ -5,7 +5,7 @@ import ElementTreeFactory from '@/classes/ElementTreeFactory';
 import _SUPPORTED_HTML_ELEMENTS_ from '@/constants/SupportedHTMLElementTypes';
 import _DEFAULT_STATE_ from '@/constants/DefaultState';
 import { HTML_TABLE, HTML_P, HTML_TD, HTML_TR } from '@/constants/SupportedHTMLElementTypes';
-import HTMLAttribute from '@/classes/HTMLAttribute';
+import iHTMLAttribute from '@/interfaces/iHTMLAttribute';
 import { _TESTING_HASH_ } from '@/constants/testing';
 
 const elFactory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_, _TESTING_HASH_);
@@ -19,7 +19,7 @@ describe('TreeElement.vue', () => {
 			children: [
 				'fizz'
 			],
-			attributes: new Array<HTMLAttribute>()
+			attributes: new Array<iHTMLAttribute>()
 		},
 		{
 			id: 'fizz',
@@ -29,7 +29,7 @@ describe('TreeElement.vue', () => {
 			children: [
 				'buzz'
 			],
-			attributes: new Array<HTMLAttribute>()
+			attributes: new Array<iHTMLAttribute>()
 		},
 		{
 			id: 'buzz',
@@ -37,7 +37,7 @@ describe('TreeElement.vue', () => {
 			element: HTML_P,
 			alias: 'rootP',
 			children: [],
-			attributes: new Array<HTMLAttribute>()
+			attributes: new Array<iHTMLAttribute>()
 		}
 	];
 	const mockBuiltBranch = elFactory.buildTree(mockChildren);
@@ -62,7 +62,7 @@ describe('TreeElement.vue', () => {
 			id: mockID,
 			children: mockBuiltBranch,
 			parentid: mockParentid,
-			attributes: new Array<HTMLAttribute>()
+			attributes: new Array<iHTMLAttribute>()
 		}
 
 		dispatch = jest.fn((action: string, payload: any) => {

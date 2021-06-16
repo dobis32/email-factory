@@ -15,15 +15,11 @@ export default {
 		state.activeModal = modalCard;
 	},
 
+	setModalData: (state: iAppState, modalData: any): void => {
+		state.modalData = modalData;
+	},
+
 	setModalCallback: (state: iAppState, modalcb: Function): void => {
 		state.modalcb = modalcb;
-	},
-
-	setActiveElement: (state: iAppState, element: iTreeElement): void => {
-		state.activeElement = element;
-	},
-
-	setValidChildren: (state: iAppState, validChildren: Array<string>): void => {
-		state.validChildren = validChildren;
 	},
 };
