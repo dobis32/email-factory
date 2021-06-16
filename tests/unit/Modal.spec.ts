@@ -6,9 +6,15 @@ import iTreeElement from '@/interfaces/iTreeElement';
 describe('Modal.vue', () => {
     let wrapper: any;
     let mockModalState: boolean = true;
-    let mockActiveModal: string = 'HTMLElementCard'; // tests will definitely break if this value is NOT a valid modal element
+    let mockActiveModal: string = 'EditTreeElementCard'; // tests will definitely break if this value is NOT a valid modal element
     let mockModalCB: Function = () => { return; };
-    const mockActiveElement = {} as iTreeElement;
+    const mockAlias = 'new-element';
+    const mockAttributes = [
+        {
+            name: 'att1',
+            value: 'foobar'
+        }
+    ]
     const stopPropagation = jest.fn((e: Event) => { e.stopPropagation(); })
     const $store = {
         dispatch: jest.fn()
@@ -18,7 +24,8 @@ describe('Modal.vue', () => {
         activeModal: mockActiveModal,
         modalcb: mockModalCB,
         modalData: {
-            activeElement: mockActiveElement
+            alias: mockAlias,
+            attributes: mockAttributes
         }
     } as iModalPayload;
 	beforeEach(() => {
@@ -44,7 +51,7 @@ describe('Modal.vue', () => {
     });
 
     it('render the corresponding modal card according to the value of the activeModal prop', () => {
-        // this test was written under the pretense that the mockActiveModal variable is set to 'HTMLElementCard'
+        // this test was written under the pretense that the mockActiveModal variable is set to 'TreeElementControlsCard'
         expect(wrapper.findComponent({ name: mockActiveModal }).exists()).toBeTruthy();
     });
 

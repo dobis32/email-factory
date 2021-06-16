@@ -23,6 +23,9 @@ import TreeElement from "./TreeElement.vue";
     TreeElement
   },
   props: ["elementTree"],
+  beforeMount() {
+    console.log('tree data before mount', this.elementTree);
+  }
 })
 export default class TreeEditor extends Vue {}
 </script>

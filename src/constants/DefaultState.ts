@@ -11,7 +11,12 @@ export default {
             root: true,
             element: HTML_TABLE,
             alias: 'rootTable',
-            attributes: new Array<iHTMLAttribute>(),
+            attributes:  [
+                {
+                    name: 'width',
+                    value: '600'
+                }
+            ] as Array<iHTMLAttribute>,
             children: [
                 'bar'
             ] as Array<string>
@@ -31,7 +36,12 @@ export default {
             root: false,
             element: HTML_TD,
             alias: 'initTD',
-            attributes: new Array<iHTMLAttribute>(),
+            attributes: [
+                {
+                    name: 'style',
+                    value: 'color: #f00;'
+                }
+            ],
             children: [
                 'buzz'
             ] as Array<string>
@@ -41,7 +51,14 @@ export default {
             root: false,
             element: HTML_P,
             alias: 'initP',
-            attributes: new Array<iHTMLAttribute>(),
+            attributes: [{
+                name: 'style',
+                value: 'font-size: 20px; color: #f00; text-decoration: bold;'
+            },
+            {
+                name: 'text',
+                value: 'foobar'
+            }] as Array<iHTMLAttribute>,
             children: [] as Array<string>
         }
     ]  as Array<iTreeElement>,

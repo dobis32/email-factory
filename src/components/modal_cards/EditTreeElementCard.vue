@@ -5,14 +5,16 @@
       <input type="text" v-model="newAlias" name="alias" id="alias-input" />
       
     </div>
-    <div id="input-row">
+    <div id="attribute-row">
       <h3>Attributes:</h3>
-      <div v-for="(att) of newAttributes" v-bind:key="att" :id="`attribute-${att.name}`" class="input-row" >
-        <h3>{{ att.name }}:</h3>
-        <input type="text" v-model="att.value" :name="att.name" class="attribute-input" />
+      <div v-for="(att) of newAttributes" v-bind:key="att" :id="`attribute-${att.name}`" class="attribute-row" >
+        <HTMLAttribute :name="att.name" :value="att.value" />
       </div>
     </div>
-    <div id="submit-button" @click="submitData">Submit</div>
+    <div id="add-attribute" class="button">
+      Add Attribute
+    </div>
+    <div id="submit-button" class="button" @click="submitData">Submit</div>
   </div>
 </template>
 
@@ -20,8 +22,9 @@
 import SupportedHTMLElement from "@/classes/SupportedHTMLElement";
 import iHTMLAttribute from "@/interfaces/iHTMLAttribute";
 import { Options, Vue } from "vue-class-component";
-
+import HTMLAttribute from '@/components/modal_cards/modal_elements/HTMLAttribute.vue';
 @Options({
+  components: { HTMLAttribute },
   data: () => {
     return { 
     newAlias: '',
@@ -39,6 +42,7 @@ import { Options, Vue } from "vue-class-component";
     }
   },
   beforeMount() {
+    console.log('ATTRIBUTES', this.attributes);
     this.newAlias = this.alias
     this.newAttributes = [ ...this.attributes ];
   },
@@ -50,7 +54,6 @@ import { Options, Vue } from "vue-class-component";
       alias: this.newAlias,
       attributes: this.newAttributes 
     });
-    this.$store.dispatch("resetModalCB");
   }
 })
 export default class EditTreeElementCard extends Vue {}
@@ -61,7 +64,7 @@ export default class EditTreeElementCard extends Vue {}
 #modal-card {
   z-index: 10; /* Sit on top */
   background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
+  margin: 2% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
   width: 400px; /* Could be more or less, depending on screen size */
@@ -70,15 +73,25 @@ export default class EditTreeElementCard extends Vue {}
 
 .input-row {
   padding-bottom: 20px;
+  width: 80%;
+  margin: 0px auto;
+}
+
+.attribute-row {
+  width: 80%;
+  margin: 0px auto;
+}
+
+.button {
+  width: 140px;
+  margin: 20px auto 0px auto;
+  padding: 15px 0px;
 }
 
 #submit-button {
   background-color: #062;
   color: #fff;
   cursor: pointer;
-  width: 80px;
-  margin: 0px auto;
-  padding: 15px 0px;
 }
 
 input {
@@ -87,5 +100,11 @@ input {
 
 select {
   text-align: center;
+}
+
+#add-attribute {
+  background-color: #05a;
+  color: #fff;
+  cursor: pointer;
 }
 </style>

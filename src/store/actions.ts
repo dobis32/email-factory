@@ -10,7 +10,7 @@ export default {
 	openModal: (context: any, modalCard: string) => {
 		context.commit('setModalState', true);
 	},
-	setModal: (context: any, payload: { card: string, data: { activeElement: iTreeElement} }): void => {
+	setModal: (context: any, payload: { card: string, data: any }): void => {
 		const { card, data } = payload;
 		// const { activeElement } = data;
 		context.commit('setModalCard', card);

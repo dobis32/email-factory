@@ -16,7 +16,6 @@ describe('getters.ts', () => {
         modalState = DefaultStateIndex.modalState;
         activeModal = DefaultStateIndex.activeModal;
         modalcb = DefaultStateIndex.modalcb;
-        // activeElement = DefaultStateIndex.activeElement
 		modalData = DefaultStateIndex.modalData
 
         state = {
@@ -24,6 +23,7 @@ describe('getters.ts', () => {
             modalState,
             activeModal,
             modalcb,
+            modalData,
             activeElement,
         }
 

@@ -38,7 +38,7 @@ import { Options, Vue } from "vue-class-component";
   ],
   methods: {
     async promptAction() {
-      console.log('prompt action');
+      console.log('prompt action; attributes', this.attributes);
       const f: ElementTreeFactory = this.$store.state.elementTreeFactory;
       const treeData = this.$store.state.treeData;
       const id = this.id;
@@ -105,6 +105,7 @@ import { Options, Vue } from "vue-class-component";
     },
 
     async editElement() {
+      console.log(`[ Tree Element Vue ] attributes ${this.attributes}`);
       const card = 'EditTreeElementCard';
       const data = {
         alias: this.alias,

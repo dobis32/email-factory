@@ -1,10 +1,12 @@
 import { mount } from '@vue/test-utils';
 import EditTreeElementCard from '@/components/modal_cards/EditTreeElementCard.vue';
 import { HTML_TD } from '@/constants/SupportedHTMLElementTypes';
+import iHTMLAttribute from '@/interfaces/iHTMLAttribute';
+
 describe('EditTreeElementCard.vue', () => {
-    let cb: Function;
-    let validChildren: Array<string>;
-    let siblingType: string;
+    let mockcb: Function;
+    let mockAlias: string;
+    let mockAttributes: Array<iHTMLAttribute>;
 	let wrapper: any;
     let stopPropagation: Function;
     let provide: any;
@@ -12,17 +14,32 @@ describe('EditTreeElementCard.vue', () => {
     let $store: any;
 
 	beforeEach(() => {
-        cb = jest.fn(() => {
+        mockcb = jest.fn(() => {
             return;
         });
-
-        validChildren = HTML_TD.getValidChildren();
 
         stopPropagation = jest.fn((e: Event) => { e.stopPropagation() });
 
         provide = { stopPropagation };
 
         dispatch = jest.fn();
+
+        mockAlias = 'new-element'
+
+        mockAttributes = [
+            {
+                name: 'att1',
+                value: 'foobar'
+            },
+            {
+                name: 'att2',
+                value: 'fizzybuzzer'
+            },
+            {
+                name: 'att3',
+                value: '666'
+            }
+        ]
 
         $store = {
             dispatch,
@@ -33,9 +50,9 @@ describe('EditTreeElementCard.vue', () => {
 				return {};
 			},
 			props: {
-				cb,
-                validChildren,
-                siblingType
+				cb: mockcb,
+                alias: mockAlias,
+                attributes: mockAttributes
 			},
 			global: {
 				mocks: { $store },
@@ -85,18 +102,14 @@ describe('EditTreeElementCard.vue', () => {
 
     it('should call the callback function upon unmount/beforeUnmount', () => {
         const alias = 'foobar';
+        const expectedPayload = {
+            alias: wrapper.vm.newAlias,
+            attributes: wrapper.vm.newAttributes
+        }
         wrapper.vm.submitting = true;
-        wrapper.vm.elementAlias = alias;
         wrapper.unmount();
-        expect(cb).toHaveBeenCalled();
-        expect(cb).toHaveBeenCalledWith({ alias })
-    });
-
-    it('should dispatch the "resetModalCB" action to the store', () => {
-        const targetAction = "resetModalCB";
-        wrapper.unmount();
-        expect(dispatch).toHaveBeenCalled();
-        expect(dispatch).toHaveBeenCalledWith(targetAction);
+        expect(mockcb).toHaveBeenCalled();
+        expect(mockcb).toHaveBeenCalledWith(expectedPayload);
     });
 
     // Props
@@ -104,14 +117,21 @@ describe('EditTreeElementCard.vue', () => {
         const props = wrapper.props()
         expect(props.cb).toBeDefined();
         expect(typeof props.cb).toEqual('function');
-        expect(props.cb).toEqual(cb);
+        expect(props.cb).toEqual(mockcb);
     });
 
-    it('should have a prop that provides an array containing the valid child element types of the parent element', () => {
+    it('should have a prop that provides a string representing the alias of the assumed tree element', () => {
         const props = wrapper.props();
-        expect(props.validChildren).toBeDefined();
-        expect(Array.isArray(props.validChildren)).toEqual(true);
-        expect(props.validChildren).toEqual(HTML_TD.getValidChildren());
+        expect(props.alias).toBeDefined();
+        expect(typeof props.alias).toEqual('string');
+        expect(props.alias).toEqual(mockAlias);
+    });
+
+    it('should have a prop that provides an array containing the attributes of the assumed tree element', () => {
+        const props = wrapper.props();
+        expect(props.attributes).toBeDefined();
+        expect(Array.isArray(props.attributes)).toEqual(true);
+        expect(props.attributes).toEqual(mockAttributes);
     });
 
     // Methods

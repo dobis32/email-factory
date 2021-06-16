@@ -4,7 +4,5 @@ export default interface iModalPayload {
     modalState: boolean,
     activeModal: string,
     modalcb: Function,
-    modalData: {
-        activeElement: iTreeElement
-    }
+    modalData: any
 }
