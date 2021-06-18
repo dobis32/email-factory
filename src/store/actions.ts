@@ -1,6 +1,7 @@
 /* eslint-disable */
 import _DEFAULT_STATE_ from '@/constants/DefaultState';
 import iTreeElement from '@/interfaces/iTreeElement';
+import iHTMLAttribute from '@/interfaces/iHTMLAttribute';
 
 export default {
 	closeModal: (context: any) => {
@@ -45,6 +46,15 @@ export default {
 	deleteBranch: (context: any, idToRemove: string, parent?: string) : void => {
 		const treeData = context.state.treeData;
 		const updatedTreeData = context.state.elementTreeFactory.deleteBranch(treeData, idToRemove, parent);
+		context.commit('setTreeData', updatedTreeData);
+	},
+	updateElement: (context: any, payload: { eid: string, alias: string, attributes: Array<iHTMLAttribute>}): void => {
+		const { eid, alias, attributes } = payload;
+		const treeData = context.state.treeData;
+		const target = treeData.find((el: iTreeElement) => el.id === eid);
+		target.alias = alias;
+		target.attributes = attributes;
+		const updatedTreeData = [ ...treeData ];
 		context.commit('setTreeData', updatedTreeData);
 	}
 };

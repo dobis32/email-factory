@@ -8,7 +8,7 @@
     <div id="attribute-row">
       <h3>Attributes:</h3>
       <div v-for="(att) of newAttributes" v-bind:key="att" :id="`attribute-${att.name}`" class="attribute-row" >
-        <HTMLAttribute :name="att.name" :value="att.value" />
+        <HTMLAttribute :name="att.name" :value="att.value" @remove-attribute="removeAttribute" @update-attribute="updateAttribute" />
       </div>
     </div>
     <div id="add-attribute" class="button">
@@ -39,16 +39,25 @@ import HTMLAttribute from '@/components/modal_cards/modal_elements/HTMLAttribute
     submitData() {
       this.submitting = true;
       this.$store.dispatch("closeModal");
+    },
+    removeAttribute(attName: string) {
+      this.newAttributes = this.newAttributes.filter((a: iHTMLAttribute) => a.name != attName);
+    },
+    updateAttribute(payload: { name: string, newName: string, value: string }) {
+      const { name, newName, value } = payload;
+      const target  = this.newAttributes.find((a: iHTMLAttribute) => a.name === name);
+      target.name = newName;
+      target.value = value;
     }
   },
   beforeMount() {
-    console.log('ATTRIBUTES', this.attributes);
     this.newAlias = this.alias
-    this.newAttributes = [ ...this.attributes ];
+    this.newAttributes = this.attributes.map((a: iHTMLAttribute) => Object.assign({}, a));
   },
   beforeUnmount() {
     if (!this.submitting) {
-      this.elementAlias = "";
+      this.newAlias = this.alias;
+      this.newAttributes = [ ...this.attributes ];
     }
     this.cb({ 
       alias: this.newAlias,
@@ -98,13 +107,13 @@ input {
   width: 120px;
 }
 
-select {
-  text-align: center;
-}
-
 #add-attribute {
   background-color: #05a;
   color: #fff;
   cursor: pointer;
+}
+
+#alias-input {
+  margin-top: 6px;
 }
 </style>
