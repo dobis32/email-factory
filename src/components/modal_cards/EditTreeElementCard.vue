@@ -3,18 +3,17 @@
     <div class="input-row">
       <h3>Element alias:</h3>
       <input type="text" v-model="newAlias" name="alias" id="alias-input" />
-      
     </div>
     <div id="attribute-row">
       <h3>Attributes:</h3>
       <div v-for="(att) of newAttributes" v-bind:key="att" :id="`attribute-${att.name}`" class="attribute-row" >
-        <HTMLAttribute :name="att.name" :value="att.value" @remove-attribute="removeAttribute" @update-attribute="updateAttribute" />
+        <HTMLAttribute :name="att.name" :value="att.value" @remove-attribute="removeAttribute" @update-attribute="updateAttribute" @editing="handleEdit" />
       </div>
     </div>
     <div id="add-attribute" class="button">
       Add Attribute
     </div>
-    <div id="submit-button" class="button" @click="submitData">Submit</div>
+    <div id="submit-button" :class="{ button: true, disabled: disableSubmit }" @click="submitData">Submit</div>
   </div>
 </template>
 
@@ -30,7 +29,8 @@ import HTMLAttribute from '@/components/modal_cards/modal_elements/HTMLAttribute
     newAlias: '',
     newAttributes: new Array<iHTMLAttribute>(),
     submitting: false, 
-    supportedChildren: new Array<SupportedHTMLElement>()
+    supportedChildren: new Array<SupportedHTMLElement>(),
+    disableSubmit: false
     };
   },
   inject: [ "stopPropagation" ],
@@ -48,6 +48,9 @@ import HTMLAttribute from '@/components/modal_cards/modal_elements/HTMLAttribute
       const target  = this.newAttributes.find((a: iHTMLAttribute) => a.name === name);
       target.name = newName;
       target.value = value;
+    },
+    handleEdit(disable: boolean) {
+      this.disableSubmit = disable
     }
   },
   beforeMount() {
@@ -92,6 +95,7 @@ export default class EditTreeElementCard extends Vue {}
 }
 
 .button {
+  display: block;
   width: 140px;
   margin: 20px auto 0px auto;
   padding: 15px 0px;
@@ -101,6 +105,10 @@ export default class EditTreeElementCard extends Vue {}
   background-color: #062;
   color: #fff;
   cursor: pointer;
+}
+
+.disabled {
+  display: none;
 }
 
 input {

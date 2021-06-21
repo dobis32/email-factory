@@ -47,19 +47,27 @@ import { Options, Vue } from "vue-class-component";
   methods: {
     edit() {
         this.editing = true;
+        this.$emit('editing', true);
     },
     save() {
         this.editing = false;
         if (!this.newName.length) alert('Element attributes must have a name');
-        else this.$emit('update-attribute', { name: this.name, newName: this.newName, value: this.newValue});
-    },
+        else {
+            this.$emit('update-attribute', { name: this.name, newName: this.newName, value: this.newValue});
+            this.$emit('editing', false);
+        } 
+
+
+   },
     cancel() {
         this.newName = this.name;
         this.newValue = this.value;
         this.editing = false;
+        this.$emit('editing', false);
     },
     remove() {
         this.$emit('remove-attribute', this.name);
+        this.$emit('editing', false);
     }
   },
   beforeMount() {

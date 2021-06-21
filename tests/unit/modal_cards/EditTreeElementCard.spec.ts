@@ -81,23 +81,27 @@ describe('EditTreeElementCard.vue', () => {
         expect(wrapper.vm.submitData).toHaveBeenCalled();
     });
 
-    // Hooks
-    it('should reset the "elementAlias" component variable if the submitting variable is false upon beforeUnmount hook', () => {
-        const initSubmitting = wrapper.vm.submitting;
-        wrapper.vm.elementAlias = 'foobar';
-        wrapper.unmount();
-        expect(initSubmitting).toEqual(false);
-        expect(wrapper.vm.elementAlias).toEqual('');
+    it('should render html attributes of the assumed element', () => {
+        expect(wrapper.findAllComponents({ name: 'HTMLAttribute' }).length).toEqual(wrapper.vm.newAttributes.length);
     });
 
-    it('should not reset the "elementAlias" component variable if the submitting variable is true upon unmount/beforeUnmount hook', () => {
+    // Hooks
+    it('should reset the "newAlias" component variable if the submitting variable is false upon beforeUnmount hook', () => {
+        wrapper.vm.submitting = false;
+        const initAlias = wrapper.props().alias;
+        wrapper.vm.newAlias = 'foobar';
+        wrapper.unmount();
+        expect(wrapper.vm.submitting).toEqual(false);
+        expect(wrapper.vm.newAlias).toEqual(initAlias);
+    });
+
+    it('should not reset the "newAlias" component variable if the submitting variable is true upon unmount/beforeUnmount hook', () => {
         const alias = 'foobar';
         wrapper.vm.submitting = true;
-        const initSubmitting = wrapper.vm.submitting;
-        wrapper.vm.elementAlias = alias;
+        wrapper.vm.newAlias = alias;
         wrapper.unmount();
-        expect(initSubmitting).toEqual(true);
-        expect(wrapper.vm.elementAlias).toEqual(alias);
+        expect(wrapper.vm.submitting).toEqual(true);
+        expect(wrapper.vm.newAlias).toEqual(alias);
     });
 
     it('should call the callback function upon unmount/beforeUnmount', () => {
@@ -153,5 +157,17 @@ describe('EditTreeElementCard.vue', () => {
     it('should close the modal when submitting data', () => {
         wrapper.vm.submitData();
         expect(dispatch).toHaveBeenCalledWith('closeModal');
+    });
+
+    it('should have a function to handle emit events from html attributes', () => {
+        wrapper.vm.disableSubmit = false;
+        wrapper.vm.handleEdit(true);
+        const state1 = wrapper.vm.disableSubmit;
+        wrapper.vm.handleEdit(false);
+        const state2 = wrapper.vm.disableSubmit;
+        expect(wrapper.vm.handleEdit).toBeDefined();
+        expect(typeof wrapper.vm.handleEdit).toEqual('function');
+        expect(state1).toBeTruthy();
+        expect(state2).toBeFalsy();
     });
 });
