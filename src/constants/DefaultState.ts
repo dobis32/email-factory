@@ -64,6 +64,7 @@ export default {
     ]  as Array<iTreeElement>,
     modalState: false,
     activeModal: '',
+    modalCanSubmit: true,
     modalcb: (): void => { return; },
     modalData: {},
     elementTreeFactory: new ElementTreeFactory(SUPPORTED_HTML_ELEMENTS)

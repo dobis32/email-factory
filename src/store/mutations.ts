@@ -22,4 +22,8 @@ export default {
 	setModalCallback: (state: iAppState, modalcb: Function): void => {
 		state.modalcb = modalcb;
 	},
+	
+	modalCanSubmit: (state: iAppState, canSubmit: boolean): void => {
+		state.modalCanSubmit = canSubmit;
+	}
 };

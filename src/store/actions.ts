@@ -56,5 +56,8 @@ export default {
 		target.attributes = attributes;
 		const updatedTreeData = [ ...treeData ];
 		context.commit('setTreeData', updatedTreeData);
+	},
+	modalCanSubmit: (context: any, submit: boolean): void => {
+		context.commit('modalCanSubmit', submit);
 	}
 };

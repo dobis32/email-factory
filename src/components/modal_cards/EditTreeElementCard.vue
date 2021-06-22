@@ -7,7 +7,7 @@
     <div id="attribute-row">
       <h3>Attributes:</h3>
       <div v-for="(att) of newAttributes" v-bind:key="att" :id="`attribute-${att.name}`" class="attribute-row" >
-        <HTMLAttribute :name="att.name" :value="att.value" @remove-attribute="removeAttribute" @update-attribute="updateAttribute" @editing="handleEdit" />
+        <HTMLAttribute :name="att.name" :value="att.value" @remove-attribute="removeAttribute" @editing="handleEdit" />
       </div>
     </div>
     <div id="add-attribute" class="button">

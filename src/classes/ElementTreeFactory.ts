@@ -4,6 +4,7 @@ import { _TESTING_HASH_ } from '@/constants/Testing';
 import iTreeElement from '@/interfaces/iTreeElement';
 import iNode from '@/interfaces/iNode';
 import iHTMLAttribute from '@/interfaces/iHTMLAttribute';
+import { EWOULDBLOCK } from 'node:constants';
 
 
 export default class ElementTreeFactory {
@@ -84,11 +85,26 @@ export default class ElementTreeFactory {
 	}
 
 	private getChildNodes(treeData: Array<iTreeElement>, childIDs: Array<string>): Array<iNode> {
-		const childNodes = new Array<iNode>();
-		childIDs.forEach((cid: string) => {
+		// const childNodes = new Array<iNode>();
+		// childIDs.forEach((cid: string) => {
+		// 	const el = treeData.find((el: iTreeElement) => el.id == cid);
+		// 	if (!el) throw new Error(`Failed to find tree element with id ${cid}`)
+		// 	const node = {
+		// 		id: el.id,
+		// 		alias: el.alias,
+		// 		type:  el.element.getElementType(),
+		// 		root: el.root,
+		// 		attributes: el.attributes,
+		// 		children: this.getChildNodes(treeData, el.children)
+		// 	} as iNode;
+		// 	childNodes.push(node);
+		// });
+		// return childNodes;
+
+		return childIDs.map((cid: string) => {
 			const el = treeData.find((el: iTreeElement) => el.id == cid);
 			if (!el) throw new Error(`Failed to find tree element with id ${cid}`)
-			const node = {
+			return {
 				id: el.id,
 				alias: el.alias,
 				type:  el.element.getElementType(),
@@ -96,28 +112,37 @@ export default class ElementTreeFactory {
 				attributes: el.attributes,
 				children: this.getChildNodes(treeData, el.children)
 			} as iNode;
-			childNodes.push(node);
 		});
-
-		return childNodes;
 	}
 
 	copyBranch(treeData: Array<iTreeElement>, headID: string): Array<iTreeElement> {
 		let newHead: iTreeElement = {} as iTreeElement;
 		const copiedBranch = new Array<iTreeElement>();
 		const copyPairs = new Array<{ old: iTreeElement, new: iTreeElement}>();
-		const aux = new Array<string>();
-		aux.push(headID);
-		while (aux.length) {
-			const target = aux.shift();
-			const el = treeData.find((te: iTreeElement) => te.id == target);
-			if (!el) throw new Error(`[ Element Tree Factory ] Element with ID ${target} not found.`);
-			el.children.forEach((c: string) => { aux.push(c) });
+		const flattenedIDs = this.flattenBranchIDs(treeData, headID);
+
+		// const aux = new Array<string>();
+		// aux.push(headID);
+		// while (aux.length) {
+		// 	const target = aux.shift();
+		// 	const el = treeData.find((te: iTreeElement) => te.id == target);
+		// 	if (!el) throw new Error(`[ Element Tree Factory ] Element with ID ${target} not found.`);
+		// 	el.children.forEach((c: string) => { aux.push(c) });
+		// 	const elCopy = this.copyElement(el);
+		// 	copyPairs.push({old: el, new: elCopy});
+		// 	if (target === headID) newHead = elCopy;
+		// 	else copiedBranch.push(elCopy);
+		// }
+
+
+		// this read better but is less efficient cuz it requires a duplicate look-up within tree data
+		flattenedIDs.forEach((id: string) => {
+			const el = treeData.find((el: iTreeElement) => el.id === id) as iTreeElement;
 			const elCopy = this.copyElement(el);
 			copyPairs.push({old: el, new: elCopy});
-			if (target === headID) newHead = elCopy;
+			if (id === headID) newHead = elCopy;
 			else copiedBranch.push(elCopy);
-		}
+		});
 
 		const updatedChildren = new Array<iTreeElement>();
 		copiedBranch.forEach((el: iTreeElement) => {
@@ -131,24 +156,40 @@ export default class ElementTreeFactory {
 	}
 
 	deleteBranch(treeData: Array<iTreeElement>, head: string, parent?: string): Array<iTreeElement> {
-		const idsToRemove = [ head ];
-		const aux = [ head ];
-		while (aux.length) {
-			const target = aux.shift();
-			const element = treeData.find((el: iTreeElement) => el.id === target);
-			if (!element) throw new Error(`[ Element Tree Factory ] Element with ID ${head} not found.`);
+		// const idsToRemove = [ head ];
+		// const aux = [ head ];
+		// while (aux.length) {
+		// 	const target = aux.shift();
+		// 	const element = treeData.find((el: iTreeElement) => el.id === target);
+		// 	if (!element) throw new Error(`[ Element Tree Factory ] Element with ID ${head} not found.`);
 
-			element.children.forEach((cid: string) => {
-				idsToRemove.push(cid);
-				aux.push(cid);
-			});
-			
-		}
+		// 	element.children.forEach((cid: string) => {
+		// 		idsToRemove.push(cid);
+		// 		aux.push(cid);
+		// 	});
+		// }
+		const idsToRemove = this.flattenBranchIDs(treeData, head);
+
 		if (parent) { // remove head's ID from parent element's children
 			const parentElement = treeData.find((el: iTreeElement) => el.id === parent) as iTreeElement;
 			parentElement.children = parentElement.children.filter((cid: string) => cid != head);
 		}
 		return treeData.filter((el: iTreeElement) => idsToRemove.find((id: string) => id === el.id) === undefined); // filter out elements with IDs in idsToRemove
+	}
+
+	flattenBranchIDs(treeData: Array<iTreeElement>, head: string): Array<string> {
+		const flattened = [ head ];
+		const aux = [ head ];
+		while (aux.length) {
+			const target = aux.shift();
+			const element = treeData.find((el: iTreeElement) => el.id === target);
+			if (!element) throw new Error(`[ Element Tree Factory ] Element with ID ${head} not found.`);
+			element.children.forEach((cid: string) => {
+				aux.push(cid);
+				flattened.push(cid);
+			});
+		}
+		return flattened;
 	}
 
 	private updateChildren(el: iTreeElement, childPairs: Array<any>): iTreeElement {

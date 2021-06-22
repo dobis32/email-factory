@@ -56,8 +56,6 @@ import { Options, Vue } from "vue-class-component";
             this.$emit('update-attribute', { name: this.name, newName: this.newName, value: this.newValue});
             this.$emit('editing', false);
         } 
-
-
    },
     cancel() {
         this.newName = this.name;
