@@ -100,7 +100,7 @@ import { Options, Vue } from "vue-class-component";
     },
 
     deleteBranch() { // TODO unit test
-      this.$store.dispatch('deleteBranch', this.id, this.parentid);
+      this.$store.dispatch('deleteBranch', { idToRemove: this.id, parentid: this.parentid });
     },
 
     async editElement() {

@@ -43,9 +43,10 @@ export default {
 		const newData = [ ...treeData, newElement ];
 		context.commit('setTreeData', newData);
 	},
-	deleteBranch: (context: any, idToRemove: string, parent?: string) : void => {
+	deleteBranch: (context: any, payload: { idToRemove: string, parentid?: string }) : void => {
+		const { idToRemove, parentid } = payload;
 		const treeData = context.state.treeData;
-		const updatedTreeData = context.state.elementTreeFactory.deleteBranch(treeData, idToRemove, parent);
+		const updatedTreeData = context.state.elementTreeFactory.deleteBranch(treeData, idToRemove, parentid);
 		context.commit('setTreeData', updatedTreeData);
 	},
 	updateElement: (context: any, payload: { eid: string, alias: string, attributes: Array<iHTMLAttribute>}): void => {
