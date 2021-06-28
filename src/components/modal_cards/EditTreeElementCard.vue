@@ -10,7 +10,7 @@
         <HTMLAttribute :name="att.name" :value="att.value" @remove-attribute="removeAttribute" @editing="handleEdit" />
       </div>
     </div>
-    <div id="add-attribute" class="button">
+    <div id="add-attribute" class="button" @click="addAttribute">
       Add Attribute
     </div>
     <div id="submit-button" :class="{ button: true, disabled: disableSubmit }" @click="submitData">Submit</div>
@@ -51,6 +51,13 @@ import HTMLAttribute from '@/components/modal_cards/modal_elements/HTMLAttribute
     },
     handleEdit(disable: boolean) {
       this.disableSubmit = disable
+    },
+    addAttribute() {
+      const newAttribute: iHTMLAttribute = {
+        name: 'New Attribute',
+        value: ''
+      }
+      this.newAttributes.push(newAttribute);
     }
   },
   beforeMount() {
@@ -90,7 +97,7 @@ export default class EditTreeElementCard extends Vue {}
 }
 
 .attribute-row {
-  width: 80%;
+  width: 90%;
   margin: 0px auto;
 }
 

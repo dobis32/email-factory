@@ -104,7 +104,6 @@ export default class ElementTreeFactory {
 		const copiedBranch = new Array<iTreeElement>();
 		const copyPairs = new Array<{ old: iTreeElement, new: iTreeElement}>();
 		const flattenedBanch = this.flattenBranch(treeData, headID);
-		console.log('[ Element Tree Factory ] flattened branch', flattenedBanch)
 		flattenedBanch.forEach((el: iTreeElement) => {
 			const elCopy = this.copyElement(el);
 			copyPairs.push({old: el, new: elCopy});
@@ -134,8 +133,6 @@ export default class ElementTreeFactory {
 	}
 
 	flattenBranch(treeData: Array<iTreeElement>, head: string): Array<iTreeElement> {
-		// const headElement = treeData.find((el: iTreeElement) => el.id === head);
-		// if (!headElement) throw new Error(`[ Element Tree Factory ] Element with ID ${head} not found.`);
 		const flattened = [ ] as Array<iTreeElement>;
 		const aux = [ head ];
 		while (aux.length) {
@@ -145,15 +142,12 @@ export default class ElementTreeFactory {
 			flattened.push(element);
 			element.children.forEach((cid: string) => {
 				aux.push(cid);
-				// const childElement = treeData.find((el: iTreeElement) => el.id === target) as iTreeElement;
-				// flattened.push(childElement);
 			});
 		}
 		return flattened;
 	}
 
 	private updateChildren(el: iTreeElement, childPairs: Array<any>): iTreeElement {
-		console.log('[ Element Tree Factory ] Updating children', el, childPairs);
 		const updatedChildren = new Array<string>();
 		el.children.forEach((c: string) => {
 			const targetPair = childPairs.find((pair: any) => pair.old.id === c)

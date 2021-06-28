@@ -99,6 +99,7 @@ export default class HTMLAttribute extends Vue {}
     #edit-btn {
         background-color: orange;
         width: 60px;
+        margin-right: 16px;
     }
 
    
@@ -128,7 +129,7 @@ export default class HTMLAttribute extends Vue {}
         display: inline-block;
         padding: 10px 0px;
         margin-top: 3px;
-        width: 60px;
+        width: 120px;
         justify-content: center;
     }
 

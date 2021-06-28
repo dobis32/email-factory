@@ -111,7 +111,6 @@ import { Options, Vue } from "vue-class-component";
       };
       this.$store.dispatch('setModal', { card, data });
       const { alias, attributes } = await this.openModal();
-      console.log('[ Tree Element Vue ] edit element mode result', { alias, attributes });
       this.$store.dispatch('updateElement', { eid: this.id, alias, attributes });
     }
   }
@@ -137,6 +136,7 @@ export default class TreeElement extends Vue {}
   padding: 30px 0px;
   margin-bottom: 0px;
   cursor: pointer;
+  overflow: hidden;
 }
 
 .table {
