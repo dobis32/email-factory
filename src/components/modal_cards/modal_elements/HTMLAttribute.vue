@@ -23,7 +23,7 @@
         </div>
         <div id="static-att" v-else>
             <div id="att-name-heading">
-               <h3>{{ name }}</h3>
+               <h3>{{ newName }}</h3>
             </div>
             <div id="edit-btn" class="btn" @click="edit">
                 Edit
@@ -33,6 +33,7 @@
 </template>
 
 <script lang="ts">
+import iHTMLAttribute from "@/interfaces/iHTMLAttribute";
 import { Options, Vue } from "vue-class-component";
 
 @Options({
@@ -43,24 +44,27 @@ import { Options, Vue } from "vue-class-component";
         newValue: ''
     };
   },
-  props: [ 'name', 'value' ],
+  props: [ 'name', 'value', 'attributes' ],
   methods: {
     edit() {
         this.editing = true;
         this.$emit('editing', true);
     },
     save() {
-        this.editing = false;
+        const attributeNames = this.attributes.map((att: iHTMLAttribute) => att.name.toLowerCase());
         if (!this.newName.length) alert('Element attributes must have a name');
+        else if (attributeNames.find((name: string) => name === this.newName.toLowerCase() && name != this.newName )) alert(`An attribute with the name ${this.newName} already exists`);
         else {
+            this.editing = false;
             this.$emit('update-attribute', { name: this.name, newName: this.newName, value: this.newValue});
             this.$emit('editing', false);
         } 
-   },
+    },
     cancel() {
         this.newName = this.name;
         this.newValue = this.value;
         this.editing = false;
+
         this.$emit('editing', false);
     },
     remove() {
