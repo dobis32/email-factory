@@ -10,13 +10,11 @@ export default {
 		return state.elementTreeFactory.buildTree(state.treeData);
 	},
 	getModalPayload: (state: any) => {
-		const payload = {
+		return {
 			modalState: state.modalState,
 			activeModal: state.activeModal,
 			modalcb: state.modalcb,
 			modalData: state.modalData
 		} as iModalPayload;
-
-		return payload;
 	}
 };

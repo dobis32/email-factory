@@ -23,7 +23,7 @@
         </div>
         <div id="static-att" v-else>
             <div id="att-name-heading">
-               <h3>{{ name }}</h3>
+               <h3>{{ newName }}</h3>
             </div>
             <div id="edit-btn" class="btn" @click="edit">
                 Edit

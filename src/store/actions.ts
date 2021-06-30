@@ -8,12 +8,11 @@ export default {
 		context.commit('setModalState', false);
 		context.commit('setModalCard', _DEFAULT_STATE_.activeModal);
 	},
-	openModal: (context: any, modalCard: string) => {
+	openModal: (context: any) => {
 		context.commit('setModalState', true);
 	},
 	setModal: (context: any, payload: { card: string, data: any }): void => {
 		const { card, data } = payload;
-		// const { activeElement } = data;
 		context.commit('setModalCard', card);
 		context.commit('setModalData', data);
 	},
@@ -60,5 +59,6 @@ export default {
 	},
 	modalCanSubmit: (context: any, submit: boolean): void => {
 		context.commit('modalCanSubmit', submit);
-	}
+	},
+
 };

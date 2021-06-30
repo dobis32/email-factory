@@ -7,7 +7,7 @@
     <div id="attribute-row">
       <h3>Attributes:</h3>
       <div v-for="(att) of newAttributes" v-bind:key="att" :id="`attribute-${att.name}`" class="attribute-row" >
-        <HTMLAttribute :name="att.name" :value="att.value" @remove-attribute="removeAttribute" @editing="handleEdit" />
+        <HTMLAttribute :name="att.name" :value="att.value" @update-attribute="updateAttribute" @remove-attribute="removeAttribute" @editing="handleEdit" />
       </div>
     </div>
     <div id="add-attribute" class="button" @click="addAttribute">
@@ -45,9 +45,12 @@ import HTMLAttribute from '@/components/modal_cards/modal_elements/HTMLAttribute
     },
     updateAttribute(payload: { name: string, newName: string, value: string }) {
       const { name, newName, value } = payload;
-      const target  = this.newAttributes.find((a: iHTMLAttribute) => a.name === name);
+      const updatedAttributes = [ ...this.newAttributes ];
+      const target = updatedAttributes.find((a: iHTMLAttribute) => a.name === name);
+      if (!target) throw new Error(`[ Edit Tree Element Card Vue ] Failed to find attribute with name ${name}`)
       target.name = newName;
       target.value = value;
+      // this.$store.dispatch('updateModalDataAttributes', updatedAttributes);
     },
     handleEdit(disable: boolean) {
       this.disableSubmit = disable
