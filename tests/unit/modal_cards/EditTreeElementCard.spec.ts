@@ -1,6 +1,5 @@
 import { mount } from '@vue/test-utils';
 import EditTreeElementCard from '@/components/modal_cards/EditTreeElementCard.vue';
-import { HTML_TD } from '@/constants/SupportedHTMLElementTypes';
 import iHTMLAttribute from '@/interfaces/iHTMLAttribute';
 
 describe('EditTreeElementCard.vue', () => {
@@ -82,7 +81,7 @@ describe('EditTreeElementCard.vue', () => {
     });
 
     it('should render html attributes of the assumed element', () => {
-        expect(wrapper.findAllComponents({ name: 'HTMLAttribute' }).length).toEqual(wrapper.vm.newAttributes.length);
+        expect(wrapper.findAllComponents({ name: 'EditableHTMLAttribute' }).length).toEqual(wrapper.vm.newAttributes.length);
     });
 
     // Hooks

@@ -103,7 +103,7 @@ export default class ElementTreeFactory {
 		let newHead: iTreeElement = {} as iTreeElement;
 		const copiedBranch = new Array<iTreeElement>();
 		const copyPairs = new Array<{ old: iTreeElement, new: iTreeElement}>();
-		const flattenedBanch = this.flattenBranch(treeData, headID);
+		const flattenedBanch = this.getFlatBranch(treeData, headID);
 		flattenedBanch.forEach((el: iTreeElement) => {
 			const elCopy = this.copyElement(el);
 			copyPairs.push({old: el, new: elCopy});
@@ -123,28 +123,28 @@ export default class ElementTreeFactory {
 	}
 
 	deleteBranch(treeData: Array<iTreeElement>, head: string, parent?: string): Array<iTreeElement> {
-		const idsToRemove = this.flattenBranch(treeData, head).map((el: iTreeElement) => el.id );
+		const idsToRemove = this.getFlatBranch(treeData, head).map((el: iTreeElement) => el.id );
 
-		if (parent) { // remove head's ID from parent element's children
+		if (parent) { // if there's a prent element, it needs its children updated
 			const parentElement = treeData.find((el: iTreeElement) => el.id === parent) as iTreeElement;
 			parentElement.children = parentElement.children.filter((cid: string) => cid != head);
 		}
 		return treeData.filter((el: iTreeElement) => idsToRemove.find((id: string) => id === el.id) === undefined); // filter out elements with IDs in idsToRemove
 	}
 
-	flattenBranch(treeData: Array<iTreeElement>, head: string): Array<iTreeElement> {
-		const flattened = [ ] as Array<iTreeElement>;
+	getFlatBranch(treeData: Array<iTreeElement>, head: string): Array<iTreeElement> {
+		const flatBranch = [ ] as Array<iTreeElement>;
 		const aux = [ head ];
 		while (aux.length) {
 			const target = aux.shift();
 			const element = treeData.find((el: iTreeElement) => el.id === target);
 			if (!element) throw new Error(`[ Element Tree Factory ] Element with ID ${target} not found.`);
-			flattened.push(element);
+			flatBranch.push(element);
 			element.children.forEach((cid: string) => {
 				aux.push(cid);
 			});
 		}
-		return flattened;
+		return flatBranch;
 	}
 
 	private updateChildren(el: iTreeElement, childPairs: Array<any>): iTreeElement {

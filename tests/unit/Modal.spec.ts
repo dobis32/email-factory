@@ -73,6 +73,6 @@ describe('Modal.vue', () => {
         wrapper.vm.closeModal();
         expect(wrapper.vm.closeModal).toBeDefined();
         expect(typeof wrapper.vm.closeModal).toEqual('function');
-        expect($store.dispatch).toHaveBeenCalled();
+        expect($store.dispatch).toHaveBeenCalledWith('closeModal');
     });
 });

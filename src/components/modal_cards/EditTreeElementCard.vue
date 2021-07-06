@@ -7,7 +7,7 @@
     <div id="attribute-row">
       <h3>Attributes:</h3>
       <div v-for="(att) of newAttributes" v-bind:key="att" :id="`attribute-${att.name}`" class="attribute-row" >
-        <HTMLAttribute :name="att.name" :value="att.value" @update-attribute="updateAttribute" @remove-attribute="removeAttribute" @editing="handleEdit" />
+        <EditableHTMLAttribute :name="att.name" :value="att.value" :existingAttributes="newAttributes" @update-attribute="updateAttribute" @remove-attribute="removeAttribute" @editing="handleEdit" />
       </div>
     </div>
     <div id="add-attribute" class="button" @click="addAttribute">
@@ -21,9 +21,9 @@
 import SupportedHTMLElement from "@/classes/SupportedHTMLElement";
 import iHTMLAttribute from "@/interfaces/iHTMLAttribute";
 import { Options, Vue } from "vue-class-component";
-import HTMLAttribute from '@/components/modal_cards/modal_elements/HTMLAttribute.vue';
+import EditableHTMLAttribute from '@/components/modal_cards/modal_elements/EditableHTMLAttribute.vue';
 @Options({
-  components: { HTMLAttribute },
+  components: { EditableHTMLAttribute },
   data: () => {
     return { 
     newAlias: '',
@@ -50,7 +50,6 @@ import HTMLAttribute from '@/components/modal_cards/modal_elements/HTMLAttribute
       if (!target) throw new Error(`[ Edit Tree Element Card Vue ] Failed to find attribute with name ${name}`)
       target.name = newName;
       target.value = value;
-      // this.$store.dispatch('updateModalDataAttributes', updatedAttributes);
     },
     handleEdit(disable: boolean) {
       this.disableSubmit = disable

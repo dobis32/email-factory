@@ -1,11 +1,10 @@
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
 import _SUPPORTED_HTML_ELEMENTS_ from '@/constants/SupportedHTMLElementTypes';
 import iTreeElement from '@/interfaces/iTreeElement';
-import { HTML_TABLE, HTML_TR, HTML_TD, HTML_P } from '@/constants/SupportedHTMLElementTypes';
-import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
 import { _TESTING_HASH_ } from '@/constants/Testing';
 import _DEFAULT_STATE_ from '@/constants/DefaultState';
 import iNode from '@/interfaces/iNode';
+
 describe('ElementTreeFactory.ts', () => {
     let mockTreeData: Array<iTreeElement>;
     let factory: ElementTreeFactory;
@@ -24,9 +23,13 @@ describe('ElementTreeFactory.ts', () => {
     });
 
     it('should have a function that creates a unique ID', () => {
+        const id1 = factory.getNewElementID();
+        const id2 = factory.getNewElementID();
+
         expect(factory.getNewElementID).toBeDefined();
         expect(typeof factory.getNewElementID).toEqual('function');
         expect(typeof factory.getNewElementID()).toEqual('string');
+        expect(id1 === id2).toBeFalsy();
     });
 
     it('should have a function to find an element by ID', () => {
@@ -121,6 +124,16 @@ describe('ElementTreeFactory.ts', () => {
         expect(factory.deleteBranch).toBeDefined();
         expect(typeof factory.deleteBranch).toEqual('function');
         expect(updatedTree).toEqual(copiedBranch);
+    });
+
+    it('should have a function that retrieves a flat branch specified by head ID', () => {
+        const treeData = _DEFAULT_STATE_.treeData;
+        const expectedBranchData = [ treeData[2], treeData[3] ];
+        const head = treeData[2].id;
+        const flatBranch = factory.getFlatBranch(treeData, head);
+        expect(factory.getFlatBranch).toBeDefined();
+        expect(typeof factory.getFlatBranch).toEqual('function');
+        expect(flatBranch).toEqual(expectedBranchData);
     });
 });
 

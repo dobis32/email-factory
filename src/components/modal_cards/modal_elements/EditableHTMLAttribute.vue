@@ -3,11 +3,11 @@
         <div v-if="editing">
             <div>
                 <label for="attName">Name:</label>
-                <input type="text" v-model="newName" name="attName" class="attribute-input" />
+                <input type="text" v-model="newName" name="attName" id="name-input" class="attribute-input" />
             </div>
             <div>
                 <label for="attValue">Value:</label>
-                <input type="text" v-model="newValue" name="attValue" class="attribute-input" />
+                <input type="text" v-model="newValue" name="attValue" id="value-input" cclass="attribute-input" />
             </div>
             <div  class="control-row">
                 <div id="save-btn"  class="btn" @click="save">
@@ -44,16 +44,16 @@ import { Options, Vue } from "vue-class-component";
         newValue: ''
     };
   },
-  props: [ 'name', 'value', 'attributes' ],
+  props: [ 'name', 'value', 'existingAttributes' ],
   methods: {
     edit() {
         this.editing = true;
         this.$emit('editing', true);
     },
     save() {
-        const attributeNames = this.attributes.map((att: iHTMLAttribute) => att.name.toLowerCase());
+        // const attributeNames = this.existingAttributes.map((att: iHTMLAttribute) => att.name.toLowerCase());
         if (!this.newName.length) alert('Element attributes must have a name');
-        else if (attributeNames.find((name: string) => name === this.newName.toLowerCase() && name != this.newName )) alert(`An attribute with the name ${this.newName} already exists`);
+        else if (this.existingAttributes.find((att: iHTMLAttribute) => att.name === this.newName.toLowerCase() && name != this.newName )) alert(`An attribute with the name ${this.newName} already exists`);
         else {
             this.editing = false;
             this.$emit('update-attribute', { name: this.name, newName: this.newName, value: this.newValue});
