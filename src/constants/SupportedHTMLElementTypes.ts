@@ -8,7 +8,6 @@ import { AChildren,
     TDChildren,
     PChildren,
     HChildren } from '@/constants/HTMLChildren/index';
-// TODO: figure out which elements <a> can be a sibling of; I think SFMC hoists/propagates <a> tags upwards
 export const HTML_TABLE = new SupportedHTMLElement('table', TableChildren);
 export const HTML_TR = new SupportedHTMLElement('tr', TRChildren);
 export const HTML_TH = new SupportedHTMLElement('th', THChildren);

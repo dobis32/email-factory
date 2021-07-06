@@ -99,7 +99,7 @@ import { Options, Vue } from "vue-class-component";
       this.$store.dispatch('addBranch', { branch: flattenedBranch, parentID });
     },
 
-    deleteBranch() { // TODO unit test
+    deleteBranch() {
       this.$store.dispatch('deleteBranch', { idToRemove: this.id, parentid: this.parentid });
     },
 

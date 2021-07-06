@@ -53,8 +53,15 @@ describe('TreeElement.vue', () => {
 	let state: any;
 	let $store: any;
 	let modalResult: any;
-	const openModal = () => Promise.resolve(modalResult);
+	let openModal: Function;
 	beforeEach(() => {
+		modalResult = {
+			alias: 'new-el-name',
+			attributes: [ { name: 'style', value: 'color: #f00;' }]
+		};
+
+		openModal = jest.fn(() => { return Promise.resolve(modalResult)});
+
 		mockProps = {
 			isRoot: false,
 			type: mockElement,
@@ -135,12 +142,33 @@ describe('TreeElement.vue', () => {
 	});
 
 	it('should have a function for performing an action on the assumed tree element', () => {
-		wrapper.vm.addChild = jest.fn(wrapper.vm.addChild);
-		const action  = 'add';
-		wrapper.vm.performAction(action);
+		wrapper.vm.addChild = jest.fn(() => {});
+		const actionAdd  = 'add';
+
+		wrapper.vm.copyBranch = jest.fn(() => {});
+		const actionCopy = 'copy';
+
+		wrapper.vm.editElement = jest.fn(() => {});
+		const actionEdit = 'edit';
+
+		wrapper.vm.deleteBranch = jest.fn(() => {});
+		const actionDelete = 'delete';
+
+
 		expect(wrapper.vm.performAction).toBeDefined();
 		expect(typeof wrapper.vm.performAction).toEqual('function');
+
+		wrapper.vm.performAction(actionAdd);
 		expect(wrapper.vm.addChild).toHaveBeenCalled();
+
+		wrapper.vm.performAction(actionCopy);
+		expect(wrapper.vm.copyBranch).toHaveBeenCalled();
+		
+		wrapper.vm.performAction(actionEdit);
+		expect(wrapper.vm.editElement).toHaveBeenCalled();
+
+		wrapper.vm.performAction(actionDelete);
+		expect(wrapper.vm.deleteBranch).toHaveBeenCalled();
 	});
 
 	it('should have a function to add a child to the assumed tree element', async () => {
@@ -170,6 +198,39 @@ describe('TreeElement.vue', () => {
 		expect(typeof wrapper.vm.copyBranch).toEqual('function');
 		expect(dispatch).toHaveBeenCalled();
 		expect(dispatch).toHaveBeenCalledWith('addBranch', payload);
+	});
+
+	it('should have a function for deleting a branch with the assumed tree element as the branch root', () => {
+		const treeData = _DEFAULT_STATE_.treeData;
+		const idToRemove = mockProps.id;
+		const parentid = mockProps.parentid;
+		const payload = {
+			idToRemove,
+			parentid
+		};
+		wrapper.vm.deleteBranch();
+		expect(wrapper.vm.deleteBranch).toBeDefined();
+		expect(typeof wrapper.vm.deleteBranch).toEqual('function');
+		expect(dispatch).toHaveBeenCalledWith('deleteBranch', payload);
+	});
+
+	it('should have a function for editing an element and opening the corresponding modal card', async () => {
+		const cardToOpen = 'EditTreeElementCard'; // this is hard-coded; adjust according to what is in the tested function
+		const props = wrapper.props();
+		const initAlias = wrapper.vm.alias;
+		const initAttributes = wrapper.vm.initAttributes;
+		const data = {
+			alias: props.alias,
+			attributes: props.attributes
+		}
+		const modalPayload = {
+			alias: initAlias,
+			attributes: initAttributes
+		};
+		await wrapper.vm.editElement();
+
+		expect(wrapper.vm.editElement).toBeDefined();
+		expect(typeof wrapper.vm.editElement).toEqual('function');
 	});
 
 	// Props
@@ -214,4 +275,6 @@ describe('TreeElement.vue', () => {
 		expect(props.isRoot).toEqual(mockProps.isRoot);
 		expect(typeof props.isRoot).toEqual('boolean');
 	});
+
+
 });

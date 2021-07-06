@@ -1,33 +1,44 @@
 import mutations from '@/store/mutations';
 import iTreeElement from '@/interfaces/iTreeElement';
+import iAppState from '@/interfaces/iAppState';
 import DefaultStateIndex from '@/constants/DefaultState';
+import ElementTreeFactory from '@/classes/ElementTreeFactory';
+import { _TESTING_HASH_ } from '@/constants/Testing';
 
 describe('mutations.ts', () => {
     let treeData: Array<iTreeElement> 
     let modalState: boolean;
     let activeModal: string;
     let modalcb: Function;
-    let state: any;
-
+    let modalCanSubmit: boolean;
+    let modalData: any;
+    let elementTreeFactory: ElementTreeFactory;
+    let state: iAppState;
 
 	beforeEach(() => {
-        treeData = DefaultStateIndex.treeData
+        treeData = DefaultStateIndex.treeData;
         modalState = DefaultStateIndex.modalState;
         activeModal = DefaultStateIndex.activeModal;
         modalcb = DefaultStateIndex.modalcb;
+        modalCanSubmit = DefaultStateIndex.modalCanSubmit;
+        modalData = DefaultStateIndex.modalData;
+        elementTreeFactory = DefaultStateIndex.elementTreeFactory;
 
 		state = {
             treeData,
             modalState,
             activeModal,
-            modalcb
+            modalcb,
+            modalCanSubmit,
+            modalData,
+            elementTreeFactory
         }
 	});
 
    it('should have a function to update the tree data of the state', () => {
     const oldData = state.treeData;
-    const newData = [...state.treeData]
-    newData[0].children = new Array<iTreeElement>();
+    const newData = [...state.treeData];
+    newData[0].children = new Array<string>();
 
     mutations.setTreeData(state, newData);
 
@@ -47,17 +58,6 @@ describe('mutations.ts', () => {
     expect(oldState == state.modalState).toEqual(false);
    });
 
-   it('should have a function to reset the active modal card of the state', () => {
-    const card = DefaultStateIndex.activeModal;
-    state.activeModal = card;
-
-    mutations.setModalCard(state, card);
-    
-    expect(mutations.setModalCard).toBeDefined();
-    expect(typeof mutations.setModalCard).toEqual('function');
-    expect(state.activeModal).toEqual(DefaultStateIndex.activeModal);
-   });
-
    it('should have a function to set the active modal card of the state', () => {
     const oldCard = state.activeModal;
     const card = 'card';
@@ -70,6 +70,14 @@ describe('mutations.ts', () => {
     expect(oldCard == state.activeModal).toEqual(false);
    });
 
+   it('should have a function to set the data used by the modal', () => {
+    const modalData = {};
+    mutations.setModalData(state, modalData);
+    expect(mutations.setModalData).toBeDefined();
+    expect(typeof mutations.setModalData).toEqual('function');
+    expect(state.modalData).toEqual(modalData);
+   });
+
    it('should have a function to set the modal callback function of the state', () => {
     const newCB = () => { return false; }
 
@@ -79,4 +87,12 @@ describe('mutations.ts', () => {
     expect(typeof mutations.setModalCallback).toEqual('function');
     expect(state.modalcb).toEqual(newCB);
    });
+
+   it('should have a function to set a boolean which decides if the modal can submit any data or not', () => {
+    const canSubmit = !DefaultStateIndex.modalCanSubmit;
+    mutations.modalCanSubmit(state, canSubmit);
+    expect(mutations.modalCanSubmit).toBeDefined();
+    expect(typeof mutations.modalCanSubmit).toEqual('function');
+    expect(state.modalCanSubmit).toEqual(canSubmit);
+   });  
 });
