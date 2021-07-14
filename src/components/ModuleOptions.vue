@@ -17,8 +17,9 @@ import { Options, Vue } from 'vue-class-component';
     saveModule(): void {
       return;
     },
-    generateCode(): void {
-      this.$store.dispatch('openModal', 'GeneratedCodeCard');
+    async generateCode(): Promise<void> {
+      this.$store.dispatch('setModal', { card: 'GeneratedCodeCard', data: {} });
+      await this.$store.dispatch('openModal');
     }
   },
   props: {

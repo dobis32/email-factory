@@ -1,9 +1,9 @@
 /* eslint-disable */
+import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
 import iAppState from '@/interfaces/iAppState';
-import iTreeElement from '@/interfaces/iTreeElement';
 
 export default {
-	setTreeData: (state: iAppState, updatedTreeData: Array<iTreeElement>): void => {
+	setTreeData: (state: iAppState, updatedTreeData: Array<SupportedHTMLElement>): void => {
 		state.treeData = updatedTreeData;
 	},
 

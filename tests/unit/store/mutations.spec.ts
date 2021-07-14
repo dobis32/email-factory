@@ -1,12 +1,12 @@
 import mutations from '@/store/mutations';
-import iTreeElement from '@/interfaces/iTreeElement';
 import iAppState from '@/interfaces/iAppState';
 import DefaultStateIndex from '@/constants/DefaultState';
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
 import { _TESTING_HASH_ } from '@/constants/Testing';
+import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
 
 describe('mutations.ts', () => {
-    let treeData: Array<iTreeElement> 
+    let treeData: Array<SupportedHTMLElement> 
     let modalState: boolean;
     let activeModal: string;
     let modalcb: Function;
@@ -38,7 +38,7 @@ describe('mutations.ts', () => {
    it('should have a function to update the tree data of the state', () => {
     const oldData = state.treeData;
     const newData = [...state.treeData];
-    newData[0].children = new Array<string>();
+    newData[0].setElementChildren(new Array<string>());
 
     mutations.setTreeData(state, newData);
 

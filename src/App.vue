@@ -11,9 +11,7 @@ import { Options, Vue } from "vue-class-component";
 import TreeEditor from "./components/TreeEditor.vue";
 import ModuleOptions from "./components/ModuleOptions.vue";
 import Modal from "./components/Modal.vue";
-import ElementTreeFactory from "./classes/ElementTreeFactory";
 import _SUPPORTED_HTML_ELEMENTS_ from "./constants/SupportedHTMLElementTypes"
-// const factory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_);
 @Options({
   components: {
     TreeEditor,
@@ -47,10 +45,6 @@ import _SUPPORTED_HTML_ELEMENTS_ from "./constants/SupportedHTMLElementTypes"
     stopPropagation: (e: Event) => {
       e.stopPropagation();
     },
-    // setModalCallback() { new Promise((resolve) => {
-    //     this.$store.dispatch('setModalCB', resolve);
-    //   });
-    // }
     openModal() {
       return new Promise((resolve) => {
         this.$store.dispatch('setModalCallback', resolve);

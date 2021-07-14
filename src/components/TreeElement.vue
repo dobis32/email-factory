@@ -4,7 +4,6 @@
       <h3 id="alias">{{alias}}</h3>
       <h4 id="type">({{ type }})</h4>
     </div>
-  
     <TreeElement
       v-for="(child) of children"
       :key="child.id"
@@ -21,7 +20,7 @@
 
 <script lang="ts">
 import ElementTreeFactory from "@/classes/ElementTreeFactory";
-import iTreeElement from "@/interfaces/iTreeElement";
+import SupportedHTMLElement from "@/classes/SupportedHTMLElement";
 import { Options, Vue } from "vue-class-component";
 @Options({
   props: ["type", "alias", "id", "children", "parentid", "isRoot", "attributes"],
@@ -74,25 +73,27 @@ import { Options, Vue } from "vue-class-component";
 
     async addChild() {
       const f: ElementTreeFactory = this.$store.state.elementTreeFactory;
-      const treeData: Array<iTreeElement> = this.$store.state.treeData;
+      const treeData: Array<SupportedHTMLElement> = this.$store.state.treeData;
       const el = f.findElementByID(treeData, this.id);
-      if (!el) throw new Error(`[ Tree element Vue ] element of type ${this.id} is not supported`);
-      const activeElement = el ? el : {};
-      const card = 'CreateChildElementCard';
-      const data = { activeElement };
-      this.$store.dispatch('setModal', { card, data });
-      const result: { alias: string, type: string } = await this.openModal();
-      const { alias, type } = result;
-      if (type) {
-        const newEl = f.createTreeElement(type, false, alias);
-        this.$store.dispatch('addChild', { newElement: newEl, parentID: this.id});
+      if (el) {
+        const activeElement = el ? el : {};
+        const card = 'CreateChildElementCard';
+        const data = { activeElement };
+        this.$store.dispatch('setModal', { card, data });
+        const result: { alias: string, type: string } = await this.openModal();
+        const { alias, type } = result;
+        if (type) {
+          const newEl = f.createTreeElement(type, false, alias);
+          this.$store.dispatch('addChild', { newElement: newEl, parentID: this.id});
+        }
       }
+      
     },
 
     copyBranch() {
       const f: ElementTreeFactory = this.$store.state.elementTreeFactory;
       const headID = this.id;
-      const treeData: Array<iTreeElement> = this.$store.state.treeData;
+      const treeData: Array<SupportedHTMLElement> = this.$store.state.treeData;
       const flattenedBranch = f.copyBranch(treeData, headID);
       let parentID: string | undefined;
       if (!this.isRoot) parentID = this.parentid;

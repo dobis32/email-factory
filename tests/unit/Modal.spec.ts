@@ -1,7 +1,6 @@
 import { mount } from '@vue/test-utils';
 import Modal from '@/components/Modal.vue';
 import iModalPayload from '@/interfaces/iModalPayload';
-import iTreeElement from '@/interfaces/iTreeElement';
 
 describe('Modal.vue', () => {
     let wrapper: any;

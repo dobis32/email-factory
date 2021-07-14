@@ -1,14 +1,14 @@
 <template>
   <div id="modal-card" @click="stopPropagation">
-    <h1>{{ activeElement.alias }}</h1>
-    <h3>{{ activeElement.element.getElementType() }}</h3>
+    <h1 id="element-alias">{{ activeElement.getElementAlias() }}</h1>
+    <h3 id="element-type">{{ activeElement.getElementType() }}</h3>
     <div id="add-button" class="action-button" @click="selectAction('add')">
       Add Child
     </div>
     <div id="edit-button" class="action-button" @click="selectAction('edit')">
       Edit Element
     </div>
-    <div id="duplicate-button" class="action-button" @click="selectAction('copy')">
+    <div id="copy-button" class="action-button" @click="selectAction('copy')">
       Copy Branch
     </div>
     <div id="delete-button" class="action-button" @click="selectAction('delete')">

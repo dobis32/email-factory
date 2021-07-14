@@ -6,7 +6,6 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import ElementTreeFactory from "@/classes/ElementTreeFactory";
 @Options({
   data: () => {
     return {
@@ -15,11 +14,11 @@ import ElementTreeFactory from "@/classes/ElementTreeFactory";
   },
   props: ["elementTreeData"],
   inject: ["stopPropagation"],
-  beforeMount() {
-    // this.generatedCode = ElementTreeFactory.generateCode(this.elementTreeData);
-  },
+  // beforeMount() {
+  //   const f = this.$store.state.elementTreeFactory;
+  // },
   beforeUnmount() {
-    this.$store.dispatch("resetModalCB");
+    this.$store.dispatch('closeModal');
   }
 })
 export default class GeneratedCodeCard extends Vue {}

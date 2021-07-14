@@ -4,49 +4,20 @@ import iTreeElement from '@/interfaces/iTreeElement';
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
 import _SUPPORTED_HTML_ELEMENTS_ from '@/constants/SupportedHTMLElementTypes';
 import _DEFAULT_STATE_ from '@/constants/DefaultState';
-import { HTML_TABLE, HTML_P, HTML_TD, HTML_TR } from '@/constants/SupportedHTMLElementTypes';
 import iHTMLAttribute from '@/interfaces/iHTMLAttribute';
 import { _TESTING_HASH_ } from '@/constants/testing';
+import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
 
 const elFactory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_, _TESTING_HASH_);
 describe('TreeElement.vue', () => {
-	const mockChildren: Array<iTreeElement> = [
-		{
-			id: 'bar',
-			root: false,
-			element: HTML_TR,
-			alias: 'rootTR',
-			children: [
-				'fizz'
-			],
-			attributes: new Array<iHTMLAttribute>()
-		},
-		{
-			id: 'fizz',
-			root: false,
-			element: HTML_TD,
-			alias: 'rootTD',
-			children: [
-				'buzz'
-			],
-			attributes: new Array<iHTMLAttribute>()
-		},
-		{
-			id: 'buzz',
-			root: false,
-			element: HTML_P,
-			alias: 'rootP',
-			children: [],
-			attributes: new Array<iHTMLAttribute>()
-		}
-	];
+	const mockChildren: Array<SupportedHTMLElement> = _DEFAULT_STATE_.treeData
 	const mockBuiltBranch = elFactory.buildTree(mockChildren);
-	const mockElement = HTML_TABLE.getElementType();
+	const mockElement = 'table';
 	const mockAlias = 'rootTable';
 	const mockParentid = _TESTING_HASH_;
 	const numberOfChildren = mockChildren.length;
 	const mockTreeElement = 'tree-element';
-	const mockID = _DEFAULT_STATE_.treeData[0].id;
+	const mockID = _DEFAULT_STATE_.treeData[0].getElementID();
 	let mockProps: any;
 	let wrapper: any;
 	let dispatch: any;
@@ -173,12 +144,13 @@ describe('TreeElement.vue', () => {
 
 	it('should have a function to add a child to the assumed tree element', async () => {
 		wrapper.vm.performAction = jest.fn(wrapper.vm.performAction);
-		const supportedElement = elFactory.getSupportedElement(mockProps.type);
-		const assumedElement = elFactory.findElementByID(state.treeData, mockProps.id) as iTreeElement;
+		// const supportedElement = elFactory.getSupportedElement(mockProps.type);
+		const assumedElement = elFactory.findElementByID(state.treeData, mockProps.id) as SupportedHTMLElement;
 		const card = 'CreateChildElementCard';
 		const data = { activeElement: assumedElement };
 		const payload1 = { card, data };
-		modalResult = { alias: 'foobar', type: assumedElement.children[0] };
+		const assumedChildren = assumedElement.getElementChildren()[0]
+		modalResult = { alias: 'foobar', type: assumedChildren };
 		const newEl = elFactory.createTreeElement(modalResult.type, modalResult.alias);
 		const payload2 = { newElement: newEl, parentID: mockProps.id };
 		await wrapper.vm.addChild();
@@ -201,7 +173,7 @@ describe('TreeElement.vue', () => {
 	});
 
 	it('should have a function for deleting a branch with the assumed tree element as the branch root', () => {
-		const treeData = _DEFAULT_STATE_.treeData;
+		// const treeData = _DEFAULT_STATE_.treeData;
 		const idToRemove = mockProps.id;
 		const parentid = mockProps.parentid;
 		const payload = {

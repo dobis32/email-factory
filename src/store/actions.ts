@@ -2,6 +2,7 @@
 import _DEFAULT_STATE_ from '@/constants/DefaultState';
 import iTreeElement from '@/interfaces/iTreeElement';
 import iHTMLAttribute from '@/interfaces/iHTMLAttribute';
+import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
 
 export default {
 	closeModal: (context: any) => {
@@ -22,23 +23,23 @@ export default {
 	setModalCallback: (context: any, cb: Function) : void => {
 		context.commit('setModalCallback', cb);
 	},
-	addBranch: (context: any, payload: {branch: Array<iTreeElement>, parentID: string | undefined}): void => {
+	addBranch: (context: any, payload: {branch: Array<SupportedHTMLElement>, parentID: string | undefined}): void => {
 		const { branch, parentID } = payload;
 		const treeData = context.state.treeData;
 		if (parentID) {
-			const parent = treeData.find((el: iTreeElement) => el.id == parentID);
+			const parent = treeData.find((el: SupportedHTMLElement) => el.getElementID() == parentID);
 			if (parent === undefined) throw new Error(`[ Store Actions ] Failed to add branch. Parent element with ID ${parentID} not found`);
-			parent.children.push(branch[0].id); // This assumes the head node is at index 0
+			parent.children.push(branch[0].getElementID()); // This assumes the head node is at index 0
 		}
 		const newData = [ ...treeData, ...branch ];
 		context.commit('setTreeData', newData);
 	},
-	addChild: (context: any, payload: {newElement: iTreeElement, parentID: string}): void => {
+	addChild: (context: any, payload: {newElement: SupportedHTMLElement, parentID: string}): void => {
 		const { newElement, parentID } = payload;
 		const treeData = context.state.treeData;
-		const parent = treeData.find((el: iTreeElement) => el.id == parentID);
+		const parent = treeData.find((el: SupportedHTMLElement) => el.getElementID() == parentID);
 		if (parent === undefined) throw new Error(`[ Store Actions ] Failed to add child. Parent element with ID ${parentID} not found`);
-		parent.children.push(newElement.id);
+		parent.children.push(newElement.getElementID());
 		const newData = [ ...treeData, newElement ];
 		context.commit('setTreeData', newData);
 	},
@@ -50,12 +51,14 @@ export default {
 	},
 	updateElement: (context: any, payload: { eid: string, alias: string, attributes: Array<iHTMLAttribute>}): void => {
 		const { eid, alias, attributes } = payload;
-		const treeData = context.state.treeData;
-		const target = treeData.find((el: iTreeElement) => el.id === eid);
-		target.alias = alias;
-		target.attributes = attributes;
+		const treeData: Array<SupportedHTMLElement> = context.state.treeData;
+		const target = treeData.find((el: SupportedHTMLElement) => el.getElementID() === eid);
+		if (!target) throw new Error(`[ Store Actions ] Failed to update element with ID ${eid}`)
+		target.setElementAlias(alias);
+		target.setElementAttributes(attributes);
 		const updatedTreeData = [ ...treeData ];
 		context.commit('setTreeData', updatedTreeData);
+
 	},
 	modalCanSubmit: (context: any, submit: boolean): void => {
 		context.commit('modalCanSubmit', submit);

@@ -5,6 +5,7 @@ import DefaultState from '@/constants/DefaultState';
 import { _TESTING_HASH_ } from '@/constants/Testing';
 import iTreeElement from '@/interfaces/iTreeElement';
 import iHTMLAttribute from '@/interfaces/iHTMLAttribute';
+import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
 
 let mockContext: any;
 let factory: ElementTreeFactory;
@@ -77,7 +78,7 @@ describe('actions.ts', () => {
         const parentID = parent.id;
         const payload = { branch, parentID };
         const updatedTreeData = [ ...treeData, ...branch ];
-        parent.children.push(branch[0].id); // assumes branch head is at index 0
+        parent.children.push(branch[0].getElementID()); // assumes branch head is at index 0
         actions.addBranch(mockContext, payload);
         expect(actions.addBranch).toBeDefined();
         expect(typeof actions.addBranch).toEqual('function');
@@ -88,9 +89,9 @@ describe('actions.ts', () => {
 
     it('should have a function for adding a child to a given parent', () => {
         const treeData = mockContext.state.treeData;
-        const newElement = factory.createTreeElement('tr', false, 'test tr') as iTreeElement;
-        const parentID = DefaultState.treeData[0].id; // expect root table
-        const payload: {newElement: iTreeElement, parentID: string } = { newElement, parentID }
+        const newElement = factory.createTreeElement('tr', false, 'test tr') as SupportedHTMLElement;
+        const parentID = DefaultState.treeData[0].getElementID(); // expect root table
+        const payload: {newElement: SupportedHTMLElement, parentID: string } = { newElement, parentID }
         const parentEl = mockContext.state.treeData.find((el: iTreeElement) => el.id == parentID);
         const expectedResult = [ ...treeData, newElement ]
         actions.addChild(mockContext, payload);
@@ -99,7 +100,7 @@ describe('actions.ts', () => {
         expect(mockContext.commit).toHaveBeenCalled();
         expect(mockContext.commit).toHaveBeenCalledTimes(1);
         expect(mockContext.commit).toHaveBeenCalledWith('setTreeData', expectedResult);
-        expect(parentEl.children.find((c: string) => c == newElement.id)).toBeDefined();
+        expect(parentEl.children.find((c: string) => c == newElement.getElementID())).toBeDefined();
     });
 
     it('should have a function for deleting a branch from the element tree', () => {
@@ -120,11 +121,11 @@ describe('actions.ts', () => {
     it('should have a function for updating the alias and attributes of a specified tree element', () => {
         const treeData = DefaultState.treeData;
         const targetEl = treeData[1];
-        const eid = targetEl.id;
+        const eid = targetEl.getElementID();
         const alias = 'new-alias';
         const attributes = [ { name: 'style', value: 'color: #f00;' } as iHTMLAttribute ];
-        targetEl.alias = alias;
-        targetEl.attributes = attributes;
+        targetEl.setElementAlias(alias);
+        targetEl.setElementAttributes(attributes);
         const updatedTreeData = [ ...treeData ];
         const payload = { eid, alias, attributes }
         actions.updateElement(mockContext, payload);

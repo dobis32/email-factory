@@ -1,15 +1,17 @@
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
 import _SUPPORTED_HTML_ELEMENTS_ from '@/constants/SupportedHTMLElementTypes';
+import _VALID_CHILD_INDEX_ from '@/constants/ValidChildIndex';
 import iTreeElement from '@/interfaces/iTreeElement';
 import { _TESTING_HASH_ } from '@/constants/Testing';
 import _DEFAULT_STATE_ from '@/constants/DefaultState';
 import iNode from '@/interfaces/iNode';
+import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
 
 describe('ElementTreeFactory.ts', () => {
-    let mockTreeData: Array<iTreeElement>;
+    let mockTreeData: Array<SupportedHTMLElement>;
     let factory: ElementTreeFactory;
 	beforeEach(() => {
-        factory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_);
+        factory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_, _VALID_CHILD_INDEX_);
         mockTreeData = _DEFAULT_STATE_.treeData;
 	});
 
@@ -18,7 +20,7 @@ describe('ElementTreeFactory.ts', () => {
         const elType2 = 'foobar';
         expect(factory.getSupportedElement).toBeDefined();
         expect(typeof factory.getSupportedElement).toEqual('function');
-        expect(factory.getSupportedElement(elType1.getElementType())).toBeDefined();
+        expect(factory.getSupportedElement(elType1)).toBeDefined();
         expect(factory.getSupportedElement(elType2)).toBeUndefined();
     });
 
@@ -34,11 +36,11 @@ describe('ElementTreeFactory.ts', () => {
 
     it('should have a function to find an element by ID', () => {
         const targetEl =  mockTreeData[2]
-        const targetID = targetEl.id;
-        const result = factory.findElementByID(mockTreeData, targetID) as iTreeElement;
+        const targetID = targetEl.getElementID();
+        const result = factory.findElementByID(mockTreeData, targetID) as SupportedHTMLElement;
         expect(factory.findElementByID).toBeDefined();
         expect(typeof factory.findElementByID).toEqual('function');
-        expect(result.id).toEqual(targetID);
+        expect(result.getElementID()).toEqual(targetID);
     });
 
     it('should have a function to find an element by alias', () => {
@@ -46,39 +48,39 @@ describe('ElementTreeFactory.ts', () => {
         const badAlias = 'zzzzzzzzzzzzz';
         expect(factory.findElementByAlias).toBeDefined();
         expect(typeof factory.findElementByAlias).toEqual('function');
-        expect(factory.findElementByAlias(mockTreeData, targetEl.alias)).toBeDefined();
-        expect(factory.findElementByAlias(mockTreeData, targetEl.alias)).toEqual(targetEl);
+        expect(factory.findElementByAlias(mockTreeData, targetEl.getElementAlias())).toBeDefined();
+        expect(factory.findElementByAlias(mockTreeData, targetEl.getElementAlias())).toEqual(targetEl);
         expect(factory.findElementByAlias(mockTreeData, badAlias)).toEqual(undefined);
     });
 
     it('should have a function to add a child element to a specified parent', () => {
         const parent = mockTreeData[1];
-        const childType = parent.element.getValidChildren()[0]
-        const newChild = factory.createTreeElement(childType, false, `child$-${childType}`) as iTreeElement;
-        const result1 = factory.addChildElement(mockTreeData, parent.id, newChild.id, false);
-        const result2 = factory.addChildElement(mockTreeData, parent.id, newChild.id, true);
+        const childType = factory.getValidChildren(parent.getElementType())[0];
+        const newChild = factory.createTreeElement(childType, false, `child$-${childType}`) as SupportedHTMLElement;
+        const result1 = factory.addChildElement(mockTreeData, parent.getElementID(), newChild.getElementID(), false);
+        const result2 = factory.addChildElement(mockTreeData, parent.getElementID(), newChild.getElementID(), true);
         expect(factory.addChildElement).toBeDefined();
         expect(typeof factory.addChildElement).toEqual('function');
-        expect(result1).toEqual([ ...parent.children, newChild.id ]);
-        expect(result2).toEqual([ newChild.id, ...parent.children ]);
+        expect(result1).toEqual([ ...parent.getElementChildren(), newChild.getElementID() ]);
+        expect(result2).toEqual([ newChild.getElementID(), ...parent.getElementChildren() ]);
     });
 
     it('should have a function to create a new tree element', () => {
         const type = 'table';
         const alias = 'newTable';
         const isRoot = true;
-        const el = factory.createTreeElement(type, isRoot, alias) as iTreeElement;
+        const el = factory.createTreeElement(type, isRoot, alias) as SupportedHTMLElement;
         expect(factory.createTreeElement).toBeDefined();
         expect(typeof factory.createTreeElement).toEqual('function');
         expect(el).toBeDefined();
-        expect(el.alias).toEqual(alias);
-        expect(el.element.getElementType()).toEqual(type);
+        expect(el.getElementAlias()).toEqual(alias);
+        expect(el.getElementType()).toEqual(type);
     });
 
     it('should return an element with an alias that matches the ID if no alias is provided', () => {
         const type = 'table';
-        const el: iTreeElement = factory.createTreeElement(type, true) as iTreeElement;
-        expect(el.alias).toEqual(el.id);
+        const el: SupportedHTMLElement = factory.createTreeElement(type, true) as SupportedHTMLElement;
+        expect(el.getElementAlias()).toEqual(el.getElementID());
     });
 
     it('should return undefined if it tries to create a tree element that is not supported', () => {
@@ -95,7 +97,7 @@ describe('ElementTreeFactory.ts', () => {
     it('should have a function to build a tree structure from a flattened input array of elements', () => {
         factory.buildBranch = jest.fn(factory.buildBranch);
         const builtTree = factory.buildTree(mockTreeData);
-        const numBranches = mockTreeData.filter((te: iTreeElement) => te.root === true).length;
+        const numBranches = mockTreeData.filter((te: SupportedHTMLElement) => te.elementIsARoot() === true).length;
         expect(factory.buildTree).toBeDefined();
         expect(typeof factory.buildTree).toEqual('function');
         expect(factory.buildBranch).toHaveBeenCalledTimes(numBranches);
@@ -103,14 +105,14 @@ describe('ElementTreeFactory.ts', () => {
     });
     
     it('should have a function to built a branch from a flattened input array of elements', () => {
-        const head = mockTreeData.find((te: iTreeElement) => te.root === true) as iTreeElement;
+        const head = mockTreeData.find((te: SupportedHTMLElement) => te.elementIsARoot() === true) as SupportedHTMLElement;
         factory.buildBranch(mockTreeData, head);
         expect(factory.buildBranch).toBeDefined();
         expect(typeof factory.buildBranch).toEqual('function');
     });
 
     it('should have a function for copying a branch started at the element that matches the input ID', () => {
-        const result = factory.copyBranch(mockTreeData, mockTreeData[0].id);
+        const result = factory.copyBranch(mockTreeData, mockTreeData[0].getElementID());
         expect(factory.copyBranch).toBeDefined();
         expect(typeof factory.copyBranch).toEqual('function');
         expect(Array.isArray(result));
@@ -118,9 +120,9 @@ describe('ElementTreeFactory.ts', () => {
 
     it('should have a function for deleting a branch', () => {
         const initBranch = [ ...mockTreeData ];
-        const copiedBranch = factory.copyBranch(initBranch, initBranch[0].id);
+        const copiedBranch = factory.copyBranch(initBranch, initBranch[0].getElementID());
         const tree = [ ...initBranch, ...copiedBranch ];
-        const updatedTree = factory.deleteBranch(tree, initBranch[0].id);
+        const updatedTree = factory.deleteBranch(tree, initBranch[0].getElementID());
         expect(factory.deleteBranch).toBeDefined();
         expect(typeof factory.deleteBranch).toEqual('function');
         expect(updatedTree).toEqual(copiedBranch);
@@ -129,7 +131,7 @@ describe('ElementTreeFactory.ts', () => {
     it('should have a function that retrieves a flat branch specified by head ID', () => {
         const treeData = _DEFAULT_STATE_.treeData;
         const expectedBranchData = [ treeData[2], treeData[3] ];
-        const head = treeData[2].id;
+        const head = treeData[2].getElementID();
         const flatBranch = factory.getFlatBranch(treeData, head);
         expect(factory.getFlatBranch).toBeDefined();
         expect(typeof factory.getFlatBranch).toEqual('function');

@@ -1,22 +1,23 @@
 import getters from '@/store/getters';
-import iTreeElement from '@/interfaces/iTreeElement';
 import iAppState from '@/interfaces/iAppState';
 import DefaultStateIndex from '@/constants/DefaultState';
 import iModalPayload from '@/interfaces/iModalPayload';
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
 import _SUPPORTED_HTML_ELEMENTS_ from '@/constants/SupportedHTMLElementTypes';
-const f = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_);
+import _VALID_CHILD_INDEX_ from '@/constants/ValidChildIndex';
+import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
+const f = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_, _VALID_CHILD_INDEX_);
 
 
 describe('getters.ts', () => {
-    let treeData: Array<iTreeElement> 
+    let treeData: Array<SupportedHTMLElement> 
     let modalState: boolean;
     let activeModal: string;
     let modalcb: Function;
     let modalCanSubmit: boolean;
     let state: iAppState;
     let mockPayload: iModalPayload;
-    let modalData: { activeElement: iTreeElement };
+    let modalData: { activeElement: SupportedHTMLElement };
 	beforeEach(() => {
         treeData = DefaultStateIndex.treeData
         modalState = DefaultStateIndex.modalState;

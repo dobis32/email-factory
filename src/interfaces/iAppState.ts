@@ -1,7 +1,8 @@
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
-import iTreeElement from '@/interfaces/iTreeElement';
+import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
+
 export default interface iAppState {
-    treeData: Array<iTreeElement>,
+    treeData: Array<SupportedHTMLElement>,
     modalState: boolean,
     activeModal: string,
     modalCanSubmit: boolean,

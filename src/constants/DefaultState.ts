@@ -1,71 +1,78 @@
-import { HTML_TABLE, HTML_TR, HTML_TD, HTML_P } from '@/constants/SupportedHTMLElementTypes';
 import SUPPORTED_HTML_ELEMENTS from '@/constants/SupportedHTMLElementTypes';
-import iHTMLAttribute from '@/interfaces/iHTMLAttribute';
-import iTreeElement from '@/interfaces/iTreeElement';
+import VALID_CHILD_INDEX from '@/constants/ValidChildIndex';
 import iAppState from '@/interfaces/iAppState';
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
+import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
+const defaultTable = new SupportedHTMLElement(
+    'foo'
+    , 'rootTable'
+    , 'table'
+    , true
+    , [
+        {
+            name: 'width',
+            value: '600'
+        }
+    ]  
+    , [
+        'bar'
+    ]
+     
+);
+
+const defaultTR = new SupportedHTMLElement(
+    'foo'
+    , 'initTR'
+    , 'tr'
+    , false
+    , [ ]  
+    , [
+        'fizz'
+    ]
+     
+);
+
+const defaultTD = new SupportedHTMLElement(
+    'fizz'
+    , 'initTD'
+    , 'td'
+    , false
+    , [ {
+        name: 'style',
+        value: 'color: #f00;'
+    } ]  
+    , [
+        'buzz'
+    ]
+     
+);
+
+const defaultP = new SupportedHTMLElement(
+    'buzz'
+    , 'initTD'
+    , 'td'
+    , false
+    , [ {
+        name: 'style',
+        value: 'font-size: 20px; color: #f00; text-decoration: bold;'
+    },
+    {
+        name: 'text',
+        value: 'foobar'
+    } ]  
+    , [ ]
+     
+);
+
+
 export default {
     treeData: [
-        {
-            id: 'foo',
-            root: true,
-            element: HTML_TABLE,
-            alias: 'rootTable',
-            attributes:  [
-                {
-                    name: 'width',
-                    value: '600'
-                }
-            ] as Array<iHTMLAttribute>,
-            children: [
-                'bar'
-            ] as Array<string>
-        },
-        {
-            id: 'bar',
-            root: false,
-            element: HTML_TR,
-            alias: 'initTR',
-            attributes: new Array<iHTMLAttribute>(),
-            children: [
-                'fizz'   
-            ] as Array<string>
-        },
-        {
-            id: 'fizz',
-            root: false,
-            element: HTML_TD,
-            alias: 'initTD',
-            attributes: [
-                {
-                    name: 'style',
-                    value: 'color: #f00;'
-                }
-            ],
-            children: [
-                'buzz'
-            ] as Array<string>
-        },
-        {
-            id: 'buzz',
-            root: false,
-            element: HTML_P,
-            alias: 'initP',
-            attributes: [{
-                name: 'style',
-                value: 'font-size: 20px; color: #f00; text-decoration: bold;'
-            },
-            {
-                name: 'text',
-                value: 'foobar'
-            }] as Array<iHTMLAttribute>,
-            children: [] as Array<string>
-        }
-    ]  as Array<iTreeElement>,
+      defaultTable, defaultTR, defaultTD, defaultP
+    ]  as Array<SupportedHTMLElement>,
     modalState: false,
     activeModal: '',
     modalCanSubmit: true,
     modalcb: (): void => { return; },
     modalData: {},
-    elementTreeFactory: new ElementTreeFactory(SUPPORTED_HTML_ELEMENTS)
+    elementTreeFactory: new ElementTreeFactory(SUPPORTED_HTML_ELEMENTS, VALID_CHILD_INDEX)
 } as iAppState;
