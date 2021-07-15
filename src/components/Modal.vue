@@ -3,7 +3,7 @@
     <EditTreeElementCard v-if="payload.activeModal == 'EditTreeElementCard'" :cb="payload.modalcb" :alias="payload.modalData.alias" :attributes="payload.modalData.attributes" />
     <GeneratedCodeCard v-if="payload.activeModal == 'GeneratedCodeCard'" :cb="payload.modalcb" />
     <TreeElementControlsCard v-if="payload.activeModal == 'ElementControlsCard'"  :activeElement="payload.modalData.activeElement" :cb="payload.modalcb" />
-    <CreateChildElementCard v-if="payload.activeModal == 'CreateChildElementCard'"  :validChildren="payload.modalData.activeElement.element.getValidChildren()" :cb="payload.modalcb" />
+    <!-- <CreateChildElementCard v-if="payload.activeModal == 'CreateChildElementCard'"  :validChildren="validChildren" :cb="payload.modalcb" /> -->
 
     <!-- card components here -->
   </div>
@@ -15,13 +15,25 @@ import EditTreeElementCard from "./modal_cards/EditTreeElementCard.vue";
 import GeneratedCodeCard from "./modal_cards/GeneratedCodeCard.vue";
 import TreeElementControlsCard from "./modal_cards/TreeElementControlsCard.vue";
 import CreateChildElementCard from "./modal_cards/CreateChildElementCard.vue";
-
+import SupportedHTMLElement from "@/classes/SupportedHTMLElement";
 @Options({
   props: ["payload"],
+  data() {
+    return {
+      validChildren: Array<string>()
+    }
+  },
   components: { EditTreeElementCard, GeneratedCodeCard, TreeElementControlsCard, CreateChildElementCard },
   methods: {
     closeModal() {
       this.$store.dispatch("closeModal");
+    }
+  },
+  beforeMount() {
+    const activeElement: SupportedHTMLElement = this.payload.modalData.activeElement;
+    const modalActive = this.payload.modalState;
+    if (activeElement && modalActive) {
+      this.validChildren =  this.$store.state.elementTreeFactory.getValidChildren(activeElement.getElementType());
     }
   }
 })

@@ -143,12 +143,12 @@ export default class ElementTreeFactory {
 		return flatBranch;
 	}
 
-private getUpdatedChildren(el: SupportedHTMLElement, childPairs: Array<any>): SupportedHTMLElement {
+	private getUpdatedChildren(el: SupportedHTMLElement, childPairs: Array<{ old: SupportedHTMLElement, new: SupportedHTMLElement}>): SupportedHTMLElement {
 		const updatedChildren = new Array<string>();
 		el.getElementChildren().forEach((c: string) => {
-			const targetPair = childPairs.find((pair: any) => pair.old.id === c)
+			const targetPair = childPairs.find((pair: { old: SupportedHTMLElement, new: SupportedHTMLElement}) => pair.old.getElementID() === c)
 			if (!targetPair) throw new Error(`[ Element Tree Factory ] Element pair with old id ${c} not found`)
-			updatedChildren.push(targetPair.new.id);
+			updatedChildren.push(targetPair.new.getElementID());
 		});
 		return new SupportedHTMLElement(el.getElementID(), el.getElementAlias(), el.getElementType(), el.elementIsARoot(), el.getElementAttributes(), el.getElementChildren());
 	}

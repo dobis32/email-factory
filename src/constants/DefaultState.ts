@@ -21,7 +21,7 @@ const defaultTable = new SupportedHTMLElement(
 );
 
 const defaultTR = new SupportedHTMLElement(
-    'foo'
+    'bar'
     , 'initTR'
     , 'tr'
     , false
@@ -49,8 +49,8 @@ const defaultTD = new SupportedHTMLElement(
 
 const defaultP = new SupportedHTMLElement(
     'buzz'
-    , 'initTD'
-    , 'td'
+    , 'initP'
+    , 'p'
     , false
     , [ {
         name: 'style',

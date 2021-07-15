@@ -1,14 +1,14 @@
 import { mount, flushPromises } from '@vue/test-utils';
 import TreeElement from '@/components/TreeElement.vue';
-import iTreeElement from '@/interfaces/iTreeElement';
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
 import _SUPPORTED_HTML_ELEMENTS_ from '@/constants/SupportedHTMLElementTypes';
+import _VALID_CHILD_INDEX_ from '@/constants/ValidChildIndex';
 import _DEFAULT_STATE_ from '@/constants/DefaultState';
 import iHTMLAttribute from '@/interfaces/iHTMLAttribute';
 import { _TESTING_HASH_ } from '@/constants/testing';
 import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
 
-const elFactory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_, _TESTING_HASH_);
+const elFactory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_, _VALID_CHILD_INDEX_, _TESTING_HASH_);
 describe('TreeElement.vue', () => {
 	const mockChildren: Array<SupportedHTMLElement> = _DEFAULT_STATE_.treeData
 	const mockBuiltBranch = elFactory.buildTree(mockChildren);

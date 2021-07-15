@@ -27,9 +27,9 @@ export default {
 		const { branch, parentID } = payload;
 		const treeData = context.state.treeData;
 		if (parentID) {
-			const parent = treeData.find((el: SupportedHTMLElement) => el.getElementID() == parentID);
+			const parent: SupportedHTMLElement = treeData.find((el: SupportedHTMLElement) => el.getElementID() == parentID);
 			if (parent === undefined) throw new Error(`[ Store Actions ] Failed to add branch. Parent element with ID ${parentID} not found`);
-			parent.children.push(branch[0].getElementID()); // This assumes the head node is at index 0
+			parent.getElementChildren().push(branch[0].getElementID()); // This assumes the head node is at index 0
 		}
 		const newData = [ ...treeData, ...branch ];
 		context.commit('setTreeData', newData);
@@ -37,9 +37,9 @@ export default {
 	addChild: (context: any, payload: {newElement: SupportedHTMLElement, parentID: string}): void => {
 		const { newElement, parentID } = payload;
 		const treeData = context.state.treeData;
-		const parent = treeData.find((el: SupportedHTMLElement) => el.getElementID() == parentID);
+		const parent: SupportedHTMLElement = treeData.find((el: SupportedHTMLElement) => el.getElementID() == parentID);
 		if (parent === undefined) throw new Error(`[ Store Actions ] Failed to add child. Parent element with ID ${parentID} not found`);
-		parent.children.push(newElement.getElementID());
+		parent.getElementChildren().push(newElement.getElementID());
 		const newData = [ ...treeData, newElement ];
 		context.commit('setTreeData', newData);
 	},

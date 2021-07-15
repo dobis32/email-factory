@@ -45,7 +45,7 @@ describe('getters.ts', () => {
 	});
 
    it('should have a function to get the tree data from the state index', () => {
-    const treeData = getters.getTreeData(state);
+    const treeData: Array<SupportedHTMLElement> = getters.getTreeData(state);
     expect(getters.getTreeData).toBeDefined();
     expect(typeof getters.getTreeData).toEqual('function');
     expect(getters.getTreeData(state)).toEqual(state.treeData);

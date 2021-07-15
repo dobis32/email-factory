@@ -52,8 +52,10 @@ import { Options, Vue } from "vue-class-component";
     },
     save() {
         // const attributeNames = this.existingAttributes.map((att: iHTMLAttribute) => att.name.toLowerCase());
+        const otherAttributes = this.existingAttributes.filter((att: iHTMLAttribute) => att.name !== this.name);
+        const nameExists = otherAttributes.find((att: iHTMLAttribute) => att.name === this.newName.toLowerCase() && name != this.newName );
         if (!this.newName.length) alert('Element attributes must have a name');
-        else if (this.existingAttributes.find((att: iHTMLAttribute) => att.name === this.newName.toLowerCase() && name != this.newName )) alert(`An attribute with the name ${this.newName} already exists`);
+        else if (nameExists) alert(`An attribute with the name ${this.newName} already exists`);
         else {
             this.editing = false;
             this.$emit('update-attribute', { name: this.name, newName: this.newName, value: this.newValue});

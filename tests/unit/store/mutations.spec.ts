@@ -36,8 +36,8 @@ describe('mutations.ts', () => {
 	});
 
    it('should have a function to update the tree data of the state', () => {
-    const oldData = state.treeData;
-    const newData = [...state.treeData];
+    const oldData: Array<SupportedHTMLElement> = state.treeData;
+    const newData: Array<SupportedHTMLElement> = [...state.treeData];
     newData[0].setElementChildren(new Array<string>());
 
     mutations.setTreeData(state, newData);

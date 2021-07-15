@@ -44,7 +44,7 @@ describe('actions.ts', () => {
 
     it('should have a function to set data for the modal to use', () => {
         const card = 'TreeElementControlsCard';
-        const data = { activeElement: {} as iTreeElement };
+        const data = { activeElement: {} as SupportedHTMLElement };
         const payload = { card, data };
         actions.setModal(mockContext, payload);
         expect(actions.setModal).toBeDefined();
@@ -71,14 +71,14 @@ describe('actions.ts', () => {
     });
 
     it('should have a function for adding a branch to the element tree', () => {
-        const treeData = mockContext.state.treeData;
-        const headID = treeData[1].id;
+        const treeData: Array<SupportedHTMLElement> = mockContext.state.treeData;
+        const headID = treeData[1].getElementID();
         const branch = factory.copyBranch(treeData, headID);
-        const parent = treeData[0];
-        const parentID = parent.id;
+        const parent: SupportedHTMLElement = treeData[0];
+        const parentID = parent.getElementID();
         const payload = { branch, parentID };
         const updatedTreeData = [ ...treeData, ...branch ];
-        parent.children.push(branch[0].getElementID()); // assumes branch head is at index 0
+        parent.getElementChildren().push(branch[0].getElementID()); // assumes branch head is at index 0
         actions.addBranch(mockContext, payload);
         expect(actions.addBranch).toBeDefined();
         expect(typeof actions.addBranch).toEqual('function');
@@ -88,11 +88,11 @@ describe('actions.ts', () => {
 
 
     it('should have a function for adding a child to a given parent', () => {
-        const treeData = mockContext.state.treeData;
+        const treeData: Array<SupportedHTMLElement> = mockContext.state.treeData;
         const newElement = factory.createTreeElement('tr', false, 'test tr') as SupportedHTMLElement;
         const parentID = DefaultState.treeData[0].getElementID(); // expect root table
         const payload: {newElement: SupportedHTMLElement, parentID: string } = { newElement, parentID }
-        const parentEl = mockContext.state.treeData.find((el: iTreeElement) => el.id == parentID);
+        const parentEl: SupportedHTMLElement = mockContext.state.treeData.find((el: SupportedHTMLElement) => el.getElementID() == parentID);
         const expectedResult = [ ...treeData, newElement ]
         actions.addChild(mockContext, payload);
         expect(actions.addChild).toBeDefined();
@@ -100,14 +100,14 @@ describe('actions.ts', () => {
         expect(mockContext.commit).toHaveBeenCalled();
         expect(mockContext.commit).toHaveBeenCalledTimes(1);
         expect(mockContext.commit).toHaveBeenCalledWith('setTreeData', expectedResult);
-        expect(parentEl.children.find((c: string) => c == newElement.getElementID())).toBeDefined();
+        expect(parentEl.getElementChildren().find((c: string) => c == newElement.getElementID())).toBeDefined();
     });
 
     it('should have a function for deleting a branch from the element tree', () => {
         const idToRemove = 'bar';
         const parentid = 'foo';
         const payload = { idToRemove, parentid };
-        const treeData = mockContext.state.treeData;
+        const treeData: Array<SupportedHTMLElement> = mockContext.state.treeData;
         const f = mockContext.state.elementTreeFactory;
         const updatedData = f.deleteBranch(treeData, idToRemove, parentid);
         f.deleteBranch = jest.fn(f.deleteBranch);
@@ -119,7 +119,7 @@ describe('actions.ts', () => {
     });
 
     it('should have a function for updating the alias and attributes of a specified tree element', () => {
-        const treeData = DefaultState.treeData;
+        const treeData: Array<SupportedHTMLElement> = DefaultState.treeData;
         const targetEl = treeData[1];
         const eid = targetEl.getElementID();
         const alias = 'new-alias';
