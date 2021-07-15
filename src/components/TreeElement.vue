@@ -99,11 +99,9 @@ import { Options, Vue } from "vue-class-component";
       if (!this.isRoot) parentID = this.parentid;
       this.$store.dispatch('addBranch', { branch: flattenedBranch, parentID });
     },
-
     deleteBranch() {
       this.$store.dispatch('deleteBranch', { idToRemove: this.id, parentid: this.parentid });
     },
-
     async editElement() {
       const card = 'EditTreeElementCard';
       const data = {

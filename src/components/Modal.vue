@@ -3,7 +3,7 @@
     <EditTreeElementCard v-if="payload.activeModal == 'EditTreeElementCard'" :cb="payload.modalcb" :alias="payload.modalData.alias" :attributes="payload.modalData.attributes" />
     <GeneratedCodeCard v-if="payload.activeModal == 'GeneratedCodeCard'" :cb="payload.modalcb" />
     <TreeElementControlsCard v-if="payload.activeModal == 'ElementControlsCard'"  :activeElement="payload.modalData.activeElement" :cb="payload.modalcb" />
-    <!-- <CreateChildElementCard v-if="payload.activeModal == 'CreateChildElementCard'"  :validChildren="validChildren" :cb="payload.modalcb" /> -->
+    <CreateChildElementCard v-if="payload.activeModal == 'CreateChildElementCard'"  :validChildren="validChildren" :cb="payload.modalcb" />
 
     <!-- card components here -->
   </div>
