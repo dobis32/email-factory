@@ -1,5 +1,6 @@
 import getters from '@/store/getters';
 import iAppState from '@/interfaces/iAppState';
+import iNode from '@/interfaces/iNode';
 import DefaultStateIndex from '@/constants/DefaultState';
 import iModalPayload from '@/interfaces/iModalPayload';
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
@@ -10,7 +11,8 @@ const f = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_, _VALID_CHILD_INDEX_)
 
 
 describe('getters.ts', () => {
-    let treeData: Array<SupportedHTMLElement> 
+    let treeData: Array<SupportedHTMLElement> ;
+    let builtTree: Array<iNode>;
     let modalState: boolean;
     let activeModal: string;
     let modalcb: Function;
@@ -19,7 +21,8 @@ describe('getters.ts', () => {
     let mockPayload: iModalPayload;
     let modalData: { activeElement: SupportedHTMLElement };
 	beforeEach(() => {
-        treeData = DefaultStateIndex.treeData
+        treeData = DefaultStateIndex.treeData;
+        builtTree = DefaultStateIndex.builtTree;
         modalState = DefaultStateIndex.modalState;
         activeModal = DefaultStateIndex.activeModal;
         modalcb = DefaultStateIndex.modalcb;
@@ -28,6 +31,7 @@ describe('getters.ts', () => {
 
         state = {
             treeData,
+            builtTree, 
             modalState,
             activeModal,
             modalcb,
@@ -54,13 +58,11 @@ describe('getters.ts', () => {
 
    it('should have a function to get the tree data in actual tree form', () => {
     const builtTree = f.buildTree(state.treeData);
-    f.buildTree = jest.fn(f.buildTree);
     const result = getters.getBuiltTree(state);
 
     expect(getters.getBuiltTree).toBeDefined();
     expect(typeof getters.getBuiltTree).toEqual('function');
     expect(result).toEqual(builtTree);
-    expect(f.buildTree).toHaveBeenCalledWith(state.treeData);
 
    });
 

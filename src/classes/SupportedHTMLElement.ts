@@ -1,5 +1,5 @@
 import iHTMLAttribute from "@/interfaces/iHTMLAttribute";
-
+import _TEXT_CONTENT_ATTRIBUTE_ from "@/constants/TextContentAttribute";
 export default class SupportedHTMLElement {
     private _elementID: string;
     private _elementAlias: string;
@@ -51,21 +51,5 @@ export default class SupportedHTMLElement {
 
     setElementChildren(updatedChildren: Array<string>): void {
         this._children = updatedChildren;
-    }
-
-    getHTML(attributes: Array<iHTMLAttribute>): string {
-        // TODO unit test; unit test the element-text functionality too
-        const textContentAttribute = 'element-text';
-        const elementText = attributes.find((att: iHTMLAttribute) => att.name === textContentAttribute) as iHTMLAttribute;
-        const inlineAttributes = attributes.filter((att: iHTMLAttribute) => att.name !== textContentAttribute) as Array<iHTMLAttribute>;
-        let output = '';
-        output += `<${this._elementType}`;
-        inlineAttributes.forEach((att: iHTMLAttribute) => {
-            if (att.name !== 'element-text') output +=  ` ${att.name}="${att.value}"`
-        });
-        output += '>';
-        output += `${elementText ? elementText.value : ''}`;
-        output += ` </${this._elementType}>`;
-        return output;
     }
 }

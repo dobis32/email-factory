@@ -1,5 +1,5 @@
 <template>
-  <div id="modal-wrapper" v-if="payload.modalState" @click="closeModal" >
+  <div id="modal-wrapper" @click="closeModal" >
     <EditTreeElementCard v-if="payload.activeModal == 'EditTreeElementCard'" :cb="payload.modalcb" :alias="payload.modalData.alias" :attributes="payload.modalData.attributes" />
     <GeneratedCodeCard v-if="payload.activeModal == 'GeneratedCodeCard'" :cb="payload.modalcb" />
     <TreeElementControlsCard v-if="payload.activeModal == 'ElementControlsCard'"  :activeElement="payload.modalData.activeElement" :cb="payload.modalcb" />

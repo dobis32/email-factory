@@ -5,6 +5,7 @@ import iAppState from '@/interfaces/iAppState';
 export default {
 	setTreeData: (state: iAppState, updatedTreeData: Array<SupportedHTMLElement>): void => {
 		state.treeData = updatedTreeData;
+		state.builtTree = state.elementTreeFactory.buildTree(updatedTreeData); // TODO unit test
 	},
 
 	setModalState: (state: iAppState, updatedState: boolean): void => {

@@ -1,8 +1,11 @@
 <template>
   <div>
-    <TreeEditor :elementTreeData="getTreeData" :elementTree="getTree" />
+    <TreeEditor :elementTree="getTree" />
     <ModuleOptions />
-    <Modal :payload="getModalPayload" />
+    <div v-if="getModalPayload.modalState">
+      <Modal :payload="getModalPayload" />
+    </div>
+   
   </div>
 </template>
 
@@ -22,20 +25,9 @@ import _SUPPORTED_HTML_ELEMENTS_ from "./constants/SupportedHTMLElementTypes"
     getTree() {
       return this.$store.getters.getBuiltTree;
     },
-    getTreeData() {
-      return this.$store.getters.getTreeData;
-    },
     getModalState() {
-      return this.$store.getters.getModalState;
-    },
-    getActiveModal() {
-      return this.$store.getters.getActiveModal;
-    },
-    getModalCB() {
-      return this.$store.getters.getModalCB;
-    },
-    getValidChildren() {
-      return this.$store.getters.getValidChildren;
+      console.log('getting modal state');
+      return this.$store.state.modalState;
     },
     getModalPayload() {
       return this.$store.getters.getModalPayload;
@@ -62,5 +54,10 @@ export default class App extends Vue {}
   margin: 0;
   padding: 0;
   vertical-align: top;
+}
+
+#modal {
+    z-index: 9; /* Sit on top */
+
 }
 </style>

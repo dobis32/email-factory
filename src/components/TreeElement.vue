@@ -3,15 +3,16 @@
     <div :class="treeElementClass" @click="promptAction">
       <h3 id="alias">{{alias}}</h3>
       <h4 id="type">({{ type }})</h4>
+      <h4>{{ id }}</h4>
     </div>
     <TreeElement
       v-for="(child) of children"
-      :key="child.id"
-      :isRoot="child.root"
-      :type="child.type"
-      :alias="child.alias"
-      :id="child.id"
-      :attributes="child.attributes"
+      :key="child.element.getElementID()"
+      :isRoot="child.element.elementIsARoot()"
+      :type="child.element.getElementType()"
+      :alias="child.element.getElementAlias()"
+      :id="child.element.getElementID()"
+      :attributes="child.element.getElementAttributes()"
       :parentid="id"
       :children="child.children"
     />
@@ -37,13 +38,14 @@ import { Options, Vue } from "vue-class-component";
   ],
   methods: {
     async promptAction() {
+      console.log('prompting action');
       const f: ElementTreeFactory = this.$store.state.elementTreeFactory;
       const treeData = this.$store.state.treeData;
       const id = this.id;
       const el = f.findElementByID(treeData, id);
       const activeElement = el ? el : {};
-      const card = 'ElementControlsCard'
-      const data = { activeElement }
+      const card = 'ElementControlsCard';
+      const data = { activeElement };
       this.$store.dispatch('setModal', { card, data });
       const result = await this.openModal();
       this.performAction(result);
@@ -94,10 +96,10 @@ import { Options, Vue } from "vue-class-component";
       const f: ElementTreeFactory = this.$store.state.elementTreeFactory;
       const headID = this.id;
       const treeData: Array<SupportedHTMLElement> = this.$store.state.treeData;
-      const flattenedBranch = f.copyBranch(treeData, headID);
+      const copiedBranch = f.copyBranch(treeData, headID);
       let parentID: string | undefined;
       if (!this.isRoot) parentID = this.parentid;
-      this.$store.dispatch('addBranch', { branch: flattenedBranch, parentID });
+      this.$store.dispatch('addBranch', { branch: copiedBranch, parentID });
     },
     deleteBranch() {
       this.$store.dispatch('deleteBranch', { idToRemove: this.id, parentid: this.parentid });

@@ -57,22 +57,26 @@ const defaultP = new SupportedHTMLElement(
         value: 'font-size: 20px; color: #f00; text-decoration: bold;'
     },
     {
-        name: 'text',
+        name: 'text-content',
         value: 'foobar'
     } ]  
     , [ ]
      
 );
 
+const factory = new ElementTreeFactory(SUPPORTED_HTML_ELEMENTS, VALID_CHILD_INDEX);
+const treeData = [
+    defaultTable, defaultTR, defaultTD, defaultP
+  ]  as Array<SupportedHTMLElement>
+const builtTree = factory.buildTree(treeData);
 
 export default {
-    treeData: [
-      defaultTable, defaultTR, defaultTD, defaultP
-    ]  as Array<SupportedHTMLElement>,
+    treeData,
+    builtTree,
     modalState: false,
     activeModal: '',
     modalCanSubmit: true,
     modalcb: (): void => { return; },
     modalData: {},
-    elementTreeFactory: new ElementTreeFactory(SUPPORTED_HTML_ELEMENTS, VALID_CHILD_INDEX)
+    elementTreeFactory: factory
 } as iAppState;

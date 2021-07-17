@@ -45,7 +45,7 @@ export default {
 	},
 	deleteBranch: (context: any, payload: { idToRemove: string, parentid?: string }) : void => {
 		const { idToRemove, parentid } = payload;
-		const treeData = context.state.treeData;
+		const treeData: Array<SupportedHTMLElement> = context.state.treeData;
 		const updatedTreeData = context.state.elementTreeFactory.deleteBranch(treeData, idToRemove, parentid);
 		context.commit('setTreeData', updatedTreeData);
 	},

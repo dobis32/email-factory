@@ -3,6 +3,8 @@ import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
 import { _TESTING_HASH_ } from '@/constants/Testing';
 import iNode from '@/interfaces/iNode';
 import iHTMLAttribute from '@/interfaces/iHTMLAttribute';
+import _TEXT_CONTENT_ATTRIBUTE_ from '@/constants/TextContentAttribute';
+import _INDENTATION_UNIT_ from '@/constants/IndentationUnit';
 
 export default class ElementTreeFactory {
     private _SUPPORTED_HTML_ELEMENTS: Array<string>;
@@ -63,19 +65,15 @@ export default class ElementTreeFactory {
 			const branch = this.buildBranch(treeData, r)
 			builtTree.push(branch);
 		});
-		
+		console.log('built tree', builtTree);
 		return builtTree;
 	}
 
 	buildBranch(treeData: Array<SupportedHTMLElement>, head: SupportedHTMLElement): iNode {
 		const builtBranch = {
-			id: head.getElementID(),
-			alias: head.getElementAlias(),
-			type: head.getElementType(),
-			root: head.elementIsARoot(),
-			attributes: head.getElementAttributes(),
+			element: head,
 			children: this.getChildNodes(treeData, head.getElementChildren())
-		} as iNode;
+		}
 		return builtBranch;
 	}
 
@@ -84,11 +82,7 @@ export default class ElementTreeFactory {
 			const el = treeData.find((el: SupportedHTMLElement) => el.getElementID() === cid);
 			if (!el) throw new Error(`[ Element Tree Factory ] Failed to find tree element with id ${cid}`);
 			return {
-				id: el.getElementID(),
-				alias: el.getElementAlias(),
-				type:  el.getElementType(),
-				root: el.elementIsARoot(),
-				attributes: el.getElementAttributes(),
+				element: el,
 				children: this.getChildNodes(treeData, el.getElementChildren())
 			} as iNode;
 		});
@@ -98,8 +92,8 @@ export default class ElementTreeFactory {
 		let newHead: SupportedHTMLElement = {} as SupportedHTMLElement;
 		const copiedBranch = new Array<SupportedHTMLElement>();
 		const copyPairs = new Array<{ old: SupportedHTMLElement, new: SupportedHTMLElement}>();
-		const flattenedBanch = this.getFlatBranch(treeData, headID);
-		flattenedBanch.forEach((el: SupportedHTMLElement) => {
+		const initBranch = this.getBranchByHead(treeData, headID);
+		initBranch.forEach((el: SupportedHTMLElement) => {
 			const elCopy = this.copyElement(el);
 			copyPairs.push({old: el, new: elCopy});
 			if (el.getElementID() === headID) newHead = elCopy;
@@ -113,12 +107,11 @@ export default class ElementTreeFactory {
 		});
 
 		const updatedHead = this.getUpdatedChildren(newHead, copyPairs);
-
-		return [ updatedHead, ...updatedChildren ]; // Add branch state action assumes head is at index 0
+		return [ updatedHead, ...updatedChildren ]; // a related state action ('addBranch') assumes head is at index 0
 	}
 
 	deleteBranch(treeData: Array<SupportedHTMLElement>, head: string, parent?: string): Array<SupportedHTMLElement> {
-		const idsToRemove = this.getFlatBranch(treeData, head).map((el: SupportedHTMLElement) => el.getElementID() );
+		const idsToRemove = this.getBranchByHead(treeData, head).map((el: SupportedHTMLElement) => el.getElementID() );
 
 		if (parent) { // if there's a prent element, it needs its children updated
 			const parentElement = treeData.find((el: SupportedHTMLElement) => el.getElementID() === parent) as SupportedHTMLElement;
@@ -128,7 +121,7 @@ export default class ElementTreeFactory {
 		return treeData.filter((el: SupportedHTMLElement) => idsToRemove.find((id: string) => id === el.getElementID()) === undefined); // filter out elements with IDs in idsToRemove
 	}
 
-	getFlatBranch(treeData: Array<SupportedHTMLElement>, head: string): Array<SupportedHTMLElement> {
+	getBranchByHead(treeData: Array<SupportedHTMLElement>, head: string): Array<SupportedHTMLElement> {
 		const flatBranch = [ ] as Array<SupportedHTMLElement>;
 		const aux = [ head ];
 		while (aux.length) {
@@ -146,11 +139,11 @@ export default class ElementTreeFactory {
 	private getUpdatedChildren(el: SupportedHTMLElement, childPairs: Array<{ old: SupportedHTMLElement, new: SupportedHTMLElement}>): SupportedHTMLElement {
 		const updatedChildren = new Array<string>();
 		el.getElementChildren().forEach((c: string) => {
-			const targetPair = childPairs.find((pair: { old: SupportedHTMLElement, new: SupportedHTMLElement}) => pair.old.getElementID() === c)
-			if (!targetPair) throw new Error(`[ Element Tree Factory ] Element pair with old id ${c} not found`)
+			const targetPair = childPairs.find((pair: { old: SupportedHTMLElement, new: SupportedHTMLElement}) => pair.old.getElementID() === c);
+			if (!targetPair) throw new Error(`[ Element Tree Factory ] Element pair with old id ${c} not found`);
 			updatedChildren.push(targetPair.new.getElementID());
 		});
-		return new SupportedHTMLElement(el.getElementID(), el.getElementAlias(), el.getElementType(), el.elementIsARoot(), el.getElementAttributes(), el.getElementChildren());
+		return new SupportedHTMLElement(el.getElementID(), el.getElementAlias(), el.getElementType(), el.elementIsARoot(), el.getElementAttributes(), updatedChildren);
 	}
 
 	private copyElement(elementToCopy: SupportedHTMLElement): SupportedHTMLElement {
@@ -160,10 +153,42 @@ export default class ElementTreeFactory {
 		const isRoot = elementToCopy.elementIsARoot();
 		const attributes = elementToCopy.getElementAttributes();
 		const children = elementToCopy.getElementChildren();
-		return new SupportedHTMLElement(id, alias, type, isRoot, attributes, children);
+		const copy = new SupportedHTMLElement(id, alias, type, isRoot, attributes, children);
+		return copy;
 	}
 
 	getValidChildren(type: string): Array<string> {
 		return this._VALID_CHILD_INDEX[type];
+	}
+
+	getTreeCode(builtTree: Array<iNode>): string {
+		// recursive function
+		let code = '';
+		builtTree.forEach((n: iNode) => { code += this.getBranchCode(n, 0) });
+		return code;
+	}
+
+	getBranchCode(node: iNode, level: number): string {
+		let codeString = '';
+		const element = node.element;
+		const calculatedIndentation = this.getIndentation(level);
+		codeString += `${calculatedIndentation}<${element.getElementType()} `;
+		let textContent: iHTMLAttribute = {} as iHTMLAttribute;
+		element.getElementAttributes().forEach((att: iHTMLAttribute) => {
+			if (att.name === _TEXT_CONTENT_ATTRIBUTE_) textContent = att;
+			else codeString += `${att.name}="${att.value}" `;
+		});
+		codeString += `>\n`;
+		if (textContent.name && textContent.value) codeString += `${_INDENTATION_UNIT_ + calculatedIndentation}${textContent.value}\n`;
+		node.children.forEach((c: iNode) => {
+			codeString += this.getBranchCode(c, level + 1);
+		});
+		codeString += `${calculatedIndentation}</${element.getElementType()}>\n`;
+		return codeString;
+	}
+
+	getIndentation(level: number): string {
+		if (level === 0) return '';
+		else return _INDENTATION_UNIT_ + this.getIndentation(level - 1);
 	}
 }

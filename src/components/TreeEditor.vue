@@ -1,15 +1,15 @@
 <template>
   <div class="tree-editor-wrapper">
     <TreeElement
-      v-for="(el) of elementTree"
-      :key="el.id"
-      :isRoot="el.root"
-      :type="el.type"
-      :alias="el.alias"
-      :id="el.id"
-      :attributes="el.attributes"
+      v-for="(node) of elementTree"
+      :key="node.element.getElementID()"
+      :isRoot="node.element.elementIsARoot()"
+      :type="node.element.getElementType()"
+      :alias="node.element.getElementAlias()"
+      :id="node.element.getElementID()"
+      :attributes="node.element.getElementAttributes()"
       :parentid="undefined"
-      :children="el.children"
+      :children="node.children"
     />
   </div>
 </template>

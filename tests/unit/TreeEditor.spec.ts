@@ -1,15 +1,13 @@
 import { mount } from '@vue/test-utils';
 import TreeEditor from '@/components/TreeEditor.vue';
-import TreeElement from '@/components/TreeElement.vue';
-import iTreeElement from '@/interfaces/iTreeElement';
 import _DEFAULT_STATE_ from '@/constants/DefaultState';
 import _SUPPORTED_HTML_ELEMENTS_ from "@/constants/SupportedHTMLElementTypes";
 import _VALID_CHILD_INDEX_ from '@/constants/ValidChildIndex';
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
-import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
+import iNode from '@/interfaces/iNode';
 
 describe('TreeEditor.vue', () => {
-	let mockElementTree: Array<SupportedHTMLElement>;
+	let mockElementTree: Array<iNode>;
 	const factory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_, _VALID_CHILD_INDEX_);
 	const openModal = () => {
 		return Promise.resolve();
@@ -17,7 +15,7 @@ describe('TreeEditor.vue', () => {
 	let wrapper: any;
 
 	beforeEach(() => {
-		mockElementTree = _DEFAULT_STATE_.treeData;
+		mockElementTree = _DEFAULT_STATE_.builtTree;
 		const mockProps =  {
 			elementTree: mockElementTree
 		}

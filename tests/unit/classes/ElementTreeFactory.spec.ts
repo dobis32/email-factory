@@ -101,7 +101,7 @@ describe('ElementTreeFactory.ts', () => {
         expect(factory.buildTree).toBeDefined();
         expect(typeof factory.buildTree).toEqual('function');
         expect(factory.buildBranch).toHaveBeenCalledTimes(numBranches);
-        expect(builtTree).toEqual(builtTree.filter((n: iNode) => n.root === true))
+        expect(builtTree).toEqual(builtTree.filter((n: iNode) => n.element.elementIsARoot() === true))
     });
     
     it('should have a function to built a branch from a flattened input array of elements', () => {
@@ -132,9 +132,9 @@ describe('ElementTreeFactory.ts', () => {
         const treeData = _DEFAULT_STATE_.treeData;
         const expectedBranchData = [ treeData[2], treeData[3] ];
         const head = treeData[2].getElementID();
-        const flatBranch = factory.getFlatBranch(treeData, head);
-        expect(factory.getFlatBranch).toBeDefined();
-        expect(typeof factory.getFlatBranch).toEqual('function');
+        const flatBranch = factory.getBranchByHead(treeData, head);
+        expect(factory.getBranchByHead).toBeDefined();
+        expect(typeof factory.getBranchByHead).toEqual('function');
         expect(flatBranch).toEqual(expectedBranchData);
     });
 });

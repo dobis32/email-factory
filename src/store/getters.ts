@@ -7,7 +7,7 @@ export default {
 		return state.treeData;
 	},
 	getBuiltTree: (state: any) => {
-		return state.elementTreeFactory.buildTree(state.treeData);
+		return state.builtTree;
 	},
 	getModalPayload: (state: any) => {
 		return {

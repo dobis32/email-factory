@@ -1,10 +1,13 @@
 <template>
   <div id="modal-card" @click="stopPropagation">
-    <textarea name="code" id="generated-code" wrap="off" cols="30" rows="10" v-model="generatedCode"></textarea>
+    <textarea name="code" id="generated-code" wrap="off" cols="76" rows="10" v-model="generatedCode"></textarea>
   </div>
 </template>
 
 <script lang="ts">
+import ElementTreeFactory from "@/classes/ElementTreeFactory";
+import SupportedHTMLElement from "@/classes/SupportedHTMLElement";
+import iNode from "@/interfaces/iNode";
 import { Options, Vue } from "vue-class-component";
 @Options({
   data: () => {
@@ -14,9 +17,11 @@ import { Options, Vue } from "vue-class-component";
   },
   props: ["elementTreeData"],
   inject: ["stopPropagation"],
-  // beforeMount() {
-  //   const f = this.$store.state.elementTreeFactory;
-  // },
+  beforeMount() {
+    const f: ElementTreeFactory = this.$store.state.elementTreeFactory;
+    const builtTree: Array<iNode> = this.$store.state.builtTree;
+    this.generatedCode = f.getTreeCode(builtTree);
+  },
   beforeUnmount() {
     this.$store.dispatch('closeModal');
   }
@@ -32,7 +37,7 @@ export default class GeneratedCodeCard extends Vue {}
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
-  width: 800px; /* Could be more or less, depending on screen size */
+  width: 600px; /* Could be more or less, depending on screen size */
   text-align: center;
 }
 
