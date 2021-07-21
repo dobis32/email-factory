@@ -18,6 +18,7 @@ describe('actions.ts', () => {
 
 		mockContext = {
             commit: jest.fn(),
+            dispatch: jest.fn(),
             state: {
                 treeData: [ ... DefaultState.treeData ],
                 elementTreeFactory: factory
@@ -71,6 +72,7 @@ describe('actions.ts', () => {
     });
 
     it('should have a function for adding a branch to the element tree', () => {
+        actions.updateTree = jest.fn(actions.updateTree);
         const treeData: Array<SupportedHTMLElement> = mockContext.state.treeData;
         const headID = treeData[1].getElementID();
         const branch = factory.copyBranch(treeData, headID);
@@ -82,8 +84,8 @@ describe('actions.ts', () => {
         actions.addBranch(mockContext, payload);
         expect(actions.addBranch).toBeDefined();
         expect(typeof actions.addBranch).toEqual('function');
-        expect(mockContext.commit).toHaveBeenCalled();
-        expect(mockContext.commit).toHaveBeenCalledWith('setTreeData', updatedTreeData);
+        expect(mockContext.dispatch).toHaveBeenCalled();
+        expect(mockContext.dispatch).toHaveBeenCalledWith('updateTree', updatedTreeData);
     });
 
 
@@ -97,13 +99,14 @@ describe('actions.ts', () => {
         actions.addChild(mockContext, payload);
         expect(actions.addChild).toBeDefined();
         expect(typeof actions.addChild).toEqual('function');
-        expect(mockContext.commit).toHaveBeenCalled();
-        expect(mockContext.commit).toHaveBeenCalledTimes(1);
-        expect(mockContext.commit).toHaveBeenCalledWith('setTreeData', expectedResult);
+        expect(mockContext.dispatch).toHaveBeenCalled();
+        expect(mockContext.dispatch).toHaveBeenCalledTimes(1);
+        expect(mockContext.dispatch).toHaveBeenCalledWith('updateTree', expectedResult);
         expect(parentEl.getElementChildren().find((c: string) => c == newElement.getElementID())).toBeDefined();
     });
 
     it('should have a function for deleting a branch from the element tree', () => {
+        actions.updateTree = jest.fn(actions.updateTree);
         const idToRemove = 'bar';
         const parentid = 'foo';
         const payload = { idToRemove, parentid };
@@ -115,10 +118,11 @@ describe('actions.ts', () => {
         expect(actions.deleteBranch).toBeDefined();
         expect(typeof actions.deleteBranch).toEqual('function');
         expect(f.deleteBranch).toHaveBeenCalledWith(treeData, idToRemove, parentid);
-        expect(mockContext.commit).toHaveBeenCalledWith('setTreeData', updatedData);
+        expect(mockContext.dispatch).toHaveBeenCalledWith('updateTree', updatedData);
     });
 
     it('should have a function for updating the alias and attributes of a specified tree element', () => {
+        actions.updateTree = jest.fn(actions.updateTree);
         const treeData: Array<SupportedHTMLElement> = DefaultState.treeData;
         const targetEl = treeData[1];
         const eid = targetEl.getElementID();
@@ -131,7 +135,7 @@ describe('actions.ts', () => {
         actions.updateElement(mockContext, payload);
         expect(actions.updateElement).toBeDefined();
         expect(typeof actions.updateElement).toEqual('function');
-        expect(mockContext.commit).toHaveBeenCalledWith('setTreeData', updatedTreeData);
+        expect(mockContext.dispatch).toHaveBeenCalledWith('updateTree', updatedTreeData);
     });
 
     it('should have a function for setting a boolean that controls wether or not the modal can submit data', () => {
@@ -140,5 +144,10 @@ describe('actions.ts', () => {
         expect(actions.modalCanSubmit).toBeDefined();
         expect(typeof actions.modalCanSubmit).toEqual('function');
         expect(mockContext.commit).toHaveBeenCalledWith('modalCanSubmit', b);
+    });
+
+    it('should have a function to update the tree', () => {
+        // expect(mockContext.commit).toHaveBeenCalledWith('setTreeData', updatedTreeData);
+
     });
 });

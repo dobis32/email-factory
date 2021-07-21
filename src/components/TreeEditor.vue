@@ -1,5 +1,11 @@
 <template>
+  
   <div class="tree-editor-wrapper">
+    <div v-if="elementTree.length === 0">
+      <div class="empty-tree-button">
+        +
+      </div>
+    </div>
     <TreeElement
       v-for="(node) of elementTree"
       :key="node.element.getElementID()"
@@ -36,5 +42,13 @@ export default class TreeEditor extends Vue {}
   margin: 10px;
   padding: 10px;
   border: 2px solid #999;
+}
+
+.empty-tree-button {
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  background-color: greenyellow;
+  cursor: pointer;
 }
 </style>

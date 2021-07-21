@@ -3,6 +3,7 @@ import _DEFAULT_STATE_ from '@/constants/DefaultState';
 import iTreeElement from '@/interfaces/iTreeElement';
 import iHTMLAttribute from '@/interfaces/iHTMLAttribute';
 import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
+import ElementTreeFactory from '@/classes/ElementTreeFactory';
 
 export default {
 	closeModal: (context: any) => {
@@ -32,7 +33,7 @@ export default {
 			parent.getElementChildren().push(branch[0].getElementID()); // This assumes the head node is at index 0
 		}
 		const newData = [ ...treeData, ...branch ];
-		context.commit('setTreeData', newData);
+		context.dispatch('updateTree', newData);
 	},
 	addChild: (context: any, payload: {newElement: SupportedHTMLElement, parentID: string}): void => {
 		const { newElement, parentID } = payload;
@@ -41,13 +42,13 @@ export default {
 		if (parent === undefined) throw new Error(`[ Store Actions ] Failed to add child. Parent element with ID ${parentID} not found`);
 		parent.getElementChildren().push(newElement.getElementID());
 		const newData = [ ...treeData, newElement ];
-		context.commit('setTreeData', newData);
+		context.dispatch('updateTree', newData);
 	},
 	deleteBranch: (context: any, payload: { idToRemove: string, parentid?: string }) : void => {
 		const { idToRemove, parentid } = payload;
 		const treeData: Array<SupportedHTMLElement> = context.state.treeData;
 		const updatedTreeData = context.state.elementTreeFactory.deleteBranch(treeData, idToRemove, parentid);
-		context.commit('setTreeData', updatedTreeData);
+		context.dispatch('updateTree', updatedTreeData);
 	},
 	updateElement: (context: any, payload: { eid: string, alias: string, attributes: Array<iHTMLAttribute>}): void => {
 		const { eid, alias, attributes } = payload;
@@ -57,11 +58,15 @@ export default {
 		target.setElementAlias(alias);
 		target.setElementAttributes(attributes);
 		const updatedTreeData = [ ...treeData ];
-		context.commit('setTreeData', updatedTreeData);
-
+		context.dispatch('updateTree', updatedTreeData);
 	},
 	modalCanSubmit: (context: any, submit: boolean): void => {
 		context.commit('modalCanSubmit', submit);
 	},
-
+	updateTree: (context: any, treeData: Array<SupportedHTMLElement>): void => {
+		const f: ElementTreeFactory = context.state.elementTreeFactory;
+		const builtTree = f.buildTree(treeData);
+		context.commit('setTreeData', treeData);
+		context.commit('setBuiltTree', builtTree);
+	}
 };

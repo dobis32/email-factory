@@ -1,11 +1,15 @@
 /* eslint-disable */
 import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
 import iAppState from '@/interfaces/iAppState';
+import iNode from '@/interfaces/iNode';
 
 export default {
 	setTreeData: (state: iAppState, updatedTreeData: Array<SupportedHTMLElement>): void => {
 		state.treeData = updatedTreeData;
-		state.builtTree = state.elementTreeFactory.buildTree(updatedTreeData); // TODO unit test
+	},
+
+	setBuiltTree: (state: iAppState, newBuiltTree: Array<iNode>): void => {
+		state.builtTree = newBuiltTree;
 	},
 
 	setModalState: (state: iAppState, updatedState: boolean): void => {
