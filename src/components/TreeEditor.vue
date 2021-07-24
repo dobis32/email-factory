@@ -35,6 +35,7 @@ export default class TreeEditor extends Vue {}
   min-height: 200px;
   margin: 10px;
   padding: 10px;
-  border: 2px solid #999;
+  border: 2px solid #2A2438;
+  border-radius: 30px;
 }
 </style>

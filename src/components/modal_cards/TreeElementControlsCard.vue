@@ -52,12 +52,15 @@ export default class TreeElementControlsCard extends Vue {}
 <style scoped lang="scss">
 #modal-card {
   z-index: 10; /* Sit on top */
-  background-color: #fefefe;
+  background-color: #171717;
+  color: #BBE1FA;
   margin: 30px auto;
   padding: 20px;
-  border: 1px solid #888;
-  width: 200px;   
+  // border: 1px solid #888;
+  width: 400px;   
   text-align: center;
+  border-radius: 30px;
+
 }
 
 .input-row {
@@ -66,11 +69,16 @@ export default class TreeElementControlsCard extends Vue {}
 
 .action-button {
   width: 180px;
-  padding: 10px 0px;
+  padding: 10px 6px;
   text-align: center;
+  font-weight: bold;
   margin: 8px auto;
-  background-color: darkcyan;
-  color: #fff;
+  background-color: #3282B8;
+  color: #BBE1FA;
   cursor: pointer;
+  border-radius: 8px;
+  &:hover{
+    color: #CCF0FA;
+  }
 }
 </style>

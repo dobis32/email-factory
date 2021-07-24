@@ -5,7 +5,7 @@
       <input type="text" v-model="elementAlias" name="alias" id="alias-input" />
       
     </div>
-    <div id="input-row">
+    <div class="input-row">
       <h3>Element type:</h3>
       <select name="type" v-model="elementType" id="type-input">
         <option v-for="(child) of validChildren" id="elementType" v-bind:key="child">{{ child }}</option>
@@ -55,12 +55,26 @@ export default class CreateChildElementCard extends Vue {}
 <style scoped lang="scss">
 #modal-card {
   z-index: 10; /* Sit on top */
-  background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
+  background-color: #171717;
+  color: #BBE1FA;
+  margin: 2% auto; 
   padding: 20px;
-  border: 1px solid #888;
   width: 400px; /* Could be more or less, depending on screen size */
   text-align: center;
+  border-radius: 30px;
+
+}
+
+h3 {
+  padding-bottom: 10px;
+}
+
+input {
+  color: #BBE1FA;
+}
+
+select {
+  color: #BBE1FA;
 }
 
 .input-row {
@@ -68,12 +82,17 @@ export default class CreateChildElementCard extends Vue {}
 }
 
 #submit-button {
-  background-color: #062;
-  color: #fff;
+  background-color: #3282B8;
+  font-weight: bold;
+  color: #BBE1FA;
   cursor: pointer;
-  width: 80px;
+  width: 120px;
   margin: 0px auto;
-  padding: 15px 0px;
+  padding: 10px 0px;
+  border-radius: 8px;
+  &:hover{
+    color: #CCF0FA;
+  }
 }
 
 input {

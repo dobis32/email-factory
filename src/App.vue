@@ -1,7 +1,9 @@
 <template>
-  <div>
-    <TreeEditor :elementTree="getTree" />
-    <ModuleOptions />
+  <div id="app-background">
+    <div id="editor">
+      <TreeEditor :elementTree="getTree" />
+      <ModuleOptions />
+    </div>
     <div v-if="getModalPayload.modalState">
       <Modal :payload="getModalPayload" />
     </div>
@@ -54,10 +56,26 @@ export default class App extends Vue {}
   margin: 0;
   padding: 0;
   vertical-align: top;
+  // background-color: #171717;
 }
 
+#editor {
+  max-width: 1100px;
+  margin: 8vh auto;
+  background-color: #171717;
+  padding: 30px;
+  border-radius: 30px;
+}
 #modal {
     z-index: 9; /* Sit on top */
 
+}
+
+#app-background {
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  background-color: #A9C9FF;
+  background-image: linear-gradient(180deg, #A9C9FF 0%, #FFBBEC 100%);
 }
 </style>

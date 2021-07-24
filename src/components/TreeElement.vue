@@ -1,9 +1,7 @@
 <template>
   <div class="tree-element-wrapper">
-    <div :class="treeElementClass" @click="promptAction">
-      <h3 id="alias">{{alias}}</h3>
-      <h4 id="type">({{ type }})</h4>
-      <h4>{{ id }}</h4>
+    <div class="tree-element" @click="promptAction">
+      <span>&lt;<span id="type">{{ type }}</span>&nbsp;<span class="att-name">alias</span>=&quot;<span id="alias">{{alias}}</span>&quot; id=&quot;{{ id }}&quot; &gt;</span>
     </div>
     <TreeElement
       v-for="(child) of children"
@@ -27,11 +25,8 @@ import { Options, Vue } from "vue-class-component";
   props: ["type", "alias", "id", "children", "parentid", "isRoot", "attributes"],
   data: () => {
     return {
-      treeElementClass: "tree-element"
+      
     };
-  },
-  created() {
-    this.treeElementClass = `${this.type} ${this.treeElementClass}`;
   },
   inject: [
     'openModal'
@@ -122,43 +117,42 @@ export default class TreeElement extends Vue {}
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .tree-element-wrapper {
-  padding-left: 50px;
+  padding-left: 30px;
 }
 
 .button-wrapper {
-  width: 120px;
+  // width: 120px;
   height: 7px;
   display: flex;
 }
 
 .tree-element {
-  width: 120px;
-  text-align: center;
-  padding: 30px 0px;
+  // width: 120px;
+  text-align: left;
+  padding: 10px 0px;
   margin-bottom: 0px;
+  font-size: 24px;
   cursor: pointer;
   overflow: hidden;
+  color: #3A9188;
+  span {
+    &:hover {
+      color: #B8E1DD;
+    }
+  }
 }
 
-.table {
-  background-color: brown;
+#type {
+  color: #3A9188;
 }
 
-.tr {
-  background-color: cadetblue;
+#alias {
+  color: #A12559;
+  
 }
 
-.td {
-  background-color: coral;
+.att-name {
+  color: #3282B8;
 }
-
-.th {
-  background-color: seagreen;
-}
-
-.p {
-  background-color: khaki;
-}
-
 
 </style>

@@ -13,7 +13,7 @@
     <div id="add-attribute" class="button" @click="addAttribute">
       Add Attribute
     </div>
-    <div id="submit-button" :class="{ button: true, disabled: disableSubmit }" @click="submitData">Submit</div>
+    <div id="submit-button" :class="{ button: true, disabled: disableSubmit }" @click="submitData">Save</div>
   </div>
 </template>
 
@@ -84,12 +84,14 @@ export default class EditTreeElementCard extends Vue {}
 <style scoped lang="scss">
 #modal-card {
   z-index: 10; /* Sit on top */
-  background-color: #fefefe;
-  margin: 2% auto; /* 15% from the top and centered */
+  background-color: #171717;
+  color: #BBE1FA;
+  margin: 2% auto; 
   padding: 20px;
-  border: 1px solid #888;
   width: 400px; /* Could be more or less, depending on screen size */
   text-align: center;
+  border-radius: 30px;
+
 }
 
 .input-row {
@@ -100,20 +102,27 @@ export default class EditTreeElementCard extends Vue {}
 
 .attribute-row {
   width: 90%;
-  margin: 0px auto;
+  margin: 0px auto 10px;
 }
 
 .button {
   display: block;
-  width: 140px;
+  width: 160px;
   margin: 20px auto 0px auto;
   padding: 15px 0px;
+  border-radius: 8px;
+  font-weight: bold;
+  
+
 }
 
 #submit-button {
-  background-color: #062;
-  color: #fff;
+  background-color: #3A9188;
+  color: #B8E1DD;
   cursor: pointer;
+  &:hover{
+    color: #DDF0EE;
+  }
 }
 
 .disabled {
@@ -122,12 +131,17 @@ export default class EditTreeElementCard extends Vue {}
 
 input {
   width: 120px;
+  color: #BBE1FA;
+  background-color: #171717;
 }
 
 #add-attribute {
-  background-color: #05a;
-  color: #fff;
+  background-color: #3282B8;
+  color: #BBE1FA;
   cursor: pointer;
+  &:hover{
+    color: #CCF0FA;
+  }
 }
 
 #alias-input {

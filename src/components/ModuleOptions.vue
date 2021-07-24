@@ -34,16 +34,23 @@ export default class ModuleOptions extends Vue {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
   .module-options-wrapper {
+    margin-left: 20px;
     display: inline-block;
-    width: 150px;
+    width: 200px;
     min-height: 200px;
   }
 
   .module-option {
-    background-color: cornflowerblue;
+    background-color: #3282B8;
+    font-weight: bold;
+    color: #BBE1FA;
     text-align: center;
     cursor: pointer;
-    padding: 20px 0px;
+    padding: 20px 10px;
     margin: 10px 0px;
+    border-radius: 8px;
+    &:hover{
+      color: #CCF0FA;
+    }
   }
 </style>

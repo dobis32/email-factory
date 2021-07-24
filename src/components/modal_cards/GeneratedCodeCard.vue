@@ -33,12 +33,19 @@ export default class GeneratedCodeCard extends Vue {}
 <style scoped lang="scss">
 #modal-card {
   z-index: 10; /* Sit on top */
-  background-color: #fefefe;
+  background-color: #171717;
+  color: #BBE1FA;
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
-  border: 1px solid #888;
   width: 600px; /* Could be more or less, depending on screen size */
   text-align: center;
+  border-radius: 30px;
+
+}
+
+textarea {
+  color: #BBE1FA;
+  background-color: #171717;
 }
 
 .input-row {

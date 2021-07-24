@@ -91,6 +91,8 @@ export default class HTMLAttribute extends Vue {}
     input {
         margin-bottom: 6px;
         max-width: 100px;
+        color: #BBE1FA;
+        background-color: #171717;;
     }
 
     .btn {
@@ -100,24 +102,26 @@ export default class HTMLAttribute extends Vue {}
         width: 80px;
         cursor: pointer;
         justify-content: center;
+        border-radius: 8px;
+        font-weight: bold;
+        &:hover {
+            color: #CCF0FA;
+        }
     }
 
     #edit-btn {
-        background-color: orange;
+        background-color: #3282B8;
         width: 60px;
         margin-right: 16px;
     }
 
-   
-
     #save-btn {
-        background-color: green;
-        color: #fff;
+        background-color: #3282B8;
         margin-right: 10px;
     }
 
      #cancel-btn {
-        background-color: orange;
+        background-color: #3282B8;
         margin-right: 10px;
     }
 
@@ -126,9 +130,12 @@ export default class HTMLAttribute extends Vue {}
     }
 
     #remove-btn {
-        background-color: red;
+        background-color: #88304E;
         color: #fff;
         display: inline-block;
+        &:hover {
+            background-color: #AA225C;
+        }
     }
 
     #att-name-heading {

@@ -82,9 +82,6 @@ describe('TreeElement.vue', () => {
 	});
 
 	// Data
-	it('should concatenate the default tree-element css class with the appropriate element type', () => {
-		expect(wrapper.vm.treeElementClass).toEqual(`${mockProps.type} ${mockTreeElement}`);
-	});
 
 	// DOM
 	it('should have the alias of the assumed tree element rendered to the DOM', () => {
