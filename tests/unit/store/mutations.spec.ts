@@ -1,5 +1,6 @@
 import mutations from '@/store/mutations';
 import iAppState from '@/interfaces/iAppState';
+import iNode from '@/interfaces/iNode';
 import DefaultStateIndex from '@/constants/DefaultState';
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
 import { _TESTING_HASH_ } from '@/constants/Testing';
@@ -7,6 +8,7 @@ import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
 
 describe('mutations.ts', () => {
     let treeData: Array<SupportedHTMLElement> 
+    let builtTree: Array<iNode> 
     let modalState: boolean;
     let activeModal: string;
     let modalcb: Function;
@@ -17,6 +19,7 @@ describe('mutations.ts', () => {
 
 	beforeEach(() => {
         treeData = DefaultStateIndex.treeData;
+        builtTree = DefaultStateIndex.builtTree;
         modalState = DefaultStateIndex.modalState;
         activeModal = DefaultStateIndex.activeModal;
         modalcb = DefaultStateIndex.modalcb;
@@ -26,6 +29,7 @@ describe('mutations.ts', () => {
 
 		state = {
             treeData,
+            builtTree,
             modalState,
             activeModal,
             modalcb,
@@ -45,6 +49,18 @@ describe('mutations.ts', () => {
     expect(mutations.setTreeData).toBeDefined();
     expect(typeof mutations.setTreeData).toEqual('function');
     expect(oldData == state.treeData).toEqual(false);
+   });
+
+   it('should have a function to update the built tree of the state', () => {
+    const oldTree: Array<iNode> = state.builtTree;
+    const newData: Array<SupportedHTMLElement> = [...state.treeData];
+    newData[0].setElementAlias('something waaay different');
+    const newTree = elementTreeFactory.buildTree(newData);
+    mutations.setBuiltTree(state, newTree);
+
+    expect(mutations.setTreeData).toBeDefined();
+    expect(typeof mutations.setTreeData).toEqual('function');
+    expect(newTree == oldTree).toEqual(false);
    });
 
    it('should have a function to update the modal state of the state', () => {
