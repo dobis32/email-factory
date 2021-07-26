@@ -43,6 +43,7 @@ export default class TreeEditor extends Vue {}
   padding: 10px;
   border: 2px solid #2A2438;
   border-radius: 30px;
+  overflow: scroll;
 }
 
 .empty-tree-button {

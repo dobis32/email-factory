@@ -89,7 +89,7 @@ describe('TreeElement.vue', () => {
 	});
 
 	it('should have the type of the assumed tree element rendered to the DOM', () => {
-		expect(wrapper.find('#type').exists()).toBeTruthy();
+		expect(wrapper.find('.element-text').text().includes(mockProps.type)).toBeTruthy();
 	});
 
 	it('should call the promptAction function when the tree element is clicked', () => {

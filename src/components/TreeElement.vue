@@ -1,7 +1,7 @@
 <template>
   <div class="tree-element-wrapper">
     <div class="tree-element" @click="promptAction">
-      <span>&lt;<span id="type">{{ type }}</span>&nbsp;<span class="att-name">alias</span>=&quot;<span id="alias">{{alias}}</span>&quot; id=&quot;{{ id }}&quot; &gt;</span>
+      <span class="element-text">&lt;{{ type }}&nbsp;<span class="att-name">alias</span>=&quot;<span id="alias">{{alias}}</span>&quot; id=&quot;{{ id }}&quot; &gt;</span>
     </div>
     <TreeElement
       v-for="(child) of children"
@@ -135,7 +135,8 @@ export default class TreeElement extends Vue {}
   cursor: pointer;
   overflow: hidden;
   color: #3A9188;
-  span {
+  white-space: nowrap;
+  .element-text {
     &:hover {
       color: #B8E1DD;
     }
@@ -153,6 +154,11 @@ export default class TreeElement extends Vue {}
 
 .att-name {
   color: #3282B8;
-}
+  &:hover {
+    color: #3282B8;
+  }
+} 
+
+
 
 </style>
