@@ -4,55 +4,57 @@ import iTreeElement from '@/interfaces/iTreeElement';
 import iHTMLAttribute from '@/interfaces/iHTMLAttribute';
 import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
+import iAppState from '@/interfaces/iAppState';
 
 export default {
-	closeModal: (context: any) => {
+	closeModal: (context: { state: iAppState, dispatch: Function, commit: Function }) => {
 		context.commit('setModalState', false);
 		context.commit('setModalCard', _DEFAULT_STATE_.activeModal);
 	},
-	openModal: (context: any) => {
+	openModal: (context: { state: iAppState, dispatch: Function, commit: Function }) => {
 		context.commit('setModalState', true);
 	},
-	setModal: (context: any, payload: { card: string, data: any }): void => {
+	setModal: (context: { state: iAppState, dispatch: Function, commit: Function }, payload: { card: string, data: any }): void => {
 		const { card, data } = payload;
 		context.commit('setModalCard', card);
 		context.commit('setModalData', data);
 	},
-	resetModalCallback: (context: any): void => {
+	resetModalCallback: (context: { state: iAppState, dispatch: Function, commit: Function }): void => {
 		context.commit('setModalCallback', _DEFAULT_STATE_.modalcb);
 	},
-	setModalCallback: (context: any, cb: Function) : void => {
+	setModalCallback: (context: { state: iAppState, dispatch: Function, commit: Function }, cb: Function) : void => {
 		context.commit('setModalCallback', cb);
 	},
-	addBranch: (context: any, payload: {branch: Array<SupportedHTMLElement>, parentID: string | undefined}): void => {
+	addBranch: (context: { state: iAppState, dispatch: Function, commit: Function }, payload: {branch: Array<SupportedHTMLElement>, parentID: string | undefined}): void => {
 		const { branch, parentID } = payload;
-		const treeData = context.state.treeData;
+		const treeData = context.state.activeModule.getModuleTreeData();
 		if (parentID) {
-			const parent: SupportedHTMLElement = treeData.find((el: SupportedHTMLElement) => el.getElementID() == parentID);
+			const parent: SupportedHTMLElement | undefined = treeData.find((el: SupportedHTMLElement) => el.getElementID() == parentID);
 			if (parent === undefined) throw new Error(`[ Store Actions ] Failed to add branch. Parent element with ID ${parentID} not found`);
 			parent.getElementChildren().push(branch[0].getElementID()); // This assumes the head node is at index 0
 		}
 		const newData = [ ...treeData, ...branch ];
 		context.dispatch('updateTree', newData);
 	},
-	addChild: (context: any, payload: {newElement: SupportedHTMLElement, parentID: string}): void => {
+	addChild: (context: { state: iAppState, dispatch: Function, commit: Function }, payload: {newElement: SupportedHTMLElement, parentID: string}): void => {
 		const { newElement, parentID } = payload;
-		const treeData = context.state.treeData;
-		const parent: SupportedHTMLElement = treeData.find((el: SupportedHTMLElement) => el.getElementID() == parentID);
+		const treeData = context.state.activeModule.getModuleTreeData();
+		const parent: SupportedHTMLElement | undefined = treeData.find((el: SupportedHTMLElement) => el.getElementID() == parentID);
 		if (parent === undefined) throw new Error(`[ Store Actions ] Failed to add child. Parent element with ID ${parentID} not found`);
 		parent.getElementChildren().push(newElement.getElementID());
 		const newData = [ ...treeData, newElement ];
 		context.dispatch('updateTree', newData);
 	},
-	deleteBranch: (context: any, payload: { idToRemove: string, parentid?: string }) : void => {
+	deleteBranch: (context: { state: iAppState, dispatch: Function, commit: Function }, payload: { idToRemove: string, parentid?: string }) : void => {
 		const { idToRemove, parentid } = payload;
-		const treeData: Array<SupportedHTMLElement> = context.state.treeData;
+		const state: iAppState =  context.state;
+		const treeData: Array<SupportedHTMLElement> = state.activeModule.getModuleTreeData();
 		const updatedTreeData = context.state.elementTreeFactory.deleteBranch(treeData, idToRemove, parentid);
 		context.dispatch('updateTree', updatedTreeData);
 	},
-	updateElement: (context: any, payload: { eid: string, alias: string, attributes: Array<iHTMLAttribute>}): void => {
+	updateElement: (context: { state: iAppState, dispatch: Function, commit: Function }, payload: { eid: string, alias: string, attributes: Array<iHTMLAttribute>}): void => {
 		const { eid, alias, attributes } = payload;
-		const treeData: Array<SupportedHTMLElement> = context.state.treeData;
+		const treeData: Array<SupportedHTMLElement> = context.state.activeModule.getModuleTreeData();
 		const target = treeData.find((el: SupportedHTMLElement) => el.getElementID() === eid);
 		if (!target) throw new Error(`[ Store Actions ] Failed to update element with ID ${eid}`)
 		target.setElementAlias(alias);
@@ -60,10 +62,10 @@ export default {
 		const updatedTreeData = [ ...treeData ];
 		context.dispatch('updateTree', updatedTreeData);
 	},
-	modalCanSubmit: (context: any, submit: boolean): void => {
+	modalCanSubmit: (context: { state: iAppState, dispatch: Function, commit: Function }, submit: boolean): void => {
 		context.commit('modalCanSubmit', submit);
 	},
-	updateTree: (context: any, treeData: Array<SupportedHTMLElement>): void => {
+	updateTree: (context: { state: iAppState, dispatch: Function, commit: Function }, treeData: Array<SupportedHTMLElement>): void => {
 		const f: ElementTreeFactory = context.state.elementTreeFactory;
 		const builtTree = f.buildTree(treeData);
 		context.commit('setTreeData', treeData);

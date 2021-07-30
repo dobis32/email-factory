@@ -20,6 +20,7 @@
 <script lang="ts">
 import ElementTreeFactory from "@/classes/ElementTreeFactory";
 import SupportedHTMLElement from "@/classes/SupportedHTMLElement";
+import iAppState from "@/interfaces/iAppState";
 import { Options, Vue } from "vue-class-component";
 @Options({
   props: ["type", "alias", "id", "children", "parentid", "isRoot", "attributes"],
@@ -33,11 +34,12 @@ import { Options, Vue } from "vue-class-component";
   ],
   methods: {
     async promptAction() {
-      console.log('prompting action');
       const f: ElementTreeFactory = this.$store.state.elementTreeFactory;
-      const treeData = this.$store.state.treeData;
-      const id = this.id;
-      const el = f.findElementByID(treeData, id);
+      const state: iAppState = this.$store.state;
+      const treeData: Array<SupportedHTMLElement> = state.activeModule.getModuleTreeData();
+      const id: string = this.id;
+      const el: SupportedHTMLElement | undefined = f.findElementByID(treeData, id);
+      if (!el) throw new Error(`[ Tree Element Vue ] No element with ID ${id} found`);
       const activeElement = el ? el : {};
       const card = 'ElementControlsCard';
       const data = { activeElement };
@@ -45,6 +47,7 @@ import { Options, Vue } from "vue-class-component";
       const result = await this.openModal();
       this.performAction(result);
     },
+    
     performAction(action: string) {
         switch(action) {
           case 'add':
@@ -64,13 +67,14 @@ import { Options, Vue } from "vue-class-component";
             this.deleteBranch();
             break;
           default:
-            console.log('Did not recognize that action...');
+            console.log('Did not recognize that action...', action);
         }
     },
 
     async addChild() {
-      const f: ElementTreeFactory = this.$store.state.elementTreeFactory;
-      const treeData: Array<SupportedHTMLElement> = this.$store.state.treeData;
+      const state: iAppState = this.$store.state;
+      const f: ElementTreeFactory = state.elementTreeFactory;
+      const treeData: Array<SupportedHTMLElement> = state.activeModule.getModuleTreeData();
       const el = f.findElementByID(treeData, this.id);
       if (el) {
         const activeElement = el ? el : {};
@@ -88,13 +92,14 @@ import { Options, Vue } from "vue-class-component";
     },
 
     copyBranch() {
-      const f: ElementTreeFactory = this.$store.state.elementTreeFactory;
+      const state: iAppState = this.$store.state;
+      const f: ElementTreeFactory = state.elementTreeFactory;
       const headID = this.id;
-      const treeData: Array<SupportedHTMLElement> = this.$store.state.treeData;
-      const copiedBranch = f.copyBranch(treeData, headID);
+      const treeData: Array<SupportedHTMLElement> = state.activeModule.getModuleTreeData();
+      const copiedBranch: Array<SupportedHTMLElement> = f.copyBranch(treeData, headID);
       let parentID: string | undefined;
       if (!this.isRoot) parentID = this.parentid;
-      this.$store.dispatch('addBranch', { branch: copiedBranch, parentID });
+      this.$store.dispatch('addBranch', copiedBranch, parentID);
     },
     deleteBranch() {
       this.$store.dispatch('deleteBranch', { idToRemove: this.id, parentid: this.parentid });

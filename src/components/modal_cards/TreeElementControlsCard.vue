@@ -2,25 +2,20 @@
   <div id="modal-card" @click="stopPropagation">
     <h1 id="element-alias">{{ activeElement.getElementAlias() }}</h1>
     <h3 id="element-type">{{ activeElement.getElementType() }}</h3>
-    <div id="add-button" class="action-button" @click="selectAction('add')">
-      Add Child
-    </div>
-    <div id="edit-button" class="action-button" @click="selectAction('edit')">
-      Edit Element
-    </div>
-    <div id="copy-button" class="action-button" @click="selectAction('copy')">
-      Copy Branch
-    </div>
-    <div id="delete-button" class="action-button" @click="selectAction('delete')">
-      Delete Branch
-    </div>
+    <DumbButton id="add-button" :text="'Add Child'" :type="'primary'" @click="selectAction('add')" />
+    <DumbButton id="edit-button" :text="'Edit Element'" :type="'primary'" @click="selectAction('edit')"  />
+    <DumbButton id="copy-button" :text="'Copy Branch'" :type="'primary'" @click="selectAction('copy')" />
+    <DumbButton id="delete-button" :text="'Delete Branch'" :type="'primary'" @click="selectAction('delete')" />
   </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-
+import DumbButton from '@/components/dumb_ui/DumbButton.vue';
 @Options({
+  components: {
+    DumbButton
+  },
   props: ["activeElement", "cb"],
   data: () => {
     return {

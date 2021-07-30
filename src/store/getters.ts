@@ -1,15 +1,15 @@
-import ElementTreeFactory from "@/classes/ElementTreeFactory";
+import iAppState from "@/interfaces/iAppState";
 import iModalPayload from "@/interfaces/iModalPayload";
 
 /* eslint-disable */
 export default {
-	getTreeData: (state: any) => {
-		return state.treeData;
+	getTreeData: (state: iAppState) => {
+		return state.activeModule.getModuleTreeData();
 	},
-	getBuiltTree: (state: any) => {
+	getBuiltTree: (state: iAppState) => {
 		return state.builtTree;
 	},
-	getModalPayload: (state: any) => {
+	getModalPayload: (state: iAppState) => {
 		return {
 			modalState: state.modalState,
 			activeModal: state.activeModal,

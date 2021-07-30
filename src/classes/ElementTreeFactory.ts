@@ -65,7 +65,6 @@ export default class ElementTreeFactory {
 			const branch = this.buildBranch(treeData, r)
 			builtTree.push(branch);
 		});
-		console.log('built tree', builtTree);
 		return builtTree;
 	}
 

@@ -21,7 +21,7 @@ describe('TreeElementControlsCard.vue', () => {
             return;
         });
 
-        mockActiveElement = _DEFAULT_STATE_.treeData[1];
+        mockActiveElement = _DEFAULT_STATE_.activeModule.getModuleTreeData()[1];
 
         mockInitSelectedAction = 'edit';
 

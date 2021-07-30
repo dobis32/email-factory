@@ -7,11 +7,12 @@ import ElementTreeFactory from '@/classes/ElementTreeFactory';
 import _SUPPORTED_HTML_ELEMENTS_ from '@/constants/SupportedHTMLElementTypes';
 import _VALID_CHILD_INDEX_ from '@/constants/ValidChildIndex';
 import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
+import CodeModule from '@/classes/CodeModule';
 const f = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_, _VALID_CHILD_INDEX_);
 
 
 describe('getters.ts', () => {
-    let treeData: Array<SupportedHTMLElement> ;
+    let activeModule: CodeModule ;
     let builtTree: Array<iNode>;
     let modalState: boolean;
     let activeModal: string;
@@ -21,7 +22,7 @@ describe('getters.ts', () => {
     let mockPayload: iModalPayload;
     let modalData: { activeElement: SupportedHTMLElement };
 	beforeEach(() => {
-        treeData = DefaultStateIndex.treeData;
+        activeModule = DefaultStateIndex.activeModule;
         builtTree = DefaultStateIndex.builtTree;
         modalState = DefaultStateIndex.modalState;
         activeModal = DefaultStateIndex.activeModal;
@@ -30,7 +31,8 @@ describe('getters.ts', () => {
         modalCanSubmit = DefaultStateIndex.modalCanSubmit;
 
         state = {
-            treeData,
+            activeModule,
+            codeModules: [] as Array<CodeModule>,
             builtTree, 
             modalState,
             activeModal,
@@ -52,12 +54,12 @@ describe('getters.ts', () => {
     const treeData: Array<SupportedHTMLElement> = getters.getTreeData(state);
     expect(getters.getTreeData).toBeDefined();
     expect(typeof getters.getTreeData).toEqual('function');
-    expect(getters.getTreeData(state)).toEqual(state.treeData);
-    expect(treeData).toEqual(DefaultStateIndex.treeData);
+    expect(getters.getTreeData(state)).toEqual(state.activeModule.getModuleTreeData());
+    expect(treeData).toEqual(DefaultStateIndex.activeModule.getModuleTreeData());
    });
 
    it('should have a function to get the tree data in actual tree form', () => {
-    const builtTree = f.buildTree(state.treeData);
+    const builtTree = f.buildTree(state.activeModule.getModuleTreeData());
     const result = getters.getBuiltTree(state);
 
     expect(getters.getBuiltTree).toBeDefined();

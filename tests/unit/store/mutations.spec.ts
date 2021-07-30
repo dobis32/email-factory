@@ -5,9 +5,10 @@ import DefaultStateIndex from '@/constants/DefaultState';
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
 import { _TESTING_HASH_ } from '@/constants/Testing';
 import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
+import CodeModule from '@/classes/CodeModule';
 
 describe('mutations.ts', () => {
-    let treeData: Array<SupportedHTMLElement> 
+    let activeModule: CodeModule 
     let builtTree: Array<iNode> 
     let modalState: boolean;
     let activeModal: string;
@@ -18,7 +19,7 @@ describe('mutations.ts', () => {
     let state: iAppState;
 
 	beforeEach(() => {
-        treeData = DefaultStateIndex.treeData;
+        activeModule = DefaultStateIndex.activeModule;
         builtTree = DefaultStateIndex.builtTree;
         modalState = DefaultStateIndex.modalState;
         activeModal = DefaultStateIndex.activeModal;
@@ -28,7 +29,8 @@ describe('mutations.ts', () => {
         elementTreeFactory = DefaultStateIndex.elementTreeFactory;
 
 		state = {
-            treeData,
+            activeModule,
+            codeModules: [] as Array<CodeModule>,
             builtTree,
             modalState,
             activeModal,
@@ -40,20 +42,20 @@ describe('mutations.ts', () => {
 	});
 
    it('should have a function to update the tree data of the state', () => {
-    const oldData: Array<SupportedHTMLElement> = state.treeData;
-    const newData: Array<SupportedHTMLElement> = [...state.treeData];
+    const oldData: Array<SupportedHTMLElement> = state.activeModule.getModuleTreeData();
+    const newData: Array<SupportedHTMLElement> = [...state.activeModule.getModuleTreeData()];
     newData[0].setElementChildren(new Array<string>());
 
     mutations.setTreeData(state, newData);
 
     expect(mutations.setTreeData).toBeDefined();
     expect(typeof mutations.setTreeData).toEqual('function');
-    expect(oldData == state.treeData).toEqual(false);
+    expect(oldData == state.activeModule.getModuleTreeData()).toEqual(false);
    });
 
    it('should have a function to update the built tree of the state', () => {
     const oldTree: Array<iNode> = state.builtTree;
-    const newData: Array<SupportedHTMLElement> = [...state.treeData];
+    const newData: Array<SupportedHTMLElement> = [...state.activeModule.getModuleTreeData()];
     newData[0].setElementAlias('something waaay different');
     const newTree = elementTreeFactory.buildTree(newData);
     mutations.setBuiltTree(state, newTree);

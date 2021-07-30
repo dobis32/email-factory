@@ -1,7 +1,7 @@
 <template>
   <div id="app-background">
     <div id="editor">
-      <TreeEditor :elementTree="getTree" />
+      <TreeEditor if="" :elementTree="getTree" />
       <ModuleOptions />
     </div>
     <div v-if="getModalPayload.modalState">
@@ -28,11 +28,13 @@ import _SUPPORTED_HTML_ELEMENTS_ from "./constants/SupportedHTMLElementTypes"
       return this.$store.getters.getBuiltTree;
     },
     getModalState() {
-      console.log('getting modal state');
       return this.$store.state.modalState;
     },
     getModalPayload() {
       return this.$store.getters.getModalPayload;
+    },
+    getActiveModule() {
+      return this.$store.getters.getActiveModule
     }
   },
   provide: {

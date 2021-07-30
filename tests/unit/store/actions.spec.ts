@@ -1,28 +1,37 @@
 import actions from '@/store/actions';
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
 import _SUPPORTED_HTML_ELEMENTS_ from '@/constants/SupportedHTMLElementTypes';
+import _VALID_CHILD_INDEX_ from '@/constants/ValidChildIndex';
 import DefaultState from '@/constants/DefaultState';
 import { _TESTING_HASH_ } from '@/constants/Testing';
-import iTreeElement from '@/interfaces/iTreeElement';
+import iAppState from '@/interfaces/iAppState';
 import iHTMLAttribute from '@/interfaces/iHTMLAttribute';
 import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
-
+import CodeModule from '@/classes/CodeModule';
+import iNode from '@/interfaces/iNode';
 let mockContext: any;
 let factory: ElementTreeFactory;
+let state: iAppState;
 describe('actions.ts', () => {
 	beforeEach(() => {
-        factory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_, _TESTING_HASH_);
-
+        factory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_, _VALID_CHILD_INDEX_);
         factory.findElementByID = jest.fn(factory.findElementByID);
         factory.addChildElement = jest.fn(factory.addChildElement);
-
+        state = {
+            activeModule: DefaultState.activeModule,
+            modalCanSubmit: false,
+            activeModal: 'foobar',
+            codeModules: [] as Array<CodeModule>,
+            builtTree: [] as Array<iNode>,
+            modalState: false,
+            modalcb: () => {},
+            modalData: {},
+            elementTreeFactory: factory
+        }
 		mockContext = {
             commit: jest.fn(),
             dispatch: jest.fn(),
-            state: {
-                treeData: [ ... DefaultState.treeData ],
-                elementTreeFactory: factory
-            }
+            state
         }
 	});
 
@@ -72,8 +81,9 @@ describe('actions.ts', () => {
     });
 
     it('should have a function for adding a branch to the element tree', () => {
+        const state: iAppState = mockContext.state;
         actions.updateTree = jest.fn(actions.updateTree);
-        const treeData: Array<SupportedHTMLElement> = mockContext.state.treeData;
+        const treeData: Array<SupportedHTMLElement> = state.activeModule.getModuleTreeData();
         const headID = treeData[1].getElementID();
         const branch = factory.copyBranch(treeData, headID);
         const parent: SupportedHTMLElement = treeData[0];
@@ -90,11 +100,12 @@ describe('actions.ts', () => {
 
 
     it('should have a function for adding a child to a given parent', () => {
-        const treeData: Array<SupportedHTMLElement> = mockContext.state.treeData;
+        const state: iAppState = mockContext.state;
+        const treeData: Array<SupportedHTMLElement> = state.activeModule.getModuleTreeData();
         const newElement = factory.createTreeElement('tr', false, 'test tr') as SupportedHTMLElement;
-        const parentID = DefaultState.treeData[0].getElementID(); // expect root table
+        const parentID = DefaultState.activeModule.getModuleTreeData()[0].getElementID(); // expect root table
         const payload: {newElement: SupportedHTMLElement, parentID: string } = { newElement, parentID }
-        const parentEl: SupportedHTMLElement = mockContext.state.treeData.find((el: SupportedHTMLElement) => el.getElementID() == parentID);
+        const parentEl: SupportedHTMLElement = treeData.find((el: SupportedHTMLElement) => el.getElementID() == parentID) as SupportedHTMLElement;
         const expectedResult = [ ...treeData, newElement ]
         actions.addChild(mockContext, payload);
         expect(actions.addChild).toBeDefined();
@@ -106,11 +117,12 @@ describe('actions.ts', () => {
     });
 
     it('should have a function for deleting a branch from the element tree', () => {
+        const state: iAppState = mockContext.state;
         actions.updateTree = jest.fn(actions.updateTree);
         const idToRemove = 'bar';
         const parentid = 'foo';
         const payload = { idToRemove, parentid };
-        const treeData: Array<SupportedHTMLElement> = mockContext.state.treeData;
+        const treeData: Array<SupportedHTMLElement> = state.activeModule.getModuleTreeData();
         const f = mockContext.state.elementTreeFactory;
         const updatedData = f.deleteBranch(treeData, idToRemove, parentid);
         f.deleteBranch = jest.fn(f.deleteBranch);
@@ -123,7 +135,7 @@ describe('actions.ts', () => {
 
     it('should have a function for updating the alias and attributes of a specified tree element', () => {
         actions.updateTree = jest.fn(actions.updateTree);
-        const treeData: Array<SupportedHTMLElement> = DefaultState.treeData;
+        const treeData: Array<SupportedHTMLElement> = DefaultState.activeModule.getModuleTreeData();
         const targetEl = treeData[1];
         const eid = targetEl.getElementID();
         const alias = 'new-alias';
@@ -147,7 +159,6 @@ describe('actions.ts', () => {
     });
 
     it('should have a function to update the tree', () => {
-        // expect(mockContext.commit).toHaveBeenCalledWith('setTreeData', updatedTreeData);
-
+        // fuck you do it later
     });
 });

@@ -12,7 +12,7 @@ describe('ElementTreeFactory.ts', () => {
     let factory: ElementTreeFactory;
 	beforeEach(() => {
         factory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_, _VALID_CHILD_INDEX_);
-        mockTreeData = _DEFAULT_STATE_.treeData;
+        mockTreeData = _DEFAULT_STATE_.activeModule.getModuleTreeData();
 	});
 
     it('should have a function that finds and returns a supported HTML element', () => {
@@ -129,7 +129,7 @@ describe('ElementTreeFactory.ts', () => {
     });
 
     it('should have a function that retrieves a flat branch specified by head ID', () => {
-        const treeData = _DEFAULT_STATE_.treeData;
+        const treeData = _DEFAULT_STATE_.activeModule.getModuleTreeData();
         const expectedBranchData = [ treeData[2], treeData[3] ];
         const head = treeData[2].getElementID();
         const flatBranch = factory.getBranchByHead(treeData, head);

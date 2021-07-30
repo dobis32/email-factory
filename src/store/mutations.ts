@@ -5,7 +5,9 @@ import iNode from '@/interfaces/iNode';
 
 export default {
 	setTreeData: (state: iAppState, updatedTreeData: Array<SupportedHTMLElement>): void => {
-		state.treeData = updatedTreeData;
+		const activeModule = state.activeModule;
+		activeModule.setModuleTreeData(updatedTreeData);
+		state.activeModule = activeModule;
 	},
 
 	setBuiltTree: (state: iAppState, newBuiltTree: Array<iNode>): void => {

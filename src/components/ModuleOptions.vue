@@ -1,18 +1,17 @@
 <template>
   <div class="module-options-wrapper">
-   <div class="module-option" @click="saveModule">
-       SAVE MODULE
-   </div>
-   <div class="module-option" @click="generateCode">
-       GENERATE CODE
-   </div>
+    <DumbButton :text="'SAVE MODULE'" :type="'primary'" @click="saveModule" />
+    <DumbButton :text="'GENERATE CODE'" :type="'primary'" @click="generateCode" />
   </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
-
+import DumbButton from '@/components/dumb_ui/DumbButton.vue';
 @Options({
+  components: {
+    DumbButton
+  },
   methods: {
     saveModule(): void {
       return;
@@ -27,7 +26,7 @@ import { Options, Vue } from 'vue-class-component';
   }
 })
 export default class ModuleOptions extends Vue {
- 
+
 }
 </script>
 

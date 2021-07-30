@@ -3,6 +3,7 @@ import VALID_CHILD_INDEX from '@/constants/ValidChildIndex';
 import iAppState from '@/interfaces/iAppState';
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
 import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
+import CodeModule from '@/classes/CodeModule';
 const defaultTable = new SupportedHTMLElement(
     'foo'
     , 'rootTable'
@@ -61,17 +62,20 @@ const defaultP = new SupportedHTMLElement(
         value: 'foobar'
     } ]  
     , [ ]
-     
 );
 
 const factory = new ElementTreeFactory(SUPPORTED_HTML_ELEMENTS, VALID_CHILD_INDEX);
-const treeData = [
+
+const activeModule: CodeModule = new CodeModule('defaultModule', 'Default Module',  [
     defaultTable, defaultTR, defaultTD, defaultP
-  ]  as Array<SupportedHTMLElement>
-const builtTree = factory.buildTree(treeData);
+  ]  as Array<SupportedHTMLElement>);
+const codeModules = [ activeModule ];
+const builtTree = factory.buildTree(activeModule.getModuleTreeData());
 
 export default {
-    treeData,
+    // treeData,
+    codeModules,
+    activeModule,
     builtTree,
     modalState: false,
     activeModal: '',

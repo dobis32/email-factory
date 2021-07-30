@@ -25,12 +25,12 @@ import EditableHTMLAttribute from '@/components/modal_cards/modal_elements/Edita
 @Options({
   components: { EditableHTMLAttribute },
   data: () => {
-    return { 
-    newAlias: '',
-    newAttributes: new Array<iHTMLAttribute>(),
-    submitting: false, 
-    supportedChildren: new Array<SupportedHTMLElement>(),
-    disableSubmit: false
+    return {
+      newAlias: '',
+      newAttributes: new Array<iHTMLAttribute>(),
+      submitting: false, 
+      supportedChildren: new Array<SupportedHTMLElement>(),
+      disableSubmit: false
     };
   },
   inject: [ "stopPropagation" ],
@@ -112,8 +112,6 @@ export default class EditTreeElementCard extends Vue {}
   padding: 15px 0px;
   border-radius: 8px;
   font-weight: bold;
-  
-
 }
 
 #submit-button {
