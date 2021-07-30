@@ -73,7 +73,6 @@ const codeModules = [ activeModule ];
 const builtTree = factory.buildTree(activeModule.getModuleTreeData());
 
 export default {
-    // treeData,
     codeModules,
     activeModule,
     builtTree,

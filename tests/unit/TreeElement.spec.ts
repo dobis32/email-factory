@@ -71,7 +71,6 @@ describe('TreeElement.vue', () => {
 			global: {
 				mocks: { $store },
 				provide: { openModal }
-				
 			}
 		});
 

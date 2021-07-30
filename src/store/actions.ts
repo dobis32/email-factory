@@ -5,6 +5,8 @@ import iHTMLAttribute from '@/interfaces/iHTMLAttribute';
 import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
 import iAppState from '@/interfaces/iAppState';
+import iNode from '@/interfaces/iNode';
+import CodeModule from '@/classes/CodeModule';
 
 export default {
 	closeModal: (context: { state: iAppState, dispatch: Function, commit: Function }) => {
@@ -70,5 +72,16 @@ export default {
 		const builtTree = f.buildTree(treeData);
 		context.commit('setTreeData', treeData);
 		context.commit('setBuiltTree', builtTree);
+	},
+	clearActiveModule: (context: { state: iAppState, dispatch: Function, commit: Function }): void => {
+		const dummyModule: CodeModule = new CodeModule('', '', []);
+		context.commit('setActiveCodeModule', dummyModule);
+		context.dispatch('updateTree', dummyModule.getModuleTreeData());
+	},
+	activateModule: (context: { state: iAppState, dispatch: Function, commit: Function }, m: CodeModule): void => {
+		const treeData: Array<SupportedHTMLElement> = m.getModuleTreeData();
+		context.commit('setActiveCodeModule', m);
+		context.dispatch('updateTree', treeData);
+
 	}
 };

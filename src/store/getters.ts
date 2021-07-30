@@ -16,5 +16,8 @@ export default {
 			modalcb: state.modalcb,
 			modalData: state.modalData
 		} as iModalPayload;
+	},
+	getCodeModules: (state: iAppState) => { // TODO unit test
+		return state.codeModules;
 	}
 };

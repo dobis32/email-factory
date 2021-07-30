@@ -36,6 +36,7 @@ export default class HTMLAttribute extends Vue {}
 
   .primary {
     background-color: #3282B8;
+    border: 2px solid #3282B8;
     color: #BBE1FA;
     &:hover{
       color: #CCF0FA;
@@ -44,6 +45,7 @@ export default class HTMLAttribute extends Vue {}
 
   .accept {
     background-color: #3A9188;
+    border: 2px solid #3A9188;
     color: #B8E1DD;
       &:hover{
       color: #DDF0EE;
@@ -52,9 +54,19 @@ export default class HTMLAttribute extends Vue {}
 
   .cancel {
     background-color: #88304E;
+    border: 2px solid #88304E;
     color: #fff;
     &:hover {
       background-color: #AA225C;
+    }
+  }
+
+  .code-module {
+    background-color: #5F1854;
+    border: 2px solid #5F1854;
+    color: #F1BBD5;
+    &:hover {
+      border: 2px solid#F1BBD5;
     }
   }
 </style>

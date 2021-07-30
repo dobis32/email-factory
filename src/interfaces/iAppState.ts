@@ -1,6 +1,5 @@
 import CodeModule from '@/classes/CodeModule';
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
-import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
 import iNode from '@/interfaces/iNode';
 
 export default interface iAppState {

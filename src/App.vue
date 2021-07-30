@@ -1,13 +1,18 @@
 <template>
   <div id="app-background">
-    <div id="editor">
-      <TreeEditor if="" :elementTree="getTree" />
-      <ModuleOptions />
+    <div id="app-wrapper">
+      <div id="editor">
+        <TreeEditor v-if="getActiveModule" :elementTree="getTree" />
+        <ModuleManager v-else :codeModules="getCodeModules" />
+      </div>
+      <div id="side-panel">
+        <ModuleOptions v-if="getActiveModule" />
+        <GlobalOptions v-else />
+      </div>
     </div>
     <div v-if="getModalPayload.modalState">
       <Modal :payload="getModalPayload" />
     </div>
-   
   </div>
 </template>
 
@@ -16,12 +21,16 @@ import { Options, Vue } from "vue-class-component";
 import TreeEditor from "./components/TreeEditor.vue";
 import ModuleOptions from "./components/ModuleOptions.vue";
 import Modal from "./components/Modal.vue";
-import _SUPPORTED_HTML_ELEMENTS_ from "./constants/SupportedHTMLElementTypes"
+import ModuleManager from "./components/ModuleManager.vue";
+import _SUPPORTED_HTML_ELEMENTS_ from "./constants/SupportedHTMLElementTypes";
+import GlobalOptions from "./components/GlobalOptions.vue";
 @Options({
   components: {
     TreeEditor,
     ModuleOptions,
-    Modal
+    Modal,
+    ModuleManager,
+    GlobalOptions
   },
   computed: {
     getTree() {
@@ -34,7 +43,10 @@ import _SUPPORTED_HTML_ELEMENTS_ from "./constants/SupportedHTMLElementTypes"
       return this.$store.getters.getModalPayload;
     },
     getActiveModule() {
-      return this.$store.getters.getActiveModule
+      return this.$store.getters.getActiveModule;
+    },
+    getCodeModules() { // TODO unit test
+      return this.$store.getters.getCodeModules;
     }
   },
   provide: {
@@ -61,16 +73,26 @@ export default class App extends Vue {}
   // background-color: #171717;
 }
 
-#editor {
+#app-wrapper {
   max-width: 1100px;
   margin: 8vh auto;
   background-color: #171717;
   padding: 30px;
   border-radius: 30px;
+  min-height: 200px;
+  // display: flex;
+  // flex-direction: row;
 }
 #modal {
-    z-index: 9; /* Sit on top */
+  z-index: 9; /* Sit on top */
+}
 
+#editor {
+  float: left;
+}
+
+#side-panel {
+  float: right;
 }
 
 #app-background {

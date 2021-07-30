@@ -1,7 +1,7 @@
 <template>
   <div class="module-options-wrapper">
-    <DumbButton :text="'SAVE MODULE'" :type="'primary'" @click="saveModule" />
-    <DumbButton :text="'GENERATE CODE'" :type="'primary'" @click="generateCode" />
+    <DumbButton :text="'CREATE MODULE'" :type="'primary'" @click="createModule" />
+    <DumbButton :text="'GLOBAL PREFERENCES'" :type="'primary'" @click="globalPreferences" />
   </div>
 </template>
 
@@ -13,14 +13,18 @@ import DumbButton from '@/components/dumb_ui/DumbButton.vue';
     DumbButton
   },
   methods: {
-    saveModule(): void {
-      return;
-    },
-    async generateCode(): Promise<void> {
-      this.$store.dispatch('setModal', { card: 'GeneratedCodeCard', data: {} });
-      // await this.$store.dispatch('openModal');
-      await this.openModal()
-    }
+      async createModule(): Promise<void> {
+        // open module creation modal card
+        this.$store.dispatch('setModal', { card: 'CreateCodeModuleCard', data: {} });
+        // await this.$store.dispatch('openModal');
+        await this.openModal()
+      },
+      async globalPreferences(): Promise<void> {
+        // open gloabl preferences modal card
+        this.$store.dispatch('setModal', { card: 'GlobalPreferencesCard', data: {} });
+        // await this.$store.dispatch('openModal');
+        await this.openModal()
+      }
   },
   props: {
    
