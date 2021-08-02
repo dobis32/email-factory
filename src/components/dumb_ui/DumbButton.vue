@@ -29,7 +29,7 @@ export default class HTMLAttribute extends Vue {}
     font-weight: bold;
     text-align: center;
     cursor: pointer;
-    padding: 20px 10px;
+    padding: 1em .5em;
     margin: 10px 0px;
     border-radius: 8px;
   }

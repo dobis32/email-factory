@@ -19,5 +19,8 @@ export default {
 	},
 	getCodeModules: (state: iAppState) => { // TODO unit test
 		return state.codeModules;
+	},
+	getActiveCodeModule: (state: iAppState) => { // TODO unit test
+		return state.activeModule;
 	}
 };

@@ -161,7 +161,6 @@ export default class ElementTreeFactory {
 	}
 
 	getTreeCode(builtTree: Array<iNode>): string {
-		// recursive function
 		let code = '';
 		builtTree.forEach((n: iNode) => { code += this.getBranchCode(n, 0) });
 		return code;

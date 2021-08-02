@@ -96,10 +96,10 @@ import { Options, Vue } from "vue-class-component";
       const f: ElementTreeFactory = state.elementTreeFactory;
       const headID = this.id;
       const treeData: Array<SupportedHTMLElement> = state.activeModule.getModuleTreeData();
-      const copiedBranch: Array<SupportedHTMLElement> = f.copyBranch(treeData, headID);
+      const branch: Array<SupportedHTMLElement> = f.copyBranch(treeData, headID);
       let parentID: string | undefined;
       if (!this.isRoot) parentID = this.parentid;
-      this.$store.dispatch('addBranch', copiedBranch, parentID);
+      this.$store.dispatch('addBranch', { branch: branch, parentID });
     },
     deleteBranch() {
       this.$store.dispatch('deleteBranch', { idToRemove: this.id, parentid: this.parentid });
@@ -138,7 +138,7 @@ export default class TreeElement extends Vue {}
   margin-bottom: 0px;
   font-size: 24px;
   cursor: pointer;
-  overflow: hidden;
+  // overflow: hidden;
   color: #3A9188;
   white-space: nowrap;
   .element-text {

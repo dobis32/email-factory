@@ -1,22 +1,23 @@
 <template>
-  
   <div class="tree-editor-wrapper">
-    <div v-if="elementTree.length === 0">
-      <div class="empty-tree-button">
-        +
+    <div class="editor-overflow-buffer">
+      <div v-if="elementTree.length === 0">
+        <div class="empty-tree-button">
+          +
+        </div>
       </div>
+      <TreeElement
+        v-for="(node) of elementTree"
+        :key="node.element.getElementID()"
+        :isRoot="node.element.elementIsARoot()"
+        :type="node.element.getElementType()"
+        :alias="node.element.getElementAlias()"
+        :id="node.element.getElementID()"
+        :attributes="node.element.getElementAttributes()"
+        :parentid="undefined"
+        :children="node.children"
+      />
     </div>
-    <TreeElement
-      v-for="(node) of elementTree"
-      :key="node.element.getElementID()"
-      :isRoot="node.element.elementIsARoot()"
-      :type="node.element.getElementType()"
-      :alias="node.element.getElementAlias()"
-      :id="node.element.getElementID()"
-      :attributes="node.element.getElementAttributes()"
-      :parentid="undefined"
-      :children="node.children"
-    />
   </div>
 </template>
 
@@ -38,12 +39,11 @@ export default class TreeEditor extends Vue {}
 .tree-editor-wrapper {
   display: inline-block;
   width: 800px;
-  min-height: 200px;
+  height: 560px;
   margin: 10px;
-  padding: 10px;
+  padding: 14px;
   border: 2px solid #2A2438;
   border-radius: 30px;
-  overflow: scroll;
 }
 
 .empty-tree-button {
@@ -53,4 +53,12 @@ export default class TreeEditor extends Vue {}
   background-color: greenyellow;
   cursor: pointer;
 }
+
+.editor-overflow-buffer {
+  overflow: scroll;
+  height: 560px;
+
+}
+
+
 </style>

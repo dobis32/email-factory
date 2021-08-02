@@ -14,15 +14,11 @@ import DumbButton from '@/components/dumb_ui/DumbButton.vue';
   },
   methods: {
       async createModule(): Promise<void> {
-        // open module creation modal card
         this.$store.dispatch('setModal', { card: 'CreateCodeModuleCard', data: {} });
-        // await this.$store.dispatch('openModal');
         await this.openModal()
       },
       async globalPreferences(): Promise<void> {
-        // open gloabl preferences modal card
         this.$store.dispatch('setModal', { card: 'GlobalPreferencesCard', data: {} });
-        // await this.$store.dispatch('openModal');
         await this.openModal()
       }
   },
@@ -41,7 +37,6 @@ export default class ModuleOptions extends Vue {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
   .module-options-wrapper {
-    margin-left: 20px;
     display: inline-block;
     width: 200px;
     min-height: 200px;

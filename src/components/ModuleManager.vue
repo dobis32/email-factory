@@ -1,7 +1,4 @@
 <template>
-    <!-- <div v-for="(m, i) in codeModules" v-bind:key="i" class="code-module" @click="activateModule(m)">
-        {{ m.getModuleName() }}
-    </div> -->
     <DummyButton v-for="(m, i) in codeModules" 
     :key="i" 
     :text="m.getModuleName()" 
@@ -30,7 +27,7 @@ import DummyButton from "@/components/dumb_ui/DumbButton.vue"
   ],
   methods: {
    activateModule(m: CodeModule) {
-       this.$state.activateModule
+      this.$store.dispatch('activateModule', m);
    }
   }
 })

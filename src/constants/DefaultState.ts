@@ -2,75 +2,12 @@ import SUPPORTED_HTML_ELEMENTS from '@/constants/SupportedHTMLElementTypes';
 import VALID_CHILD_INDEX from '@/constants/ValidChildIndex';
 import iAppState from '@/interfaces/iAppState';
 import ElementTreeFactory from '@/classes/ElementTreeFactory';
-import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
-import CodeModule from '@/classes/CodeModule';
-const defaultTable = new SupportedHTMLElement(
-    'foo'
-    , 'rootTable'
-    , 'table'
-    , true
-    , [
-        {
-            name: 'width',
-            value: '600'
-        }
-    ]  
-    , [
-        'bar'
-    ]
-     
-);
 
-const defaultTR = new SupportedHTMLElement(
-    'bar'
-    , 'initTR'
-    , 'tr'
-    , false
-    , [ ]  
-    , [
-        'fizz'
-    ]
-     
-);
-
-const defaultTD = new SupportedHTMLElement(
-    'fizz'
-    , 'initTD'
-    , 'td'
-    , false
-    , [ {
-        name: 'style',
-        value: 'color: #f00;'
-    } ]  
-    , [
-        'buzz'
-    ]
-     
-);
-
-const defaultP = new SupportedHTMLElement(
-    'buzz'
-    , 'initP'
-    , 'p'
-    , false
-    , [ {
-        name: 'style',
-        value: 'font-size: 20px; color: #f00; text-decoration: bold;'
-    },
-    {
-        name: 'text-content',
-        value: 'foobar'
-    } ]  
-    , [ ]
-);
-
+import { CODE_MODULE_A, CODE_MODULE_B, DUMMY_PLACEHOLDER_MODULE } from '@/constants/DefaultCodeModules';
 const factory = new ElementTreeFactory(SUPPORTED_HTML_ELEMENTS, VALID_CHILD_INDEX);
-
-const activeModule: CodeModule = new CodeModule('defaultModule', 'Default Module',  [
-    defaultTable, defaultTR, defaultTD, defaultP
-  ]  as Array<SupportedHTMLElement>);
-const codeModules = [ activeModule ];
-const builtTree = factory.buildTree(activeModule.getModuleTreeData());
+const activeModule = DUMMY_PLACEHOLDER_MODULE;
+const codeModules = [ CODE_MODULE_A, CODE_MODULE_B ];
+const builtTree = factory.buildTree(DUMMY_PLACEHOLDER_MODULE.getModuleTreeData());
 
 export default {
     codeModules,
