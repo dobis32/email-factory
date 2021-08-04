@@ -39,7 +39,7 @@ export default class TreeEditor extends Vue {}
 .tree-editor-wrapper {
   display: inline-block;
   width: 800px;
-  height: 560px;
+  height: 520px;
   margin: 10px;
   padding: 14px;
   border: 2px solid #2A2438;
@@ -56,7 +56,7 @@ export default class TreeEditor extends Vue {}
 
 .editor-overflow-buffer {
   overflow: scroll;
-  height: 560px;
+  height: 520px;
 
 }
 

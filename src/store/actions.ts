@@ -27,22 +27,25 @@ export default {
 	},
 	addBranch: (context: { state: iAppState, dispatch: Function, commit: Function }, payload: {branch: Array<SupportedHTMLElement>, parentID: string | undefined}): void => {
 		const { branch, parentID } = payload;
+		const f: ElementTreeFactory = context.state.elementTreeFactory;
 		const treeData: Array<SupportedHTMLElement> = context.state.activeModule.getModuleTreeData();
+		const copiedTreeData = f.cloneTreeData(treeData);
 		if (parentID) {
-			const parent: SupportedHTMLElement | undefined = treeData.find((el: SupportedHTMLElement) => el.getElementID() == parentID);
+			const parent: SupportedHTMLElement | undefined = copiedTreeData.find((el: SupportedHTMLElement) => el.getElementID() == parentID);
 			if (parent === undefined) throw new Error(`[ Store Actions ] Failed to add branch. Parent element with ID ${parentID} not found`);
 			parent.getElementChildren().push(branch[0].getElementID()); // This assumes the head node is at index 0
 		}
-		const newData = [ ...treeData, ...branch ];
+		const newData = [ ...copiedTreeData, ...branch ];
 		context.dispatch('updateTree', newData);
 	},
 	addChild: (context: { state: iAppState, dispatch: Function, commit: Function }, payload: {newElement: SupportedHTMLElement, parentID: string}): void => {
 		const { newElement, parentID } = payload;
-		const treeData = context.state.activeModule.getModuleTreeData();
-		const parent: SupportedHTMLElement | undefined = treeData.find((el: SupportedHTMLElement) => el.getElementID() == parentID);
+		const f: ElementTreeFactory = context.state.elementTreeFactory;
+		const treeData: Array<SupportedHTMLElement> = context.state.activeModule.getModuleTreeData();
+		const copiedTreeData = f.cloneTreeData(treeData);		const parent: SupportedHTMLElement | undefined = copiedTreeData.find((el: SupportedHTMLElement) => el.getElementID() == parentID);
 		if (parent === undefined) throw new Error(`[ Store Actions ] Failed to add child. Parent element with ID ${parentID} not found`);
 		parent.getElementChildren().push(newElement.getElementID());
-		const newData = [ ...treeData, newElement ];
+		const newData = [ ...copiedTreeData, newElement ];
 		context.dispatch('updateTree', newData);
 	},
 	deleteBranch: (context: { state: iAppState, dispatch: Function, commit: Function }, payload: { idToRemove: string, parentid?: string }) : void => {
@@ -67,19 +70,23 @@ export default {
 	},
 	updateTree: (context: { state: iAppState, dispatch: Function, commit: Function }, treeData: Array<SupportedHTMLElement>): void => {
 		const f: ElementTreeFactory = context.state.elementTreeFactory;
-		const builtTree = f.buildTree(treeData);
-		context.commit('setTreeData', treeData);
+		const copiedTreeData = f.cloneTreeData(treeData);
+		const builtTree = f.buildTree(copiedTreeData);
+		context.commit('setTreeData', copiedTreeData);
 		context.commit('setBuiltTree', builtTree);
 
 	},
 	clearActiveModule: (context: { state: iAppState, dispatch: Function, commit: Function }): void => {
-		// const dummyModule: CodeModule = new CodeModule('', '', []);
 		context.commit('setActiveCodeModule', DUMMY_PLACEHOLDER_MODULE);
 		context.dispatch('updateTree', DUMMY_PLACEHOLDER_MODULE.getModuleTreeData());
 	},
 	activateModule: (context: { state: iAppState, dispatch: Function, commit: Function }, m: CodeModule): void => {
 		const treeData: Array<SupportedHTMLElement> = m.getModuleTreeData();
+
+		const f = context.state.elementTreeFactory;
+		const copiedTreeData = f.cloneTreeData(treeData)
+
 		context.commit('setActiveCodeModule', m);
-		context.dispatch('updateTree', treeData);
+		context.dispatch('updateTree', copiedTreeData);
 	},
 };

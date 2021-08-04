@@ -8,6 +8,8 @@ import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
 import CodeModule from '@/classes/CodeModule';
 
 describe('mutations.ts', () => {
+    const defaultState: iAppState = DefaultStateIndex;
+    let codeModules: Array<CodeModule>;
     let activeModule: CodeModule 
     let builtTree: Array<iNode> 
     let modalState: boolean;
@@ -19,18 +21,19 @@ describe('mutations.ts', () => {
     let state: iAppState;
 
 	beforeEach(() => {
-        activeModule = DefaultStateIndex.activeModule;
-        builtTree = DefaultStateIndex.builtTree;
-        modalState = DefaultStateIndex.modalState;
-        activeModal = DefaultStateIndex.activeModal;
-        modalcb = DefaultStateIndex.modalcb;
-        modalCanSubmit = DefaultStateIndex.modalCanSubmit;
-        modalData = DefaultStateIndex.modalData;
-        elementTreeFactory = DefaultStateIndex.elementTreeFactory;
+        codeModules = defaultState.codeModules
+        activeModule = codeModules[0];
+        builtTree = defaultState.builtTree;
+        modalState = defaultState.modalState;
+        activeModal = defaultState.activeModal;
+        modalcb = defaultState.modalcb;
+        modalCanSubmit = defaultState.modalCanSubmit;
+        modalData = defaultState.modalData;
+        elementTreeFactory = defaultState.elementTreeFactory;
 
 		state = {
             activeModule,
-            codeModules: [] as Array<CodeModule>,
+            codeModules,
             builtTree,
             modalState,
             activeModal,
@@ -43,7 +46,7 @@ describe('mutations.ts', () => {
 
    it('should have a function to update the tree data of the state', () => {
     const oldData: Array<SupportedHTMLElement> = state.activeModule.getModuleTreeData();
-    const newData: Array<SupportedHTMLElement> = [...state.activeModule.getModuleTreeData()];
+    const newData: Array<SupportedHTMLElement> = [ ...oldData ];
     newData[0].setElementChildren(new Array<string>());
 
     mutations.setTreeData(state, newData);
@@ -55,7 +58,8 @@ describe('mutations.ts', () => {
 
    it('should have a function to update the built tree of the state', () => {
     const oldTree: Array<iNode> = state.builtTree;
-    const newData: Array<SupportedHTMLElement> = [...state.activeModule.getModuleTreeData()];
+    const oldData: Array<SupportedHTMLElement> = state.activeModule.getModuleTreeData();
+    const newData: Array<SupportedHTMLElement> = [ ...oldData ];
     newData[0].setElementAlias('something waaay different');
     const newTree = elementTreeFactory.buildTree(newData);
     mutations.setBuiltTree(state, newTree);

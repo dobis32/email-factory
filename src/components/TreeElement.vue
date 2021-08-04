@@ -90,7 +90,6 @@ import { Options, Vue } from "vue-class-component";
       }
       
     },
-
     copyBranch() {
       const state: iAppState = this.$store.state;
       const f: ElementTreeFactory = state.elementTreeFactory;

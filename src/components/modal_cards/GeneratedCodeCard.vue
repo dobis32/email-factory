@@ -6,7 +6,6 @@
 
 <script lang="ts">
 import ElementTreeFactory from "@/classes/ElementTreeFactory";
-import SupportedHTMLElement from "@/classes/SupportedHTMLElement";
 import iNode from "@/interfaces/iNode";
 import { Options, Vue } from "vue-class-component";
 @Options({

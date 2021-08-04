@@ -39,8 +39,8 @@ describe('getters.ts', () => {
             modalcb,
             modalData,
             modalCanSubmit,
-            elementTreeFactory: f
-        }
+            elementTreeFactory: f,
+        } as iAppState
 
         mockPayload = {
             modalState,

@@ -11,14 +11,17 @@ import iAppState from '@/interfaces/iAppState';
 
 const elFactory = new ElementTreeFactory(_SUPPORTED_HTML_ELEMENTS_, _VALID_CHILD_INDEX_, _TESTING_HASH_);
 describe('TreeElement.vue', () => {
-	const mockChildren: Array<SupportedHTMLElement> = _DEFAULT_STATE_.activeModule.getModuleTreeData()
+	const codeModules = _DEFAULT_STATE_.codeModules
+	const activeModule = codeModules[0];
+	const modalcb = _DEFAULT_STATE_.modalcb;
+	const mockChildren: Array<SupportedHTMLElement> = activeModule.getModuleTreeData()
 	const mockBuiltBranch = elFactory.buildTree(mockChildren);
 	const mockElement = 'table';
 	const mockAlias = 'rootTable';
 	const mockParentid = _TESTING_HASH_;
 	const numberOfChildren = mockChildren.length;
 	const mockTreeElement = 'tree-element';
-	const mockID = _DEFAULT_STATE_.activeModule.getModuleTreeData()[0].getElementID();
+	const mockID = activeModule.getModuleTreeData()[0].getElementID();
 	let mockProps: any;
 	let wrapper: any;
 	let dispatch: any;
@@ -48,14 +51,18 @@ describe('TreeElement.vue', () => {
 			if (action === 'setModalCB') state.modalcb = payload;
 		});
 
-		state = _DEFAULT_STATE_;
+		state = {
+			activeModule,
+			codeModules,
+			modalcb
+		} as iAppState;
 		state.elementTreeFactory = elFactory; // replace with testing instance 
 
 		$store = {
 			state,
 			getters: {
 				getElementTree: () => {
-					return _DEFAULT_STATE_.activeModule.getModuleTreeData();
+					return activeModule.getModuleTreeData();
 				}
 			},
 			dispatch
@@ -101,7 +108,7 @@ describe('TreeElement.vue', () => {
 	// Method
 	it('should have an action for prompting the user for an action', () => {
 		const id = wrapper.props().id;
-		const el = elFactory.findElementByID(state.activeModule.getModuleTreeData(), id);
+		const el = elFactory.findElementByID(activeModule.getModuleTreeData(), id);
 		const payload = { card: 'ElementControlsCard', data: { activeElement: el }};
 		wrapper.vm.promptAction();
 		expect(wrapper.vm.promptAction).toBeDefined();
@@ -141,8 +148,7 @@ describe('TreeElement.vue', () => {
 
 	it('should have a function to add a child to the assumed tree element', async () => {
 		wrapper.vm.performAction = jest.fn(wrapper.vm.performAction);
-		// const supportedElement = elFactory.getSupportedElement(mockProps.type);
-		const assumedElement = elFactory.findElementByID(state.activeModule.getModuleTreeData(), mockProps.id) as SupportedHTMLElement;
+		const assumedElement = elFactory.findElementByID(activeModule.getModuleTreeData(), mockProps.id) as SupportedHTMLElement;
 		const card = 'CreateChildElementCard';
 		const data = { activeElement: assumedElement };
 		const payload1 = { card, data };
@@ -159,17 +165,16 @@ describe('TreeElement.vue', () => {
 	});
 
 	it('should have a function to copy the branch of the element tree where the assumed element is the head', () => {
-		const flatBranch = elFactory.copyBranch(state.activeModule.getModuleTreeData(), mockProps.id);
-		const parentid = mockProps.parentid;
-		wrapper.vm.copyBranch(flatBranch, parentid);
+		const branch = elFactory.copyBranch(activeModule.getModuleTreeData(), mockProps.id);
+		const parentID = mockProps.parentid;
+		wrapper.vm.copyBranch(branch, parentID);
 		expect(wrapper.vm.copyBranch).toBeDefined();
 		expect(typeof wrapper.vm.copyBranch).toEqual('function');
 		expect(dispatch).toHaveBeenCalled();
-		expect(dispatch).toHaveBeenCalledWith('addBranch', flatBranch, parentid);
+		expect(dispatch).toHaveBeenCalledWith('addBranch', {branch, parentID});
 	});
 
 	it('should have a function for deleting a branch with the assumed tree element as the branch root', () => {
-		// const treeData = _DEFAULT_STATE_.treeData;
 		const idToRemove = mockProps.id;
 		const parentid = mockProps.parentid;
 		const payload = {

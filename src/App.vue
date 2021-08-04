@@ -7,17 +7,20 @@
         <div v-if="getActiveCodeModule.getModuleID().length" id="back-button">
           <DumbButton :text="'BACK'" :type="'cancel'" @click="clearActiveModule" />
         </div>
-
       </div>
       <div id="app-window">
-        
         <div id="side-panel">
           <ModuleOptions v-if="getActiveCodeModule.getModuleID().length" />
           <GlobalOptions v-else />
         </div>
         <div id="editor">
-          <TreeEditor v-if="getActiveCodeModule.getModuleID().length" :elementTree="getTree" />
-          <ModuleManager v-else :codeModules="getCodeModules" />
+          <div v-if="showPreferences" >
+            <PreferenceManager :attributePreferences="getAttributePreferences" :activeElement="getActiveElement" :activeModule="getActiveModule" />
+          </div>
+          <div v-else >
+            <TreeEditor v-if="getActiveCodeModule.getModuleID().length" :elementTree="getTree" />
+            <ModuleManager v-else :codeModules="getCodeModules" />
+          </div>
         </div>
       </div>
     </div>
@@ -36,6 +39,7 @@ import ModuleManager from "./components/ModuleManager.vue";
 import _SUPPORTED_HTML_ELEMENTS_ from "./constants/SupportedHTMLElementTypes";
 import GlobalOptions from "./components/GlobalOptions.vue";
 import DumbButton from "./components/dumb_ui/DumbButton.vue";
+import PreferenceManager from "./components/PreferenceManager.vue";
 
 @Options({
   components: {
@@ -44,7 +48,8 @@ import DumbButton from "./components/dumb_ui/DumbButton.vue";
     Modal,
     ModuleManager,
     GlobalOptions,
-    DumbButton
+    DumbButton,
+    PreferenceManager
   },
   computed: {
     getTree() {
@@ -61,6 +66,18 @@ import DumbButton from "./components/dumb_ui/DumbButton.vue";
     },
     getCodeModules() { // TODO unit test
       return this.$store.getters.getCodeModules;
+    },
+    getActiveElement() { // TODO unit test
+      return this.$store.getters.getActiveElement;
+    },
+    showPreferences() {
+      return this.$store.getters.showPreferences;
+    },
+    getAttributePreferences() {
+      // implement
+    },
+    getActiveModule() {
+      // implement
     }
   },
   provide: {
@@ -98,29 +115,25 @@ export default class App extends Vue {}
   background-color: #171717;
   padding: 30px;
   border-radius: 30px;
-  height: 636px;
-  // display: flex;
-  // flex-direction: row;
+  height: 590px;
 }
 #modal {
   z-index: 9; /* Sit on top */
 }
 
 #editor {
-  // float: left;
   display: inline-block;
   width: 800px;
 }
 
 #side-panel {
-  // float: right;
   display: inline-block;
   width: 240px;
 }
 
 #app-background {
   position: absolute;
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
   background-color: #A9C9FF;
   background-image: linear-gradient(180deg, #A9C9FF 0%, #FFBBEC 100%);

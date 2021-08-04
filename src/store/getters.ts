@@ -22,5 +22,10 @@ export default {
 	},
 	getActiveCodeModule: (state: iAppState) => { // TODO unit test
 		return state.activeModule;
-	}
+	},
+	getActiveElement: (state: iAppState) => { // TODO unit test
+		const modalData = state.modalData;
+		if (modalData) return modalData?.activeElement;
+		else return undefined;
+	},
 };

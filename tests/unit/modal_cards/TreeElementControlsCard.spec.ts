@@ -5,9 +5,9 @@ import _DEFAULT_STATE_ from '@/constants/DefaultState';
 import SupportedHTMLElement from '@/classes/SupportedHTMLElement';
 
 describe('TreeElementControlsCard.vue', () => {
+    const activeModule = _DEFAULT_STATE_.codeModules[0];
     let mockcb: Function;
     let mockActiveElement: SupportedHTMLElement;
-    let mockModalData: any;
 	let wrapper: any;
     let stopPropagation: Function;
     let provide: any;
@@ -21,7 +21,7 @@ describe('TreeElementControlsCard.vue', () => {
             return;
         });
 
-        mockActiveElement = _DEFAULT_STATE_.activeModule.getModuleTreeData()[1];
+        mockActiveElement = activeModule.getModuleTreeData()[1];
 
         mockInitSelectedAction = 'edit';
 

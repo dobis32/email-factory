@@ -17,7 +17,7 @@ import CodeModule from '@/classes/CodeModule';
   },
   methods: {
     saveModule(): void {
-      return;
+      // this.$store.dispatch('')
     },
     async generateCode(): Promise<void> {
       this.$store.dispatch('setModal', { card: 'GeneratedCodeCard', data: {} });

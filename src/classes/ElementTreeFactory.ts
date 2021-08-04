@@ -59,6 +59,7 @@ export default class ElementTreeFactory {
 	}
 
 	buildTree(treeData: Array<SupportedHTMLElement>): Array<iNode> {
+		
 		const builtTree = new Array<iNode>();
 		const roots = treeData.filter((el: SupportedHTMLElement) => el.elementIsARoot() == true);
 		roots.forEach((r: SupportedHTMLElement) => {
@@ -161,12 +162,14 @@ export default class ElementTreeFactory {
 	}
 
 	getTreeCode(builtTree: Array<iNode>): string {
+		// TODO unit test
 		let code = '';
 		builtTree.forEach((n: iNode) => { code += this.getBranchCode(n, 0) });
 		return code;
 	}
 
 	getBranchCode(node: iNode, level: number): string {
+		// TODO unit test
 		let codeString = '';
 		const element = node.element;
 		const calculatedIndentation = this.getIndentation(level);
@@ -186,7 +189,29 @@ export default class ElementTreeFactory {
 	}
 
 	getIndentation(level: number): string {
+		// TODO unit test
 		if (level === 0) return '';
 		else return _INDENTATION_UNIT_ + this.getIndentation(level - 1);
+	}
+
+	cloneSupportedTreeElement(el: SupportedHTMLElement): SupportedHTMLElement {
+		// TODO unit test
+		const id: string = el.getElementID();
+		const alias: string = el.getElementAlias();
+		const type: string = el.getElementType();
+		const root: boolean = el.elementIsARoot();
+		const attributes: Array<iHTMLAttribute> = el.getElementAttributes();
+		const children: Array<string> = el.getElementChildren();
+		return new SupportedHTMLElement(id, alias, type, root, attributes, children);
+	}
+
+	cloneTreeData(treeData: Array<SupportedHTMLElement>): Array<SupportedHTMLElement> {
+		// TODO unit test
+		const copiedTreeData = new Array<SupportedHTMLElement>();
+		treeData.forEach((el: SupportedHTMLElement) => {
+			const copy: SupportedHTMLElement = this.cloneSupportedTreeElement(el);
+			copiedTreeData.push(copy);
+		});
+		return copiedTreeData;
 	}
 }

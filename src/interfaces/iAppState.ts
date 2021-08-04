@@ -12,4 +12,5 @@ export default interface iAppState {
     modalcb: Function,
     modalData: any,
     elementTreeFactory: ElementTreeFactory,
+    showPreferences: boolean
 }

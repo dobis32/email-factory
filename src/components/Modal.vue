@@ -4,7 +4,6 @@
     <CreateCodeModuleCard v-if="payload.activeModal == 'CreateCodeModuleCard'" />
     <EditTreeElementCard v-if="payload.activeModal == 'EditTreeElementCard'" :cb="payload.modalcb" :alias="payload.modalData.alias" :attributes="payload.modalData.attributes" />
     <GeneratedCodeCard v-if="payload.activeModal == 'GeneratedCodeCard'" :cb="payload.modalcb" />
-    <GlobalPreferencesCard v-if="payload.activeModal == 'GlobalPreferencesCard'" />    
     <TreeElementControlsCard v-if="payload.activeModal == 'ElementControlsCard'"  :activeElement="payload.modalData.activeElement" :cb="payload.modalcb" />
     <!-- card components here -->
   </div>
@@ -17,13 +16,13 @@ import GeneratedCodeCard from "./modal_cards/GeneratedCodeCard.vue";
 import TreeElementControlsCard from "./modal_cards/TreeElementControlsCard.vue";
 import CreateChildElementCard from "./modal_cards/CreateChildElementCard.vue";
 import SupportedHTMLElement from "@/classes/SupportedHTMLElement";
-import GlobalPreferencesCard from "./modal_cards/GlobalPreferencesCard.vue";
 import CreateCodeModuleCard from "./modal_cards/CreateCodeModuleCard.vue";
+
 @Options({
   props: ["payload"],
   data() {
     return {
-      validChildren: Array<string>()
+      validChildren: new Array<string>()
     }
   },
   components: { 
@@ -31,8 +30,7 @@ import CreateCodeModuleCard from "./modal_cards/CreateCodeModuleCard.vue";
     CreateChildElementCard,
     EditTreeElementCard, 
     GeneratedCodeCard, 
-    GlobalPreferencesCard,
-    TreeElementControlsCard, 
+    TreeElementControlsCard,
   },
   methods: {
     closeModal() {

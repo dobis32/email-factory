@@ -93,7 +93,7 @@ const moduleBHeroTable_Root = new SupportedHTMLElement(
 const moduleBHeroTR_1 = new SupportedHTMLElement(
     'Module-B-HeroTR-1'
     , 'heroTR'
-    , 'table'
+    , 'tr'
     , false
     , []  
     , [
@@ -105,7 +105,7 @@ const moduleBHeroTR_1 = new SupportedHTMLElement(
 const moduleBHeroTD_1 = new SupportedHTMLElement(
     'Module-B-HeroTD-1'
     , 'heroTD'
-    , 'table'
+    , 'td'
     , false
     , []  
     , [
@@ -129,7 +129,7 @@ const moduleBCTA1_Table = new SupportedHTMLElement(
 const moduleBCTA1_TR = new SupportedHTMLElement(
     'Module-B-CTA-1-tr'
     , 'heroCTA_tr'
-    , 'table'
+    , 'tr'
     , false
     , []  
     , [
@@ -141,7 +141,7 @@ const moduleBCTA1_TR = new SupportedHTMLElement(
 const moduleBCTA1_TD = new SupportedHTMLElement(
     'Module-B-CTA-1-td'
     , 'heroCTA_td'
-    , 'table'
+    , 'td'
     , false
     , []  
     , [
